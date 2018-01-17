@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#f47f1a</color>
+    <color name="colorPrimaryDark">#FFEF8A32</color>
+    <color name="colorAccent">#FFFA9B48</color>
+
+    <color name="pinkish">#f7b5a1</color>
+    <color name="pink">#fa8ae8</color>
+    <color name="pinkwhite">#ed5abf</color>
+    <color name="buttoncolor">#FFEB7AFA</color>
+
+    <color name="white">#faf8fa</color>
+
+    <color name="colorWhite1">#F7F7F7</color>
+    <color name="red">#f12424</color>
+    <color name="green">#23f21c</color>
+
+    <color name="windowBackground">#FFFFFF</color>
+</resources>
