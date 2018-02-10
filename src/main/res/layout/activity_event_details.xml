@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Today Attendance"
+                android:text="Event > Weekly Meeting"
                 android:textSize="18sp"
                 />
 
@@ -186,33 +186,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
-                        <TextView
-                            android:id="@+id/tvCheckin"
-                            android:layout_weight="1"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Checked In"
-                            android:padding="5dp"
-                            android:textColor="#123150"
-                            />
-                        <Button
-                            android:id="@+id/View"
-                            android:layout_weight="1.8"
-                            android:paddingTop="4dp"
-                            android:paddingBottom="4dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="6dp"
-                            android:textSize="15dp"
-                            style="@style/MyButtonStyleMedium"
-                            android:background="@color/red"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="11:00 AM"
-                            android:padding="5dp"
-                            android:textColor="#eff2f1"
-                            />
+
                     </LinearLayout>
 
                     <LinearLayout
@@ -220,28 +194,6 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
-                        <TextView
-                            android:id="@+id/desciption"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Shantinagar Peer Shaheber goli"
-                            android:padding="5dp"
-                            android:layout_marginRight="15dp"
-                            android:textColor="#123150"
-                            />
-
-                        <TextView
-                            android:id="@+id/more"
-                            android:layout_weight="1"
-                            android:textSize="16sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="More.."
-                            android:padding="5dp"
-                            android:textColor="#3c8dde"
-                            />
 
 
                         <!--
@@ -284,7 +236,7 @@
                             android:paddingBottom="4dp"
                             android:paddingLeft="8dp"
                             android:paddingRight="6dp"
-                            android:background="@color/green"
+                            android:background="@color/red"
                             style="@style/MyButtonStyleMedium"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -305,20 +257,9 @@
                             android:textSize="16sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Dhanmondi,Satmojhid Road"
+                            android:text="26 October, 2017"
                             android:padding="5dp"
                             android:textColor="#123150"
-                            />
-                        <Button
-                            android:id="@+id/tvView"
-                            android:textSize="15dp"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="View"
-                            android:layout_marginTop="5dp"
-                            style="@style/MyButtonStyleSmall"
-                            android:padding="5dp"
-                            android:textColor="#245644"
                             />
 
                     </LinearLayout>
@@ -334,20 +275,10 @@
                             android:textSize="20sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Working Hour"
+                            android:text="Description"
                             android:textStyle="bold"
                             android:padding="5dp"
                             android:textColor="#123150"
-                            />
-                        <TextView
-                            android:id="@+id/tvworkingvalue"
-                            android:layout_weight="1"
-                            android:textSize="18sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="08h 00m"
-                            android:padding="5dp"
-                            android:textColor="#245644"
                             />
                     </LinearLayout>
 
@@ -356,17 +287,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
-                        <TextView
-                            android:id="@+id/tvOvertime"
-                            android:layout_weight="1"
-                            android:textSize="20sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Over Time"
-                            android:textStyle="bold"
-                            android:padding="5dp"
-                            android:textColor="#123150"
-                            />
+
                         <TextView
                             android:id="@+id/tvPatientaddressvalue"
                             android:layout_weight="1"
@@ -385,17 +306,6 @@
                         android:layout_gravity="bottom"
 
                         >
-                        <TextView
-                            android:id="@+id/tvRemarks"
-                            android:layout_weight="1"
-                            android:textSize="20sp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Remarks"
-                            android:textStyle="bold"
-                            android:padding="5dp"
-                            android:textColor="#123150"
-                            />
 
                     </LinearLayout>
 

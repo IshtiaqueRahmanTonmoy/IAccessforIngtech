@@ -61,6 +61,12 @@ public class DashboardActivity extends AppCompatActivity
                             Intent intent = new Intent(DashboardActivity.this,AttendanceActivity.class);
                             startActivity(intent);
                         }
+
+                        else if(item.getTitle().toString().equals("Notification")){
+                            Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
+                            startActivity(intent);
+                        }
+
                         /*
                         if(item.getTitle().equals("Attendance")){
                            Intent intent = new Intent(DashboardActivity.this,AttendanceActivity.class);
@@ -141,9 +147,14 @@ public class DashboardActivity extends AppCompatActivity
         } else if (id == R.id.nav_salarystatement) {
 
         } else if (id == R.id.nav_profile) {
-
+            Intent intent = new Intent(DashboardActivity.this,ProfileActivity.class);
+            startActivity(intent);
+            finish();
 
         } else if (id == R.id.nav_employees) {
+            Intent intent = new Intent(DashboardActivity.this,AddEmployeeActivity.class);
+            startActivity(intent);
+            finish();
 
         }
 
