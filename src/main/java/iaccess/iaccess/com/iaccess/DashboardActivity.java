@@ -17,13 +17,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FloatingActionButton fab;
-    CardView cardview;
+    CardView cardview,eventcardview;
+    TextView nameText,designationText;
+    String roleval,acces_token;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,51 +35,88 @@ public class DashboardActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        roleval = getIntent().getStringExtra("userrole");
+        //acces_token = getIntent().getStringExtra("acces_token");
+        //Toast.makeText(DashboardActivity.this, ""+roleval, Toast.LENGTH_SHORT).show();
+
        cardview = (CardView) findViewById(R.id.supports);
+       eventcardview = (CardView) findViewById(R.id.events);
 
        cardview.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
                Intent intent = new Intent(DashboardActivity.this,AddSupportActivity.class);
                startActivity(intent);
-               finish();
            }
        });
-       fab = (FloatingActionButton) findViewById(R.id.fab);
+
+       eventcardview.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+               Intent intent = new Intent(DashboardActivity.this,AddEventActivity.class);
+               startActivity(intent);
+           }
+       });
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
                 PopupMenu popup = new PopupMenu(DashboardActivity.this, view);
                 //Inflating the Popup using xml file
-                popup.getMenuInflater().inflate(R.menu.button_menu, popup.getMenu());
 
-                //registering popup with OnMenuItemClickListener
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
+                if(roleval.equals("user")) {
+                    popup.getMenuInflater().inflate(R.menu.button_menu1, popup.getMenu());
 
-                        Log.d("attendance",item.getTitle().toString());
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
 
-                        if(item.getTitle().toString().equals("Attendance")){
-                            Intent intent = new Intent(DashboardActivity.this,AttendanceActivity.class);
-                            startActivity(intent);
+                            Log.d("attendance", item.getTitle().toString());
+
+                            if (item.getTitle().toString().equals("Attendance")) {
+                                Intent intent = new Intent(DashboardActivity.this, AttendanceActivity.class);
+                                intent.putExtra("rolevalue",roleval);
+                                startActivity(intent);
+                            } else if (item.getTitle().toString().equals("Notification")) {
+                                //Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
+                                //startActivity(intent);
+                            } else if (item.getTitle().toString().equals("Event")) {
+                                Intent intent = new Intent(DashboardActivity.this, EventListActivity.class);
+                                startActivity(intent);
+                            }
+                            return true;
                         }
+                    });
+                }
+                else{
+                    popup.getMenuInflater().inflate(R.menu.button_menu, popup.getMenu());
 
-                        else if(item.getTitle().toString().equals("Notification")){
-                            Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
-                            startActivity(intent);
+                    //registering popup with OnMenuItemClickListener
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        public boolean onMenuItemClick(MenuItem item) {
+
+                            Log.d("attendance", item.getTitle().toString());
+
+                            if (item.getTitle().toString().equals("Attendance")) {
+                                Intent intent = new Intent(DashboardActivity.this, AttendanceActivity.class);
+                                startActivity(intent);
+                            } else if (item.getTitle().toString().equals("Notification")) {
+                                //Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
+                                //startActivity(intent);
+                            } else if (item.getTitle().toString().equals("Event")) {
+                                Intent intent = new Intent(DashboardActivity.this, EventListActivity.class);
+                                startActivity(intent);
+                            } else if (item.getTitle().toString().equals("Employee")) {
+                                Intent intent = new Intent(DashboardActivity.this, AddEmployeeActivity.class);
+                                intent.putExtra("rolevalue",roleval);
+                                startActivity(intent);
+                            }
+                            return true;
                         }
-
-                        /*
-                        if(item.getTitle().equals("Attendance")){
-                           Intent intent = new Intent(DashboardActivity.this,AttendanceActivity.class);
-                           startActivity(intent);
-                       }
-                       */
-                        return true;
-                    }
-                });
-
+                    });
+                }
                 popup.show();//showing popup menu
                 //return super.onOptionsItemSelected(item);
             }
@@ -91,6 +131,25 @@ public class DashboardActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        View headerView = navigationView.getHeaderView(0);
+        nameText = (TextView) headerView.findViewById(R.id.nameNav);
+        designationText = (TextView) headerView.findViewById(R.id.designationNav);
+
+        nameText.setText("Nur A Alam");
+        designationText.setText("Developer");
+
+        Menu menu =navigationView.getMenu();
+
+
+        if(roleval.equals("user")) {
+            MenuItem target = menu.findItem(R.id.nav_employees);
+            target.setVisible(false);
+
+            //MenuItem target1 = menu.findItem(R.id.employee);
+            //target1.setVisible(false);
+        }
+
     }
 
 
@@ -122,6 +181,12 @@ public class DashboardActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.action_logout) {
+            Intent intent = new Intent(DashboardActivity.this,SignInActivity.class);
+            startActivity(intent);
+            return true;
+        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -135,27 +200,20 @@ public class DashboardActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             // Handle the camera action
         } else if (id == R.id.nav_history) {
-            Intent intent = new Intent(DashboardActivity.this,AttendanceDetails.class);
+            Intent intent = new Intent(DashboardActivity.this,AttendanceHistoryActivity.class);
+            intent.putExtra("rolevalue",roleval);
             startActivity(intent);
-            finish();
-
         } else if (id == R.id.nav_supporthistory) {
             Intent intent = new Intent(DashboardActivity.this,SupportHistory.class);
             startActivity(intent);
-            finish();
-
         } else if (id == R.id.nav_salarystatement) {
 
         } else if (id == R.id.nav_profile) {
             Intent intent = new Intent(DashboardActivity.this,ProfileActivity.class);
             startActivity(intent);
-            finish();
-
         } else if (id == R.id.nav_employees) {
-            Intent intent = new Intent(DashboardActivity.this,AddEmployeeActivity.class);
+            Intent intent = new Intent(DashboardActivity.this,EmployeeListActivity.class);
             startActivity(intent);
-            finish();
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

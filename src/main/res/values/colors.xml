@@ -9,11 +9,14 @@
     <color name="pinkwhite">#ed5abf</color>
     <color name="buttoncolor">#FFEB7AFA</color>
 
+    <color name="pinkdeep">#e62aab</color>
+
     <color name="white">#faf8fa</color>
 
     <color name="colorWhite1">#F7F7F7</color>
     <color name="red">#f12424</color>
     <color name="green">#23f21c</color>
+
 
     <color name="windowBackground">#FFFFFF</color>
 </resources>

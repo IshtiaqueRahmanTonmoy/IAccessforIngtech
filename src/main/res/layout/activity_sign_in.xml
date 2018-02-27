@@ -15,7 +15,7 @@
         android:layout_marginBottom="16dp"
         android:layout_marginTop="45dp"
         android:gravity="center_horizontal"
-        android:text="iAccounts"
+        android:text="iAccess"
         android:textColor="#fff"
         android:textSize="26sp"
         android:textStyle="bold" />

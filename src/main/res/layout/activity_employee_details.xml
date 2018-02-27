@@ -10,11 +10,24 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
+            android:id="@+id/page_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:layout_alignParentTop="true"
+            android:background="@color/pinkish"
+            android:elevation="4dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Employee Details"
+                android:textSize="18sp"
+                />
+
+        </android.support.v7.widget.Toolbar>
+
 
         <LinearLayout
             android:id="@+id/viewA"
@@ -63,9 +76,10 @@
                     android:layout_marginLeft="53dp"                                                style="@style/MyButtonStyleSmall"
                     android:layout_marginStart="53dp"
                     android:layout_marginTop="12dp"
+                    android:background="@drawable/editbutton"
                     android:layout_toEndOf="@+id/imageViewLogo"
-                    android:layout_toRightOf="@+id/imageViewLogo"
-                    android:text="Button" />
+                    android:layout_toRightOf="@+id/imageViewLogo"/>
+
 
             </RelativeLayout>
         </LinearLayout>
@@ -87,12 +101,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:textSize="20sp"
                     android:text="ID" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/idTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -109,12 +123,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.5"
                     android:textSize="20sp"
                     android:text="Name" />
 
                 <TextView
-                    android:id="@+id/textView2s"
+                    android:id="@+id/nameTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -131,12 +145,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="8"
+                    android:layout_weight="0.5"
                     android:textSize="20sp"
                     android:text="Email" />
 
                 <TextView
-                    android:id="@+id/email"
+                    android:id="@+id/emailTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -154,12 +168,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="3"
+                    android:layout_weight="0.5"
                     android:textSize="20sp"
                     android:text="Phone" />
 
                 <TextView
-                    android:id="@+id/phone"
+                    android:id="@+id/phoneTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -177,12 +191,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.2"
                     android:textSize="20sp"
                     android:text="Designation" />
 
                 <TextView
-                    android:id="@+id/designation"
+                    android:id="@+id/designationTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -200,12 +214,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.3"
                     android:textSize="20sp"
                     android:text="Gender" />
 
                 <TextView
-                    android:id="@+id/gender"
+                    android:id="@+id/genderTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -223,12 +237,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.002"
                     android:textSize="20sp"
+                    android:layout_marginRight="55dp"
                     android:text="Address" />
 
                 <TextView
-                    android:id="@+id/address"
+                    android:id="@+id/addressTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

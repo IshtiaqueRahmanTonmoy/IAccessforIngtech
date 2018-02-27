@@ -12,13 +12,6 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <android.support.v7.widget.Toolbar
             android:id="@+id/page_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -224,7 +217,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/desciption"
+                            android:id="@+id/tvorganizationname"
                             android:layout_weight="1"
                             android:textSize="16sp"
                             android:layout_width="match_parent"
@@ -260,7 +253,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/tvAge"
+                            android:id="@+id/tvissue"
                             android:layout_weight="1"
                             android:textSize="16sp"
                             android:layout_width="match_parent"
@@ -296,7 +289,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/tvOvertime"
+                            android:id="@+id/tvName"
                             android:layout_weight="1"
                             android:textSize="20sp"
                             android:layout_width="match_parent"
@@ -314,7 +307,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/tvRemarks"
+                            android:id="@+id/description"
                             android:layout_weight="1"
                             android:textSize="20dp"
                             android:layout_width="match_parent"
@@ -332,7 +325,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/tvRemarksvalue"
+                            android:id="@+id/tvdescriptionvalue"
                             android:layout_weight="1"
                             android:textSize="18sp"
                             android:layout_width="match_parent"
@@ -368,7 +361,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/tvRemarksvaluess"
+                            android:id="@+id/tvRemarksvalues"
                             android:layout_weight="1"
                             android:textSize="18sp"
                             android:layout_width="match_parent"

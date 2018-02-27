@@ -12,13 +12,6 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        <android.support.v7.widget.Toolbar
             android:id="@+id/page_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -233,7 +226,7 @@
                             />
 
                         <TextView
-                            android:id="@+id/more"
+                            android:id="@+id/checkedinmore"
                             android:layout_weight="1"
                             android:textSize="16sp"
                             android:layout_width="match_parent"
@@ -277,7 +270,7 @@
                             android:textColor="#123150"
                             />
                         <Button
-                            android:id="@+id/tvPatientnamevalue"
+                            android:id="@+id/View2"
                             android:layout_weight="1.8"
                             android:textSize="15dp"
                             android:paddingTop="4dp"
@@ -300,7 +293,7 @@
                         android:orientation="horizontal"
                         android:layout_gravity="bottom">
                         <TextView
-                            android:id="@+id/tvAge"
+                            android:id="@+id/tvouLoc"
                             android:layout_weight="1"
                             android:textSize="16sp"
                             android:layout_width="match_parent"
@@ -309,16 +302,16 @@
                             android:padding="5dp"
                             android:textColor="#123150"
                             />
-                        <Button
-                            android:id="@+id/tvView"
-                            android:textSize="15dp"
-                            android:layout_width="wrap_content"
+
+                        <TextView
+                            android:id="@+id/checkedout"
+                            android:layout_weight="1"
+                            android:textSize="16sp"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="View"
-                            android:layout_marginTop="5dp"
-                            style="@style/MyButtonStyleSmall"
+                            android:text="More.."
                             android:padding="5dp"
-                            android:textColor="#245644"
+                            android:textColor="#3c8dde"
                             />
 
                     </LinearLayout>
@@ -368,7 +361,7 @@
                             android:textColor="#123150"
                             />
                         <TextView
-                            android:id="@+id/tvPatientaddressvalue"
+                            android:id="@+id/tvOverValue"
                             android:layout_weight="1"
                             android:textSize="18sp"
                             android:layout_width="match_parent"
