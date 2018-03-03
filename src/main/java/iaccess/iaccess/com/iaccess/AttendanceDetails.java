@@ -4,7 +4,10 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -35,7 +38,8 @@ public class AttendanceDetails extends AppCompatActivity {
     private StringRequest stringRequest;
     String years,months,days,mnth;
     private ProgressDialog progressDialog;
-    String id,ids,name,date,intime,outtime,in_location,out_location,working_hour,overtime,remarks,timestamp,month,day,hour,timestampsout,hourout,fromto;
+    private Toolbar toolbar;
+    String roleval,access_token,Authorization,id,ids,name,date,intime,outtime,in_location,out_location,working_hour,overtime,remarks,timestamp,month,day,hour,timestampsout,hourout,fromto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,9 +47,25 @@ public class AttendanceDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
-        //Toast.makeText(this, ""+id, Toast.LENGTH_SHORT).show();
+        roleval = getIntent().getStringExtra("userrole");
+        access_token = getIntent().getStringExtra("access_token");
+        Authorization = "Bearer"+" "+access_token;
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Attendance Details List");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+        //Toast.makeText(this, "role value"+roleval, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "access token"+access_token, Toast.LENGTH_SHORT).show();
 
         showDetails(id);
+
 
         nameTxt = (TextView) findViewById(R.id.name);
         dateTxt = (TextView) findViewById(R.id.date);
@@ -81,6 +101,44 @@ public class AttendanceDetails extends AppCompatActivity {
 
 
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AttendanceDetails.this,AttendanceHistoryActivity.class);
+        intent.putExtra("userrole",roleval);
+        intent.putExtra("access_token",access_token);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menusettings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            Intent intent = new Intent(AttendanceDetails.this,AttendanceHistoryActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("access_token",access_token);
+            startActivity(intent);
+            finish();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void showDetails(String id) {
         RequestQueue queue = Volley.newRequestQueue(AttendanceDetails.this);
@@ -361,6 +419,7 @@ public class AttendanceDetails extends AppCompatActivity {
                                     fromto = intime+"-"+outtime;
                                     String y = days+","+months+","+years;
 
+                                    progressDialog.dismiss();
                                     nameTxt.setText(name);
                                     dateTxt.setText(v+","+month+","+years);
                                     idTxt.setText(ids);
@@ -380,7 +439,7 @@ public class AttendanceDetails extends AppCompatActivity {
 
 
                                     //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
+
                                     //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
 
                                 } catch (JSONException e) {

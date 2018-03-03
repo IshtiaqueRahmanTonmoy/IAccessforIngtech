@@ -10,6 +10,13 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <android.support.v7.widget.Toolbar
             android:id="@+id/page_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -96,13 +103,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="ID" />
 
                 <TextView
@@ -112,19 +121,22 @@
                     android:layout_weight="1"
                     android:textSize="20sp"
                     android:text="1007" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="Name" />
 
                 <TextView
@@ -140,13 +152,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="Email" />
 
                 <TextView
@@ -163,13 +177,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.5"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="Phone" />
 
                 <TextView
@@ -186,20 +202,22 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.2"
-                    android:textSize="20sp"
+                    android:layout_weight="0.7"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="Designation" />
 
                 <TextView
                     android:id="@+id/designationTxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="1.3"
                     android:textSize="20sp"
                     android:text="Web Developer" />
             </LinearLayout>
@@ -209,13 +227,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.3"
-                    android:textSize="20sp"
+                    android:layout_weight="1"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:text="Gender" />
 
                 <TextView
@@ -232,13 +252,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:weightSum="2"
                 android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="0.002"
-                    android:textSize="20sp"
+                    android:layout_weight="0.001"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
                     android:layout_marginRight="55dp"
                     android:text="Address" />
 
@@ -248,7 +270,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Protin premium leo ac pelletesque mollis fellis" />
+                    android:text="Protin premium leo" />
             </LinearLayout>
 
         </LinearLayout>

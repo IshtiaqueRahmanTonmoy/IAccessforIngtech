@@ -12,6 +12,13 @@
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        <android.support.v7.widget.Toolbar
             android:id="@+id/page_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -123,7 +130,7 @@
                                     android:text="Nur A Alam"
                                     android:textStyle="bold"
                                     android:textColor="#123150"
-                                    android:textSize="20sp" />
+                                    android:textSize="22sp" />
 
                                 <TextView
                                     android:id="@+id/date"
@@ -156,7 +163,7 @@
                                     android:padding="5dp"
                                     android:text="ID:1005"
                                     android:textColor="#123150"
-                                    android:textSize="20sp" />
+                                    android:textSize="22sp" />
 
 
                             </LinearLayout>
@@ -182,16 +189,6 @@
                     android:textAlignment="center"
                     android:background="@drawable/cartbutton_selector">
 
-                    <TextView
-                        android:id="@+id/detail1"
-                        android:layout_weight="1"
-                        android:textSize="22sp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Details"
-                        android:padding="5dp"
-                        android:textColor="#3d3e3e"
-                        />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -201,7 +198,8 @@
                         <TextView
                             android:id="@+id/tvCheckin"
                             android:layout_weight="1"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Organization"
@@ -219,7 +217,7 @@
                         <TextView
                             android:id="@+id/tvorganizationname"
                             android:layout_weight="1"
-                            android:textSize="16sp"
+                            android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Shantinagar Peer Shaheber goli"
@@ -237,11 +235,12 @@
                         <TextView
                             android:id="@+id/tvPatientname"
                             android:layout_weight="1"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Support Issue"
                             android:padding="5dp"
+                            android:textStyle="bold"
                             android:textColor="#123150"
                             />
 
@@ -255,7 +254,7 @@
                         <TextView
                             android:id="@+id/tvissue"
                             android:layout_weight="1"
-                            android:textSize="16sp"
+                            android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Dhanmondi,Satmojhid Road"
@@ -273,10 +272,11 @@
                         <TextView
                             android:id="@+id/tvworkinghour"
                             android:layout_weight="1"
-                            android:textSize="20sp"
+                            android:textSize="22sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Person"
+                            android:textStyle="bold"
                             android:padding="5dp"
                             android:textColor="#123150"
                             />
@@ -291,7 +291,7 @@
                         <TextView
                             android:id="@+id/tvName"
                             android:layout_weight="1"
-                            android:textSize="20sp"
+                            android:textSize="18sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Name"
@@ -309,10 +309,11 @@
                         <TextView
                             android:id="@+id/description"
                             android:layout_weight="1"
-                            android:textSize="20dp"
+                            android:textSize="22sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Description"
+                            android:textStyle="bold"
                             android:padding="5dp"
                             android:textColor="#123150"
                             />
@@ -345,7 +346,8 @@
                         <TextView
                             android:id="@+id/tvRemarkss"
                             android:layout_weight="1"
-                            android:textSize="20dp"
+                            android:textSize="22dp"
+                            android:textStyle="bold"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Remarks"

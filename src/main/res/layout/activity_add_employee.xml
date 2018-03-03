@@ -13,6 +13,14 @@ android:layout_height="match_parent">
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+
+    <android.support.v7.widget.Toolbar
         android:id="@+id/page_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
@@ -95,27 +103,6 @@ android:layout_height="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.6"
-                android:textSize="20sp"
-                android:text="ID" />
-
-            <EditText
-                android:id="@+id/idEdt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:text="1007" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
             android:orientation="horizontal">
 
@@ -132,7 +119,7 @@ android:layout_height="match_parent">
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
-                android:text="Nur A Alam" />
+                android:hint="Enter Name" />
         </LinearLayout>
 
         <LinearLayout
@@ -144,7 +131,7 @@ android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="8"
+                android:layout_weight="0.5"
                 android:textSize="20sp"
                 android:text="Email" />
 
@@ -154,7 +141,7 @@ android:layout_height="match_parent">
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
-                android:text="nuraalam@ingtechbd.com" />
+                android:hint="Enter Email" />
         </LinearLayout>
 
 
@@ -167,7 +154,7 @@ android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.6"
+                android:layout_weight="0.5"
                 android:textSize="20sp"
                 android:text="Phone" />
 
@@ -176,8 +163,9 @@ android:layout_height="match_parent">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:inputType="number"
                 android:textSize="20sp"
-                android:text="017914123456" />
+                android:hint="Enter Phone" />
         </LinearLayout>
 
 
@@ -190,7 +178,7 @@ android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.5"
                 android:textSize="20sp"
                 android:text="Designation" />
 
@@ -200,7 +188,7 @@ android:layout_height="match_parent">
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
-                android:text="Web Developer" />
+                android:hint="Enter Designation" />
         </LinearLayout>
 
         <LinearLayout
@@ -212,7 +200,7 @@ android:layout_height="match_parent">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.3"
+                android:layout_weight="0.5"
                 android:textSize="20sp"
                 android:text="Address" />
 
@@ -221,6 +209,7 @@ android:layout_height="match_parent">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:hint="Enter Address"
                 android:textSize="20sp" />
         </LinearLayout>
 
@@ -293,6 +282,7 @@ android:layout_height="match_parent">
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
+                android:hint="Enter Password"
                 android:inputType="textPassword"/>
         </LinearLayout>
 

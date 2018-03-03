@@ -5,7 +5,7 @@ package iaccess.iaccess.com.entity;
  */
 
 public class Employee {
-    String id,day,month,name,fromtotime,location;
+    String id,day,month,name,fromtotime,location,image;
 
     public Employee(String name, String month, String day, String fromtotime, String location) {
         this.name = name;
@@ -15,13 +15,21 @@ public class Employee {
         this.location = location;
     }
 
-    public Employee(String id, String name, String month, String day, String fromtotime, String location) {
+    public Employee(String id, String image, String name, String month, String day, String fromtotime, String location) {
         this.id = id;
+        this.image = image;
         this.name = name;
         this.month = month;
         this.day = day;
         this.fromtotime = fromtotime;
         this.location = location;
+    }
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public String getId() {

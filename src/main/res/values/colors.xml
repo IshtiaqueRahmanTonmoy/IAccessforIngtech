@@ -16,6 +16,8 @@
     <color name="colorWhite1">#F7F7F7</color>
     <color name="red">#f12424</color>
     <color name="green">#23f21c</color>
+    <color name="background_color">#888988</color>
+    <color name="border_colors">#636463</color>
 
 
     <color name="windowBackground">#FFFFFF</color>

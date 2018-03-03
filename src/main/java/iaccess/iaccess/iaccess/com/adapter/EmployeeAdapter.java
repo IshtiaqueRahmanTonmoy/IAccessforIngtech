@@ -6,8 +6,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 import java.util.List;
 
@@ -22,7 +26,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
     private List<Employee> empList;
     private Context context;
 
-    public EmployeeAdapter(List<Employee> empList){
+    public EmployeeAdapter(Context context,List<Employee> empList){
+        this.context = context;
         this.empList = empList;
         Log.d("emplist", String.valueOf(empList.size()));
         //Toast.makeText(context, ""+empList.size(), Toast.LENGTH_SHORT).show();
@@ -43,6 +48,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
         holder.location.setText(employee.getLocation());
         holder.abovetext.setText(employee.getMonth());
         holder.belowtext.setText(employee.getDay());
+
+        Glide.with(context)
+                .load("http://i-access.ingtechbd.com/"+employee.getImage())
+                .asBitmap()
+                .override(250,250)
+                .skipMemoryCache(true)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .into(holder.imageview);
+
     }
 
     @Override
@@ -53,6 +67,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
         private TextView ids,name,fromtodate,location,abovetext,belowtext;
+        private ImageView imageview;
 
         public MyViewHolder(View view) {
             super(view);
@@ -63,7 +78,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
             location = (TextView) view.findViewById(R.id.location);
             abovetext = (TextView) view.findViewById(R.id.aboveText);
             belowtext = (TextView) view.findViewById(R.id.belowText);
-
+            imageview = (ImageView) view.findViewById(R.id.ImageView);
         }
     }
 }

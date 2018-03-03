@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -54,19 +57,31 @@ public class AddEmployeeActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private ImageView image;
     Bitmap bitmap;
-    String val,gender,role,name,email,phone,designation,avatar,address,password;
+    String val,gender,role,name,email,phone,designation,avatar,address,password,access_token,Authorization,roleval;
     String[] gnd = new String[]{
             "Male",
             "Female"
     };
+    Toolbar toolbar;
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_employee);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Add Employee");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        roleval = getIntent().getStringExtra("userrole");
+        access_token = getIntent().getStringExtra("accesstoken");
+        //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
+        Authorization = "Bearer"+" "+access_token;
+        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+
         getrole();
-        idEdt = (EditText) findViewById(R.id.idEdt);
+        //idEdt = (EditText) findViewById(R.id.idEdt);
         nameEdt = (EditText) findViewById(R.id.nameEdt);
         emailEdt = (EditText) findViewById(R.id.emailEdt);
         phoneEdt = (EditText) findViewById(R.id.phoneEdt);
@@ -87,6 +102,125 @@ public class AddEmployeeActivity extends AppCompatActivity {
             }
         });
 
+        nameEdt.addTextChangedListener(new TextWatcher()  {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)  {
+                if (nameEdt.getText().toString().length() <= 0) {
+                    nameEdt.setError("Enter Name");
+                } else {
+                    nameEdt.setError(null);
+                }
+            }
+        });
+
+        emailEdt.addTextChangedListener(new TextWatcher()  {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)  {
+                if (emailEdt.getText().toString().length() <= 0) {
+                    emailEdt.setError("Enter Email");
+                } else {
+                    emailEdt.setError(null);
+                }
+            }
+        });
+        phoneEdt.addTextChangedListener(new TextWatcher()  {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)  {
+                if (phoneEdt.getText().toString().length() <= 0) {
+                    phoneEdt.setError("Enter Phone");
+                } else {
+                    phoneEdt.setError(null);
+                }
+            }
+        });
+        designationEdt.addTextChangedListener(new TextWatcher()  {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)  {
+                if (designationEdt.getText().toString().length() <= 0) {
+                    designationEdt.setError("Enter Designation");
+                } else {
+                    designationEdt.setError(null);
+                }
+            }
+        });
+
+        addressEdt.addTextChangedListener(new TextWatcher()  {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)  {
+                if (addressEdt.getText().toString().length() <= 0) {
+                    addressEdt.setError("Enter Address");
+                } else {
+                    addressEdt.setError(null);
+                }
+            }
+        });
+        passwordEdt.addTextChangedListener(new TextWatcher()  {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s)  {
+                if (passwordEdt.getText().toString().length() <= 0) {
+                    passwordEdt.setError("Enter Password");
+                } else {
+                    passwordEdt.setError(null);
+                }
+            }
+        });
+
+
+        /*
         scrollView = (ScrollView) findViewById(R.id.scrollview);
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -94,6 +228,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 hideKeyboard(view);
             }
         });
+        */
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 AddEmployeeActivity.this,R.layout.textview_for_spinner,gnd );
@@ -107,14 +242,40 @@ public class AddEmployeeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                name = nameEdt.getText().toString();
-                email = emailEdt.getText().toString();
-                phone = phoneEdt.getText().toString();
-                designation = designationEdt.getText().toString();
-                address = addressEdt.getText().toString();
-                avatar = getStringImage(bitmap);
-                password = passwordEdt.getText().toString();
-                addemployee();
+                if (nameEdt.getText().toString().length() <= 0) {
+                    nameEdt.setError("Enter Name");
+                }
+
+                else if (emailEdt.getText().toString().length() <= 0) {
+                    emailEdt.setError("Enter Email");
+                }
+
+                else if (phoneEdt.getText().toString().length() <= 0) {
+                    phoneEdt.setError("Enter Phone");
+                }
+
+                else if (designationEdt.getText().toString().length() <= 0) {
+                    designationEdt.setError("Enter Designation");
+                }
+
+                else if (addressEdt.getText().toString().length() <= 0) {
+                    addressEdt.setError("Enter Address");
+                }
+
+                else if (passwordEdt.getText().toString().length() <= 0) {
+                    passwordEdt.setError("Enter Password");
+                }
+                else {
+                    name = nameEdt.getText().toString();
+                    email = emailEdt.getText().toString();
+                    phone = phoneEdt.getText().toString();
+                    designation = designationEdt.getText().toString();
+                    address = addressEdt.getText().toString();
+                    password = passwordEdt.getText().toString();
+                    avatar = getStringImage(bitmap);
+
+                    addemployee();
+                }
             }
         });
 
@@ -178,6 +339,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
     }
 
     private void addemployee() {
+
+        Log.d("emp",name+"email"+email+"phone"+phone+"designation"+designation+"gender"+gender+"avatar"+avatar+"address"+address+"role"+role+"password"+password);
         RequestQueue requestQueue = Volley.newRequestQueue(AddEmployeeActivity.this);
           /*Post data*/
         Map<String, String> params = new HashMap<>();
@@ -186,7 +349,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         params.put("phone", phone);
         params.put("designaton",designation);
         params.put("gender",gender);
-        //params.put("avatar",avatar);
+        params.put("avatar",avatar);
         params.put("address",address);
         params.put("role",role);
         params.put("password",password);
@@ -200,23 +363,39 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
+
+                        //Toast.makeText(AddEmployeeActivity.this, ""+response, Toast.LENGTH_SHORT).show();
+                        //progressDialog.dismiss();
+
+                        Log.d("respo", String.valueOf(response));
+                        nameEdt.setText("");
+                        emailEdt.setText("");
+                        phoneEdt.setText("");
+                        designationEdt.setText("");
+                        addressEdt.setText("");
+                        passwordEdt.setText("");
                     }
                 },
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //   Handle Error
+                        Toast.makeText(AddEmployeeActivity.this, "added", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
-                headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                headers.put("Authorization",Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
         };
         requestQueue.add(postRequest);
+        //progressDialog = new ProgressDialog(this);
+       // progressDialog.setMessage("Please wait....");
+       // progressDialog.show();
     }
 
     private void getrole() {
@@ -258,7 +437,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
 
                             //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
+                            //progressDialog.dismiss();
                             //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
 
                     }
@@ -273,14 +452,15 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
-                headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                headers.put("Authorization",Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
         };
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-        progressDialog = new ProgressDialog(AddEmployeeActivity.this);
-        progressDialog.setMessage("Please wait....");
-        progressDialog.show();
+        //progressDialog = new ProgressDialog(AddEmployeeActivity.this);
+        //progressDialog.setMessage("Please wait....");
+        //progressDialog.show();
     }
 }

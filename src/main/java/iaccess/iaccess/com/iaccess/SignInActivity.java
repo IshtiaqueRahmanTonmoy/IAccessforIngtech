@@ -49,9 +49,13 @@ public class SignInActivity extends AppCompatActivity {
         SM = getSharedPreferences("userrecord", 0);
         Boolean islogin = SM.getBoolean("userlogin", false);
         String emailvalue = SM.getString("email",null);
-        String rolevals = SM.getString("usrole",null);
+        String accesstoken = SM.getString("acces_token",null);
+        String rolevals = SM.getString("userrole",null);
+
+        //Log.d("sharepref",accesstoken);
         if(islogin){
             Intent intent = new Intent(SignInActivity.this, DashboardActivity.class);
+            intent.putExtra("acces_token",accesstoken);
             intent.putExtra("email",emailvalue);
             intent.putExtra("userrole",rolevals);
             startActivity(intent);
@@ -119,6 +123,7 @@ public class SignInActivity extends AppCompatActivity {
                                 if(response.equals("")){
 
                                     //progressDialog.dismiss();
+                                    //progressDialog.dismiss();
                                     Toast.makeText(SignInActivity.this, "Please enter correct information..", Toast.LENGTH_SHORT).show();
                                 }
                                 else {
@@ -135,15 +140,16 @@ public class SignInActivity extends AppCompatActivity {
 
 
                                             SharedPreferences.Editor edit = SM.edit();
-                                            edit.putString("usrole", result);
+                                            edit.putString("userrole", result);
                                             edit.putString("username", username);
+                                            edit.putString("acces_token",acces_token);
                                             edit.putBoolean("userlogin", true);
                                             edit.commit();
 
                                             startActivity(intent);
 
 
-                                            progressDialog.dismiss();
+
                                             finish();
 
                                             //rolevalue = result;
@@ -153,7 +159,7 @@ public class SignInActivity extends AppCompatActivity {
                                     });
 
 
-
+                                    progressDialog.dismiss();
                                     //Toast.makeText(SignInActivity.this, "the value is"+rolevalue, Toast.LENGTH_SHORT).show();
                                                                     }
                             }

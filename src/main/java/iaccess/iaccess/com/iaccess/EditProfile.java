@@ -1,15 +1,20 @@
 package iaccess.iaccess.com.iaccess;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -30,8 +35,9 @@ public class EditProfile extends AppCompatActivity {
     private EditText idEdt,nameEdt,emailEdt,phoneEdt,designationEdt,addressEdt;
     private Spinner genderSpinner;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,designation;
+    private String id,name,email,phone,designaton,gender,address,designation,Authorization,access_token,userId,roleval;
     private Button update;
+    private Toolbar toolbar;
     String[] gnd = new String[]{
 
             "Male",
@@ -44,7 +50,23 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        idEdt = (EditText) findViewById(R.id.idEdt);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Employee Details List");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        userId = getIntent().getStringExtra("idval");
+
+        roleval = getIntent().getStringExtra("userrole");
+        access_token = getIntent().getStringExtra("access_token");
+        //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
+        Authorization = "Bearer"+" "+access_token;
+
+        //idEdt = (EditText) findViewById(R.id.idEdt);
         nameEdt = (EditText) findViewById(R.id.nameEdt);
         emailEdt = (EditText) findViewById(R.id.emailEdt);
         phoneEdt = (EditText) findViewById(R.id.phoneEdt);
@@ -90,12 +112,47 @@ public class EditProfile extends AppCompatActivity {
 
     }
 
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(EditProfile.this,DashboardActivity.class);
+        intent.putExtra("userrole",roleval);
+        intent.putExtra("acces_token",access_token);
+        finish();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menusettings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            Intent intent = new Intent(EditProfile.this,DashboardActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("acces_token",access_token);
+            startActivity(intent);
+            finish();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
     private void update() {
         RequestQueue queue = Volley.newRequestQueue(EditProfile.this);
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
-        String url = "http://i-access.ingtechbd.com/api/users/edit/"+1;
+        String url = "http://i-access.ingtechbd.com/api/users/edit/"+userId;
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -103,10 +160,11 @@ public class EditProfile extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responsevalue", response);
-                        //Toast.makeText(AttendanceActivity.this, ""+response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(EditProfile.this, "Successfully edited profile", Toast.LENGTH_SHORT).show();
                         // Display the response string.
                         //_response.setText(response);
                     }
+
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -133,6 +191,7 @@ public class EditProfile extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
+                //headers.put("Authorization",Authorization);
                 headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
@@ -148,7 +207,7 @@ public class EditProfile extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users/view/"+2,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users/view/"+userId,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -160,7 +219,7 @@ public class EditProfile extends AppCompatActivity {
                             //Getting json object
                             //Toast.makeText(AttendanceHistoryActivity.this, ""+id, Toast.LENGTH_SHORT).show();
 
-                            id = json.getString("id");
+                            //id = json.getString("id");
                             name = json.getString("name");
                             email = json.getString("email");
                             phone = json.getString("phone");
@@ -168,9 +227,7 @@ public class EditProfile extends AppCompatActivity {
                             gender = json.getString("gender");
                             address = json.getString("address");
 
-                            progressDialog.dismiss();
-
-                            idEdt.setText(id);
+                            //idEdt.setText(id);
                             nameEdt.setText(name);
                             emailEdt.setText(email);
                             phoneEdt.setText(phone);
@@ -186,6 +243,7 @@ public class EditProfile extends AppCompatActivity {
                             Log.d("id", id + "name" + name + "email" + email);
 
 
+                            progressDialog.dismiss();
                             //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
                             //progressDialog.dismiss();
                             //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
@@ -208,6 +266,7 @@ public class EditProfile extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
+                //headers.put("Authorization",Authorization);
                 headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }

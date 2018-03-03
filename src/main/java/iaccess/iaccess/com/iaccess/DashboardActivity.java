@@ -1,6 +1,7 @@
 package iaccess.iaccess.com.iaccess;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -24,7 +25,7 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FloatingActionButton fab;
-    CardView cardview,eventcardview;
+    CardView cardview,eventcardview,employeecardview,attendanceardview;
     TextView nameText,designationText;
     String roleval,acces_token;
     @Override
@@ -36,27 +37,57 @@ public class DashboardActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         roleval = getIntent().getStringExtra("userrole");
-        //acces_token = getIntent().getStringExtra("acces_token");
-        //Toast.makeText(DashboardActivity.this, ""+roleval, Toast.LENGTH_SHORT).show();
+        acces_token = getIntent().getStringExtra("acces_token");
+        Toast.makeText(DashboardActivity.this, ""+acces_token, Toast.LENGTH_SHORT).show();
 
        cardview = (CardView) findViewById(R.id.supports);
        eventcardview = (CardView) findViewById(R.id.events);
+       employeecardview = (CardView) findViewById(R.id.employees);
+       attendanceardview = (CardView) findViewById(R.id.attendance);
 
-       cardview.setOnClickListener(new View.OnClickListener() {
+
+        cardview.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               Intent intent = new Intent(DashboardActivity.this,AddSupportActivity.class);
+               Intent intent = new Intent(DashboardActivity.this,SupportHistory.class);
+               intent.putExtra("userrole",roleval);
+               intent.putExtra("access_token",acces_token);
                startActivity(intent);
+               finish();
            }
        });
 
        eventcardview.setOnClickListener(new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               Intent intent = new Intent(DashboardActivity.this,AddEventActivity.class);
+               Intent intent = new Intent(DashboardActivity.this,EventListActivity.class);
+               intent.putExtra("userrole",roleval);
+               intent.putExtra("access_token",acces_token);
                startActivity(intent);
+               //finish();
            }
        });
+
+        employeecardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this,EmployeeListActivity.class);
+                intent.putExtra("userrole",roleval);
+                intent.putExtra("access_token",acces_token);
+                startActivity(intent);
+            }
+        });
+
+        attendanceardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(DashboardActivity.this,AttendanceHistoryActivity.class);
+                intent.putExtra("access_token",acces_token);
+                intent.putExtra("userrole",roleval);
+                startActivity(intent);
+                //finish();
+            }
+        });
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -77,13 +108,15 @@ public class DashboardActivity extends AppCompatActivity
 
                             if (item.getTitle().toString().equals("Attendance")) {
                                 Intent intent = new Intent(DashboardActivity.this, AttendanceActivity.class);
-                                intent.putExtra("rolevalue",roleval);
+                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             } else if (item.getTitle().toString().equals("Notification")) {
                                 //Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
                                 //startActivity(intent);
                             } else if (item.getTitle().toString().equals("Event")) {
-                                Intent intent = new Intent(DashboardActivity.this, EventListActivity.class);
+                                Intent intent = new Intent(DashboardActivity.this, AddEventActivity.class);
+                                intent.putExtra("accesstoken",acces_token);
                                 startActivity(intent);
                             }
                             return true;
@@ -101,16 +134,22 @@ public class DashboardActivity extends AppCompatActivity
 
                             if (item.getTitle().toString().equals("Attendance")) {
                                 Intent intent = new Intent(DashboardActivity.this, AttendanceActivity.class);
+                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             } else if (item.getTitle().toString().equals("Notification")) {
                                 //Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
                                 //startActivity(intent);
                             } else if (item.getTitle().toString().equals("Event")) {
-                                Intent intent = new Intent(DashboardActivity.this, EventListActivity.class);
+                                Intent intent = new Intent(DashboardActivity.this, AddEventActivity.class);
+                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("valuenotlist","1");
+                                intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             } else if (item.getTitle().toString().equals("Employee")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEmployeeActivity.class);
-                                intent.putExtra("rolevalue",roleval);
+                                intent.putExtra("userrole",roleval);
+                                intent.putExtra("accesstoken",acces_token);
                                 startActivity(intent);
                             }
                             return true;
@@ -141,14 +180,29 @@ public class DashboardActivity extends AppCompatActivity
 
         Menu menu =navigationView.getMenu();
 
-
         if(roleval.equals("user")) {
+
+            MenuItem target1 = menu.findItem(R.id.nav_employees);
+            target1.setVisible(false);
+        }
+
+
+        if(roleval.equals("admin")) {
+            MenuItem target = menu.findItem(R.id.nav_employees);
+            target.setVisible(true);
+
+            MenuItem target1 = menu.findItem(R.id.nav_profile);
+            target1.setVisible(false);
+        }
+
+        else if(roleval.equals("user")){
             MenuItem target = menu.findItem(R.id.nav_employees);
             target.setVisible(false);
 
-            //MenuItem target1 = menu.findItem(R.id.employee);
-            //target1.setVisible(false);
+            MenuItem target1 = menu.findItem(R.id.nav_profile);
+            target1.setVisible(true);
         }
+
 
     }
 
@@ -181,9 +235,23 @@ public class DashboardActivity extends AppCompatActivity
         if (id == R.id.action_settings) {
             return true;
         }
+        else if (id == R.id.action_event) {
+            Intent intent = new Intent(DashboardActivity.this, EventListActivity.class);
+            intent.putExtra("accesstoken",acces_token);
+            intent.putExtra("userrole",roleval);
+            startActivity(intent);
+            return true;
+        }
         else if (id == R.id.action_logout) {
+
+            SharedPreferences SM = getSharedPreferences("userrecord", 0);
+            SharedPreferences.Editor edit = SM.edit();
+            edit.putBoolean("userlogin", false);
+            edit.commit();
+
             Intent intent = new Intent(DashboardActivity.this,SignInActivity.class);
             startActivity(intent);
+            finish();
             return true;
         }
 
@@ -200,19 +268,27 @@ public class DashboardActivity extends AppCompatActivity
         if (id == R.id.nav_dashboard) {
             // Handle the camera action
         } else if (id == R.id.nav_history) {
+            //Toast.makeText(this, ""+acces_token, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(DashboardActivity.this,AttendanceHistoryActivity.class);
-            intent.putExtra("rolevalue",roleval);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("access_token",acces_token);
             startActivity(intent);
         } else if (id == R.id.nav_supporthistory) {
             Intent intent = new Intent(DashboardActivity.this,SupportHistory.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("access_token",acces_token);
             startActivity(intent);
         } else if (id == R.id.nav_salarystatement) {
 
         } else if (id == R.id.nav_profile) {
-            Intent intent = new Intent(DashboardActivity.this,ProfileActivity.class);
+            Intent intent = new Intent(DashboardActivity.this,EmployeelistProfile.class);
+            intent.putExtra("access_token",acces_token);
+            intent.putExtra("userrole",roleval);
             startActivity(intent);
         } else if (id == R.id.nav_employees) {
             Intent intent = new Intent(DashboardActivity.this,EmployeeListActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("access_token",acces_token);
             startActivity(intent);
         }
 

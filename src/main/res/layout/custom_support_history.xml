@@ -93,7 +93,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dip"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="70dp"
                 android:layout_toRightOf="@+id/myImageViewText"
                 android:text="10:15 AM - 7.30 PM"
                 android:textColor="#1d1d1d"

@@ -2,17 +2,17 @@ package iaccess.iaccess.com.iaccess;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.PopupMenu;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,34 +28,45 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class ProfileActivity extends AppCompatActivity {
+import iaccess.iaccess.com.entity.EmployeeInfo;
+import iaccess.iaccess.com.entity.SimpleDividerItemDecoration;
+import iaccess.iaccess.iaccess.com.adapter.EmployeeAttendanceAdapter;
+import iaccess.iaccess.iaccess.com.adapter.RecyclerItemClickListener;
 
-    private TextView idTxt,nameTxt,emailTxt,phoneTxt,designationTxt,genderTxt,addressTxt,upnameTxt;
+public class EmployeelistProfile extends AppCompatActivity {
+
+    private String id,name,designation,role,idvalue,access_token,Authorization,roleval;
+    private RecyclerView recyclerView;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,access_token,Authorization,userId,roleval;
-    private Button buttonmenu;
-    PopupMenu popup;
+    private EmployeeAttendanceAdapter mAdapter;
+    private List<EmployeeInfo> empList = new ArrayList<EmployeeInfo>();
+    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/users/";
+    private TextView textviewid;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_employee_list);
+
+        showvaluebyid();
 
         roleval = getIntent().getStringExtra("userrole");
-        userId = getIntent().getStringExtra("idval");
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
 
+        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Profile Activity");
+        toolbar.setTitle("Support History");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
         if(getSupportActionBar()!=null){
@@ -63,61 +74,45 @@ public class ProfileActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        ProfileActivity.this.setTitle("Profile");
-        idTxt = (TextView) findViewById(R.id.idText);
-        nameTxt = (TextView) findViewById(R.id.nameText);
-        emailTxt = (TextView) findViewById(R.id.emailText);
-        phoneTxt = (TextView) findViewById(R.id.phoneText);
-        designationTxt = (TextView) findViewById(R.id.designationText);
-        genderTxt = (TextView) findViewById(R.id.genderText);
-        addressTxt = (TextView) findViewById(R.id.address);
-        upnameTxt = (TextView) findViewById(R.id.textViewName);
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
-        buttonmenu = (Button) findViewById(R.id.button);
+        mAdapter = new EmployeeAttendanceAdapter(empList);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerView.addItemDecoration(new SimpleDividerItemDecoration(this, LinearLayout.VERTICAL,16));
 
-        buttonmenu.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popup = new PopupMenu(ProfileActivity.this,view);
-                //popup.setOnMenuItemClickListener(ProfileActivity.this);// to implement on click event on items of menu
-                MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.button_menus, popup.getMenu());
-                popup.show();
+// set the adapter
+        //recyclerView.setAdapter(mAdapter);
 
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(mAdapter);
+
+        recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(EmployeelistProfile.this, new   RecyclerItemClickListener.OnItemClickListener() {
                     @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        int id = item.getItemId();
-                        switch(id) {
-                            case R.id.editprof:
-                                Intent intent = new Intent(ProfileActivity.this,EditProfile.class);
-                                intent.putExtra("idval",userId);
-                                intent.putExtra("userrole",roleval);
-                                intent.putExtra("accesstoken",access_token);
-                                startActivity(intent);
-                                return true;
-                            case R.id.resetpass:
-                                Intent intent1 = new Intent(ProfileActivity.this,ResetPassword.class);
-                                intent1.putExtra("idval",userId);
-                                intent1.putExtra("userrole",roleval);
-                                intent1.putExtra("accesstoken",access_token);
-                                startActivity(intent1);
-                                return true;
-                            default:
-                                return false;
-                        }
+                    public void onItemClick(View v, int position) {
+                        // TODO Handle item click
 
+
+                        textviewid = (TextView) v.findViewById(R.id.id);
+                        idvalue = textviewid.getText().toString();
+
+
+                        Intent intent = new Intent(EmployeelistProfile.this,ProfileActivity.class);
+                        intent.putExtra("idval",idvalue);
+                        intent.putExtra("userrole",roleval);
+                        intent.putExtra("acces_token",access_token);
+                        startActivity(intent);
+
+                        //Toast.makeText(AttendanceHistoryActivity.this, ""+t, Toast.LENGTH_SHORT).show();
                     }
-                });
-            }
-        });
-
-        getValue();
+                })
+        );
     }
 
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ProfileActivity.this,DashboardActivity.class);
+        Intent intent = new Intent(EmployeelistProfile.this,DashboardActivity.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("acces_token",access_token);
         finish();
@@ -138,7 +133,7 @@ public class ProfileActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            Intent intent = new Intent(ProfileActivity.this,DashboardActivity.class);
+            Intent intent = new Intent(EmployeelistProfile.this,DashboardActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
@@ -149,51 +144,41 @@ public class ProfileActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    private void getValue() {
-
-        RequestQueue queue = Volley.newRequestQueue(ProfileActivity.this);
+    private void showvaluebyid() {
+        RequestQueue queue = Volley.newRequestQueue(EmployeelistProfile.this);
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users/view/"+userId,
+        stringRequest = new StringRequest(Request.Method.GET, GETALL_URL,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responsevalue", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            JSONObject json = jsonObject.getJSONObject("data");
+                            JSONArray j = jsonObject.getJSONArray("data");
+                            for(int i=0;i<j.length();i++){
+                                try {
+                                    //Getting json object
+                                    JSONObject json = j.getJSONObject(i);
 
-                            //Getting json object
-                            //Toast.makeText(AttendanceHistoryActivity.this, ""+id, Toast.LENGTH_SHORT).show();
+                                    id = json.getString("id");
+                                    name = json.getString("name");
+                                    designation = json.getString("designaton");
+                                    role = json.getString("role");
 
-                            id = json.getString("id");
-                            name = json.getString("name");
-                            email = json.getString("email");
-                            phone = json.getString("phone");
-                            designaton = json.getString("designaton");
-                            gender = json.getString("gender");
-                            address = json.getString("address");
+                                    empList.add(new EmployeeInfo(id,name,designation,role));
+                                    mAdapter.notifyDataSetChanged();
 
-                            idTxt.setText(id);
-                            nameTxt.setText(name);
-                            emailTxt.setText(email);
-                            phoneTxt.setText(phone);
-                            designationTxt.setText(designaton);
-                            genderTxt.setText(gender);
-                            addressTxt.setText(address);
-                            Log.d("id", id + "name" + name + "email" + email);
+                                    //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
+                                    progressDialog.dismiss();
+                                    //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
 
-
-                            //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                            progressDialog.dismiss();
-                            //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
-
-
-
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -217,7 +202,7 @@ public class ProfileActivity extends AppCompatActivity {
         };
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
-        progressDialog = new ProgressDialog(ProfileActivity.this);
+        progressDialog = new ProgressDialog(EmployeelistProfile.this);
         progressDialog.setMessage("Please wait....");
         progressDialog.show();
     }

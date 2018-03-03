@@ -42,6 +42,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.github.thunder413.datetimeutils.DateTimeUtils;
+import com.google.android.gms.auth.api.Auth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -75,10 +76,13 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
     private Button checkIn,checkOut,submitBtn;
     private double in_lat,in_long,out_lat,out_long;
     private EditText remarksEdt;
-    private String remarks,in_location,timezone,time,out_location,hour,intime,format,format1,time1,roleval;
+    private String remarks,in_location,timezone,time,out_location,hour,intime,format,format1,time1,roleval,intimevalue,hourin;
     boolean checkinclicked=false,checkoutclicked=false;
     Timestamp ts=null;
     TextView nameText,designationText;
+    String yearout,mthout,dout,timeout,hsout,hourout,outtimevalue,access_token,Authorization;
+    int hrsout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +94,10 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        roleval = getIntent().getStringExtra("rolevalue");
+        roleval = getIntent().getStringExtra("userrole");
+        access_token = getIntent().getStringExtra("accesstoken");
+        //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
+        Authorization = "Bearer"+" "+access_token;
 
         toolbar1 = (Toolbar) findViewById(R.id.page_toolbar);
         checkIn = (Button) findViewById(R.id.checkIn);
@@ -215,8 +222,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
     }
 
     private void getValue() {
-
-        String intime,hoursh,minute;
+        final String intime,hoursh,minute;
         RequestQueue queue = Volley.newRequestQueue(AttendanceActivity.this);
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
@@ -231,262 +237,365 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
                             JSONObject json = new JSONObject(response);
                             JSONObject obj = json.getJSONObject("data");
 
-                                    Log.d("obj",obj.toString());
-                                    String in_lat = obj.getString("in_lat");
-                                    String in_long = obj.getString("in_long");
+                            Log.d("obj",obj.toString());
+                            String in_lats = obj.getString("in_lat");
+                            String out_lats = obj.getString("out_lat");
+                            //Log.d("intimevalue",in_lats);
 
-                                    String out_lat = obj.getString("out_lat");
-                                    String out_long = obj.getString("out_long");
+                            String in_long = obj.getString("in_long");
+                            String out_long = obj.getString("out_long");
 
-                                    final String in_loc = obj.getString("in_location");
-                                    final String out_loc = obj.getString("out_location");
+                            final String in_loc = obj.getString("in_location");
+                            final String out_loc = obj.getString("out_location");
 
-                                    JSONObject objtime = obj.getJSONObject("in_time");
-                                    String indate = objtime.getString("date");
+                            JSONObject objtime = obj.getJSONObject("in_time");
+                            String indates = objtime.getString("date");
+                            String[] parts = indates.split("-");
+                            String year = parts[0];
+                            String mth = parts[1];
+                            String d = parts[2];
 
-                                    JSONObject objout = obj.getJSONObject("out_time");
-                                    String outdate = objout.getString("date");
+                            Log.d("vals",year+mth+d);
 
+                            String[] partsss = d.split(" ");
+                            String times = partsss[1];
+                            String[] timepartss = times.split(":");
 
-                            try {
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                Calendar calendar = Calendar.getInstance();
-                                calendar.setTime(simpleDateFormat.parse(indate));
+                            String hs = timepartss[0];
+                            int hrs = Integer.parseInt(hs);
 
-                                //hoursh = calendar.get(Calendar.HOUR);
-                                Log.d("date", "" + calendar.get(Calendar.DAY_OF_MONTH));
-                                Log.d("month", ""+calendar.get(Calendar.MONTH));
-                                Log.d("year", ""+calendar.get(Calendar.YEAR));
+                            if (hrs == 1) {
+                                hourin = "1";
+                            }
+                            else if (hrs == 2) {
+                                hourin = "2";
+                            }
+                            else if (hrs == 3) {
+                                hourin = "3";
+                            }
+                            else if (hrs == 4) {
+                                hourin = "4";
+                            }
+                            else if (hrs == 5) {
+                                hourin = "5";
+                            }
+                            else if (hrs == 6) {
+                                hourin = "1";
+                            }
+                            else if (hrs == 7) {
+                                hourin = "7";
+                            }
+                            else if (hrs == 8) {
+                                hourin = "8";
+                            }
+                            else if (hrs == 9) {
+                                hourin = "9";
+                            }
+                            else if (hrs == 10) {
+                                hourin = "10";
+                            }
+                            else if (hrs == 11) {
+                                hourin = "11";
+                            }
+                            else if (hrs == 12) {
+                                hourin = "12";
+                            }
+                            else if (hrs == 13) {
+                                hourin = "1";
+                            } else if (hrs == 14) {
+                                hourin = "2";
+                            } else if (hrs == 15) {
+                                hourin = "3";
+                            } else if (hrs == 16) {
+                                hourin = "4";
+                            } else if (hrs == 17) {
+                                hourin = "5";
+                            } else if (hrs == 18) {
+                                hourin = "6";
+                            } else if (hrs == 19) {
+                                hourin = "7";
+                            } else if (hrs == 20) {
+                                hourin = "8";
+                            } else if (hrs == 21) {
+                                hourin = "9";
+                            } else if (hrs == 22) {
+                                hourin = "10";
+                            } else if (hrs == 23) {
+                                hourin = "11";
+                            } else if(hrs == 24){
+                                hourin = "12";
+                            }
 
-                                Log.d("hour", ""+calendar.get(Calendar.HOUR));
+                            Log.d("hrs", String.valueOf(hrs));
 
-                                int ampm = calendar.get(Calendar.HOUR);
-                                if(ampm<12){
-                                    format = "AM";
-                                }
-                                else{
-                                   format = "PM";
-                                }
+                            String mn = timepartss[1];
+                            int mttn = Integer.parseInt(mn);
+                            Log.d("mnts", mn);
 
-                                Log.d("minutes", ""+calendar.get(Calendar.MINUTE));
-                                Log.d("seconds", ""+calendar.get(Calendar.SECOND));
-                                Log.d("ampm", ""+calendar.get(Calendar.AM_PM));
-                                time = calendar.get(Calendar.HOUR)+":"+calendar.get(Calendar.MINUTE)+""+format;
+                            if (hrs <= 12) {
+                                intimevalue = hourin + ":" + mttn + "AM";
+                                checkIn.setText(intimevalue);
+                                checkIn.setBackgroundColor(getResources().getColor(R.color.green));
+                                checkIn.setTextColor(getResources().getColor(R.color.white));
+                                submitBtn.setText("CHECK OUT");
+                                checkIn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
 
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                                        // Setting Dialog Title
+                                        alertDialog.setTitle("CheckIn Location...");
+
+                                        // Setting Dialog Message
+                                        alertDialog.setMessage(in_loc);
+
+                                        // Setting Icon to Dialog
+                                        alertDialog.setIcon(R.drawable.map);
+
+                                        // Setting Positive "Yes" Button
+                                        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,int which) {
+
+                                                // Write your code here to invoke YES event
+                                                // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+                                        // Setting Negative "NO" Button
+                                        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // Write your code here to invoke NO event
+                                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                                // dialog.cancel();
+                                            }
+                                        });
+
+                                        // Showing Alert Message
+                                        alertDialog.show();
+                                    }
+                                });
+                            } else {
+                                intimevalue = hourin + ":" + mttn + "PM";
+                                checkIn.setText(intimevalue);
+                                checkIn.setBackgroundColor(getResources().getColor(R.color.red));
+                                checkIn.setTextColor(getResources().getColor(R.color.white));
+                                submitBtn.setText("CHECK OUT");
+                                checkIn.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
+
+                                        // Setting Dialog Title
+                                        alertDialog.setTitle("CheckIn Location...");
+
+                                        // Setting Dialog Message
+                                        alertDialog.setMessage(in_loc);
+
+                                        // Setting Icon to Dialog
+                                        alertDialog.setIcon(R.drawable.map);
+
+                                        // Setting Positive "Yes" Button
+                                        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,int which) {
+
+                                                // Write your code here to invoke YES event
+                                                // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+
+                                        // Setting Negative "NO" Button
+                                        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // Write your code here to invoke NO event
+                                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                                // dialog.cancel();
+                                            }
+                                        });
+
+                                        // Showing Alert Message
+                                        alertDialog.show();
+                                    }
+                                });
                             }
 
 
-                            try {
-                                SimpleDateFormat simpleDateFormat1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                Calendar calendar1 = Calendar.getInstance();
-                                calendar1.setTime(simpleDateFormat1.parse(outdate));
+                            JSONObject objout = obj.getJSONObject("out_time");
+                            String outdate = objout.getString("date");
 
-                                //hoursh = calendar.get(Calendar.HOUR);
-                                Log.d("date", "" + calendar1.get(Calendar.DAY_OF_MONTH));
-                                Log.d("month", ""+calendar1.get(Calendar.MONTH));
-                                Log.d("year", ""+calendar1.get(Calendar.YEAR));
+                            String[] partsout = outdate.split("-");
+                            String yearout = partsout[0];
+                            String mthout = partsout[1];
+                            String dout = partsout[2];
 
-                                Log.d("hour", ""+calendar1.get(Calendar.HOUR));
+                            Log.d("vals",year+mth+d);
 
-                                int ampm1 = calendar1.get(Calendar.HOUR);
-                                //Toast.makeText(AttendanceActivity.this, "amp1"+ampm1, Toast.LENGTH_SHORT).show();
-                                //Log.d("ampm", String.valueOf(ampm1));
+                            String[] partsssout = dout.split(" ");
+                            String timeout = partsssout[1];
+                            String[] timepartssout = timeout.split(":");
 
-                                if(ampm1<12){
-                                    format1 = "AM";
-                                }
-                                else{
-                                    format1 = "PM";
-                                }
+                            String hsout = timepartssout[0];
+                            int hrsout = Integer.parseInt(hsout);
 
-                                Log.d("minutes", ""+calendar1.get(Calendar.MINUTE));
-                                Log.d("seconds", ""+calendar1.get(Calendar.SECOND));
-                                Log.d("ampm", ""+calendar1.get(Calendar.AM_PM));
-                                time1 = calendar1.get(Calendar.HOUR)+":"+calendar1.get(Calendar.MINUTE)+""+format1;
-                                Log.d("time1",time1);
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
+                            if (hrsout == 1) {
+                                hourout = "1";
+                            }
+                            else if (hrsout == 2) {
+                                hourout = "2";
+                            }
+                            else if (hrsout == 3) {
+                                hourout = "3";
+                            }
+                            else if (hrsout == 4) {
+                                hourout = "4";
+                            }
+                            else if (hrsout == 5) {
+                                hourout = "5";
+                            }
+                            else if (hrsout == 6) {
+                                hourout = "1";
+                            }
+                            else if (hrsout == 7) {
+                                hourout = "7";
+                            }
+                            else if (hrsout == 8) {
+                                hourout = "8";
+                            }
+                            else if (hrsout == 9) {
+                                hourout = "9";
+                            }
+                            else if (hrsout == 10) {
+                                hourout = "10";
+                            }
+                            else if (hrsout == 11) {
+                                hourout = "11";
+                            }
+                            else if (hrsout == 12) {
+                                hourout = "12";
+                            }
+                            else if (hrsout == 13) {
+                                hourout = "1";
+                            } else if (hrsout == 14) {
+                                hourout = "2";
+                            } else if (hrsout == 15) {
+                                hourout = "3";
+                            } else if (hrsout == 16) {
+                                hourout = "4";
+                            } else if (hrsout == 17) {
+                                hourout = "5";
+                            } else if (hrsout == 18) {
+                                hourout = "6";
+                            } else if (hrsout == 19) {
+                                hourout = "7";
+                            } else if (hrsout == 20) {
+                                hourout = "8";
+                            } else if (hrsout == 21) {
+                                hourout = "9";
+                            } else if (hrsout == 22) {
+                                hourout = "10";
+                            } else if (hrsout == 23) {
+                                hourout = "11";
+                            } else if(hrsout == 24){
+                                hourout = "12";
                             }
 
-                            if(!in_lat.equals(null)){
+                            Log.d("hrs", String.valueOf(hrs));
 
-                                Toast.makeText(AttendanceActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                checkIn.setText(time);
-                                if(format.equals("AM")){
-                                    checkIn.setBackgroundColor(getResources().getColor(R.color.green));
-                                    checkIn.setTextColor(getResources().getColor(R.color.white));
-                                    submitBtn.setText("CHECK OUT");
-                                    checkIn.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
+                            String mnout = timepartssout[1];
+                            int mttnout = Integer.parseInt(mnout);
+                            Log.d("mnts", mn);
 
-                                            // Setting Dialog Title
-                                            alertDialog.setTitle("CheckIn Location...");
+                            if (hrsout <= 12) {
+                                outtimevalue = hourout + ":" + mttnout + "AM";
+                                checkOut.setText(outtimevalue);
+                                checkOut.setBackgroundColor(getResources().getColor(R.color.green));
+                                checkOut.setTextColor(getResources().getColor(R.color.white));
+                                submitBtn.setText("Attendance Complete");
+                                submitBtn.setEnabled(false);
+                                checkOut.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
 
-                                            // Setting Dialog Message
-                                            alertDialog.setMessage(in_loc);
+                                        // Setting Dialog Title
+                                        alertDialog.setTitle("CheckOut Location...");
 
-                                            // Setting Icon to Dialog
-                                            alertDialog.setIcon(R.drawable.map);
+                                        // Setting Dialog Message
+                                        alertDialog.setMessage(out_loc);
 
-                                            // Setting Positive "Yes" Button
-                                            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog,int which) {
+                                        // Setting Icon to Dialog
+                                        alertDialog.setIcon(R.drawable.map);
 
-                                                    // Write your code here to invoke YES event
-                                                    // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                        // Setting Positive "Yes" Button
+                                        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,int which) {
 
-                                            // Setting Negative "NO" Button
-                                            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // Write your code here to invoke NO event
-                                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                                    // dialog.cancel();
-                                                }
-                                            });
+                                                // Write your code here to invoke YES event
+                                                // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
 
-                                            // Showing Alert Message
-                                            alertDialog.show();
-                                        }
-                                    });
-                                }
-                                else{
-                                    checkIn.setBackgroundColor(getResources().getColor(R.color.red));
-                                    checkIn.setTextColor(getResources().getColor(R.color.white));
-                                    submitBtn.setText("CHECK OUT");
-                                    checkIn.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
+                                        // Setting Negative "NO" Button
+                                        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // Write your code here to invoke NO event
+                                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                                // dialog.cancel();
+                                            }
+                                        });
 
-                                            // Setting Dialog Title
-                                            alertDialog.setTitle("CheckIn Location...");
+                                        // Showing Alert Message
+                                        alertDialog.show();
+                                    }
+                                });
+                            } else {
+                                outtimevalue = hourout + ":" + mttnout + "PM";
+                                checkOut.setText(outtimevalue);
+                                checkOut.setBackgroundColor(getResources().getColor(R.color.red));
+                                checkOut.setTextColor(getResources().getColor(R.color.white));
+                                submitBtn.setText("Attendance Complete");
+                                submitBtn.setEnabled(false);
+                                checkOut.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
 
-                                            // Setting Dialog Message
-                                            alertDialog.setMessage(out_loc);
+                                        // Setting Dialog Title
+                                        alertDialog.setTitle("CheckOut Location...");
 
-                                            // Setting Icon to Dialog
-                                            alertDialog.setIcon(R.drawable.map);
+                                        // Setting Dialog Message
+                                        alertDialog.setMessage(out_loc);
 
-                                            // Setting Positive "Yes" Button
-                                            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog,int which) {
+                                        // Setting Icon to Dialog
+                                        alertDialog.setIcon(R.drawable.map);
 
-                                                    // Write your code here to invoke YES event
-                                                    // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
+                                        // Setting Positive "Yes" Button
+                                        alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog,int which) {
 
-                                            // Setting Negative "NO" Button
-                                            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // Write your code here to invoke NO event
-                                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                                    // dialog.cancel();
-                                                }
-                                            });
+                                                // Write your code here to invoke YES event
+                                                // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
 
-                                            // Showing Alert Message
-                                            alertDialog.show();
-                                        }
-                                    });
-                                }
-                                //Toast.makeText(AttendanceActivity.this, "not null", Toast.LENGTH_SHORT).show();
+                                        // Setting Negative "NO" Button
+                                        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                // Write your code here to invoke NO event
+                                                //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
+                                                // dialog.cancel();
+                                            }
+                                        });
+
+                                        // Showing Alert Message
+                                        alertDialog.show();
+                                    }
+                                });
                             }
 
-                            if(!out_lat.equals(null)){
 
-                                //Toast.makeText(AttendanceActivity.this, ""+time1, Toast.LENGTH_SHORT).show();
-                                checkOut.setText(time1);
-                                if(format1.equals("AM")){
-                                    checkOut.setBackgroundColor(getResources().getColor(R.color.green));
-                                    checkOut.setTextColor(getResources().getColor(R.color.white));
-                                    submitBtn.setText("CHECK IN");
-                                    checkOut.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
+                           // Log.d("intime",in_lat);
 
-                                            // Setting Dialog Title
-                                            alertDialog.setTitle("CheckIn Location...");
 
-                                            // Setting Dialog Message
-                                            alertDialog.setMessage(out_loc);
-
-                                            // Setting Icon to Dialog
-                                            alertDialog.setIcon(R.drawable.map);
-
-                                            // Setting Positive "Yes" Button
-                                            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog,int which) {
-
-                                                    // Write your code here to invoke YES event
-                                                    // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-
-                                            // Setting Negative "NO" Button
-                                            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // Write your code here to invoke NO event
-                                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                                    // dialog.cancel();
-                                                }
-                                            });
-
-                                            // Showing Alert Message
-                                            alertDialog.show();
-                                        }
-                                    });
-                                }
-                                else{
-                                    checkOut.setBackgroundColor(getResources().getColor(R.color.red));
-                                    checkOut.setTextColor(getResources().getColor(R.color.white));
-                                    submitBtn.setText("CHECK IN");
-                                    checkIn.setOnClickListener(new View.OnClickListener() {
-                                        @Override
-                                        public void onClick(View view) {
-                                            AlertDialog.Builder alertDialog = new AlertDialog.Builder(  AttendanceActivity.this);
-
-                                            // Setting Dialog Title
-                                            alertDialog.setTitle("CheckIn Location...");
-
-                                            // Setting Dialog Message
-                                            alertDialog.setMessage(out_loc);
-
-                                            // Setting Icon to Dialog
-                                            alertDialog.setIcon(R.drawable.map);
-
-                                            // Setting Positive "Yes" Button
-                                            alertDialog.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog,int which) {
-
-                                                    // Write your code here to invoke YES event
-                                                    // Toast.makeText(getApplicationContext(), "You clicked on YES", Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-
-                                            // Setting Negative "NO" Button
-                                            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    // Write your code here to invoke NO event
-                                                    //Toast.makeText(getApplicationContext(), "You clicked on NO", Toast.LENGTH_SHORT).show();
-                                                    // dialog.cancel();
-                                                }
-                                            });
-
-                                            // Showing Alert Message
-                                            alertDialog.show();
-                                        }
-                                    });
-                                }
-                            }
 
                         }catch (Exception e) {e.printStackTrace();}
                         //Toast.makeText(AttendanceActivity.this, ""+response, Toast.LENGTH_SHORT).show();
@@ -504,13 +613,15 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
-                headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                headers.put("Authorization", Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
         };
         // Add the request to the RequestQueue.
         queue.add(stringRequest);
     }
+
 
     private void getLocation() {
         gps = new GPSTracker(this);
@@ -717,7 +828,8 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
-                headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                headers.put("Authorization", Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
         };
@@ -742,6 +854,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             checkOut.setTextColor(getResources().getColor(R.color.white));
             checkOut.setText(time);
             submitBtn.setText("CHECK IN");
+            remarksEdt.setEnabled(false);
             submitBtn.setEnabled(false);
 
             checkOut.setOnClickListener(new View.OnClickListener() {
@@ -792,6 +905,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             checkOut.setTextColor(getResources().getColor(R.color.white));
             checkOut.setText(time);
             submitBtn.setText("CHECK IN");
+            remarksEdt.setEnabled(false);
             submitBtn.setEnabled(false);
 
             checkOut.setOnClickListener(new View.OnClickListener() {
@@ -874,7 +988,8 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
-                headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                headers.put("Authorization", Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
         };
@@ -896,21 +1011,26 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
 
         if (id == R.id.nav_dashboard) {
             Intent intent = new Intent(AttendanceActivity.this,DashboardActivity.class);
+            intent.putExtra("userrole",roleval);
             startActivity(intent);
             // Handle the camera action
         } else if (id == R.id.nav_history) {
             Intent intent = new Intent(AttendanceActivity.this,AttendanceHistoryActivity.class);
+            intent.putExtra("userrole",roleval);
             startActivity(intent);
         } else if (id == R.id.nav_supporthistory) {
             Intent intent = new Intent(AttendanceActivity.this,SupportHistory.class);
+            intent.putExtra("userrole",roleval);
             startActivity(intent);
         } else if (id == R.id.nav_salarystatement) {
 
         } else if (id == R.id.nav_profile) {
             Intent intent = new Intent(AttendanceActivity.this,ProfileActivity.class);
+            intent.putExtra("userrole",roleval);
             startActivity(intent);
         } else if (id == R.id.nav_employees) {
             Intent intent = new Intent(AttendanceActivity.this,EmployeeListActivity.class);
+            intent.putExtra("userrole",roleval);
             startActivity(intent);
         }
 
