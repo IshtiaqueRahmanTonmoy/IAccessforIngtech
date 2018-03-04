@@ -25,7 +25,7 @@ public class DashboardActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     FloatingActionButton fab;
-    CardView cardview,eventcardview,employeecardview,attendanceardview;
+    CardView cardview,eventcardview,employeecardview,attendanceardview,notificationcardview,helpcardview;
     TextView nameText,designationText;
     String roleval,acces_token;
     @Override
@@ -45,6 +45,8 @@ public class DashboardActivity extends AppCompatActivity
        employeecardview = (CardView) findViewById(R.id.employees);
        attendanceardview = (CardView) findViewById(R.id.attendance);
 
+        notificationcardview = (CardView) findViewById(R.id.notification);
+        helpcardview = (CardView) findViewById(R.id.help);
 
         cardview.setOnClickListener(new View.OnClickListener() {
            @Override
@@ -89,6 +91,20 @@ public class DashboardActivity extends AppCompatActivity
             }
         });
 
+        notificationcardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(DashboardActivity.this, "On build process", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        helpcardview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(DashboardActivity.this, "On build process", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,12 +127,16 @@ public class DashboardActivity extends AppCompatActivity
                                 intent.putExtra("accesstoken",acces_token);
                                 intent.putExtra("userrole",roleval);
                                 startActivity(intent);
-                            } else if (item.getTitle().toString().equals("Notification")) {
-                                //Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
-                                //startActivity(intent);
-                            } else if (item.getTitle().toString().equals("Event")) {
+                            }
+                            else if (item.getTitle().toString().equals("Event")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEventActivity.class);
                                 intent.putExtra("accesstoken",acces_token);
+                                startActivity(intent);
+                            }
+                            else if (item.getTitle().toString().equals("Support")) {
+                                Intent intent = new Intent(DashboardActivity.this, AddSupportActivity.class);
+                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             }
                             return true;
@@ -137,15 +157,13 @@ public class DashboardActivity extends AppCompatActivity
                                 intent.putExtra("accesstoken",acces_token);
                                 intent.putExtra("userrole",roleval);
                                 startActivity(intent);
-                            } else if (item.getTitle().toString().equals("Notification")) {
-                                //Intent intent = new Intent(DashboardActivity.this,AddNotification.class);
-                                //startActivity(intent);
-                            } else if (item.getTitle().toString().equals("Event")) {
+                            }  else if (item.getTitle().toString().equals("Event")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEventActivity.class);
                                 intent.putExtra("accesstoken",acces_token);
                                 intent.putExtra("valuenotlist","1");
                                 intent.putExtra("userrole",roleval);
                                 startActivity(intent);
+                                finish();
                             } else if (item.getTitle().toString().equals("Employee")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEmployeeActivity.class);
                                 intent.putExtra("userrole",roleval);
@@ -155,6 +173,7 @@ public class DashboardActivity extends AppCompatActivity
                             return true;
                         }
                     });
+
                 }
                 popup.show();//showing popup menu
                 //return super.onOptionsItemSelected(item);
@@ -240,6 +259,7 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("accesstoken",acces_token);
             intent.putExtra("userrole",roleval);
             startActivity(intent);
+            finish();
             return true;
         }
         else if (id == R.id.action_logout) {
@@ -278,9 +298,7 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("userrole",roleval);
             intent.putExtra("access_token",acces_token);
             startActivity(intent);
-        } else if (id == R.id.nav_salarystatement) {
-
-        } else if (id == R.id.nav_profile) {
+        }  else if (id == R.id.nav_profile) {
             Intent intent = new Intent(DashboardActivity.this,EmployeelistProfile.class);
             intent.putExtra("access_token",acces_token);
             intent.putExtra("userrole",roleval);

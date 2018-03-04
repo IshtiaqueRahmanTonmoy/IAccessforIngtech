@@ -1,5 +1,6 @@
 package iaccess.iaccess.com.iaccess;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -72,6 +74,23 @@ public class SignInActivity extends AppCompatActivity {
         emailEdt = (EditText) findViewById(R.id.email);
         passwordEdt = (EditText) findViewById(R.id.password);
 
+        emailEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
+
+        passwordEdt.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    hideKeyboard(v);
+                }
+            }
+        });
         submitBtn = (Button) findViewById(R.id.login_button);
 
         submitBtn.setOnClickListener(new View.OnClickListener() {
@@ -190,6 +209,11 @@ public class SignInActivity extends AppCompatActivity {
                 progressDialog.show();
             }
         });
+    }
+
+    private void hideKeyboard(View v) {
+        InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
     private void getId(final VolleyCallback callback) {

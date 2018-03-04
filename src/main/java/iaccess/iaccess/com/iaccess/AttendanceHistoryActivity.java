@@ -921,9 +921,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
             intent.putExtra("userrole",roleval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
-        } else if (id == R.id.nav_salarystatement) {
-
-        } else if (id == R.id.nav_profile) {
+        }  else if (id == R.id.nav_profile) {
             Intent intent = new Intent(AttendanceHistoryActivity.this,ProfileActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("access_token",access_token);

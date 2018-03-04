@@ -62,7 +62,8 @@ public class EmployeeListActivity extends AppCompatActivity {
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
 
-        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        Log.d("autho",Authorization);
+        //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
         showvaluebyid();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -158,39 +159,41 @@ public class EmployeeListActivity extends AppCompatActivity {
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("responsevalue", response);
+                        Log.d("responsevalueall", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            JSONArray j = jsonObject.getJSONArray("data");
-                            if (j.length() > 0) {
-                                for (int i = 0; i < j.length(); i++) {
-                                    try {
-                                        //Getting json object
-                                        JSONObject json = j.getJSONObject(i);
+                            //JSONArray j = jsonObject.getJSONArray("data");
+                            //if (j.length() > 0) {
+                            //for (int i = 0; i < j.length(); i++) {
+                            try {
+                                //Getting json object
+                                JSONObject json = jsonObject.getJSONObject("data");
 
-                                        id = json.getString("id");
-                                        name = json.getString("name");
-                                        designation = json.getString("designaton");
-                                        role = json.getString("role");
+                                id = json.getString("id");
+                                name = json.getString("name");
+                                designation = json.getString("designaton");
+                                role = json.getString("role");
 
-                                        empList.add(new EmployeeInfo(id, name, designation, role));
-                                        mAdapter.notifyDataSetChanged();
+                                Log.d("adaptervalue", id + "name" + name + "desingation" + designation + "role");
+                                empList.add(new EmployeeInfo(id,name,designation,role));
+                                mAdapter.notifyDataSetChanged();
 
-                                        //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                        progressDialog.dismiss();
-                                        //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
-
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                            }
-
-                            else {
+                                //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
+                                //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+
+                        }
+
+                          /*
+                            else {
+                                //progressDialog.dismiss();
                                 Toast.makeText(EmployeeListActivity.this, "Data not found", Toast.LENGTH_SHORT).show();
                             }
+                            */
+
                         }
 
                         catch (JSONException e) {

@@ -17,10 +17,6 @@
             android:icon="@drawable/ic_menu_slideshow"
             android:title="Support History" />
         <item
-            android:id="@+id/nav_salarystatement"
-            android:icon="@drawable/ic_salary"
-            android:title="Salary Statement" />
-        <item
             android:id="@+id/nav_profile"
             android:icon="@drawable/ic_profile"
             android:title="Profile" />

@@ -1022,9 +1022,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             Intent intent = new Intent(AttendanceActivity.this,SupportHistory.class);
             intent.putExtra("userrole",roleval);
             startActivity(intent);
-        } else if (id == R.id.nav_salarystatement) {
-
-        } else if (id == R.id.nav_profile) {
+        }  else if (id == R.id.nav_profile) {
             Intent intent = new Intent(AttendanceActivity.this,ProfileActivity.class);
             intent.putExtra("userrole",roleval);
             startActivity(intent);

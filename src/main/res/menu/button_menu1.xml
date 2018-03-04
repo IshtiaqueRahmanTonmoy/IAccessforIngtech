@@ -9,8 +9,8 @@
         android:title="Event"
         android:orderInCategory="100"
         app:showAsAction="never" />
-    <item android:id="@+id/notification"
-        android:title="Notification"
+    <item android:id="@+id/support"
+        android:title="Support"
         android:orderInCategory="100"
         app:showAsAction="never" />
 </menu>

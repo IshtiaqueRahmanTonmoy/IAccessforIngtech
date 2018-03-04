@@ -75,7 +75,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
-        //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

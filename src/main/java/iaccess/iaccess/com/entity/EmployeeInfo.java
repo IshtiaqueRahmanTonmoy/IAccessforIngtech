@@ -6,6 +6,9 @@ package iaccess.iaccess.com.entity;
 
 public class EmployeeInfo {
     String id;
+    String name;
+    String designation;
+    String role;
 
     public EmployeeInfo(String id,String name,String designation,String role){
         this.id = id;
@@ -21,10 +24,6 @@ public class EmployeeInfo {
     public void setId(String id) {
         this.id = id;
     }
-
-    String name;
-    String designation;
-    String role;
 
 
     public String getName() {

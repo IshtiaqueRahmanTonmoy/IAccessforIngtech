@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Build;
+import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,9 +19,11 @@ import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -82,6 +85,7 @@ public class AddEventActivity extends AppCompatActivity {
         titleEdt = (EditText) findViewById(R.id.titleEdt);
         timeEdt = (EditText) findViewById(R.id.timeEdt);
         descriptionEdt = (EditText) findViewById(R.id.descriptionEdt);
+
         submitBtn = (Button) findViewById(R.id.saveBtn);
 
         scrollView = (ScrollView) findViewById(R.id.scrollview);
@@ -91,11 +95,18 @@ public class AddEventActivity extends AppCompatActivity {
                 hideKeyboard(view);
             }
         });
+
+
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
 
         timeEdt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                //DatePickerFragment mTimePicker = new DatePickerFragment();
+                //DatePickerFragment.show(getFragmentManager(), "Select time");
+
+
                 TimePicker mTimePicker = new TimePicker();
                 mTimePicker.show(getFragmentManager(), "Select time");
             }
@@ -202,7 +213,7 @@ public class AddEventActivity extends AppCompatActivity {
             Intent intent = new Intent(AddEventActivity.this,DashboardActivity.class);
             intent.putExtra("userrole",roleval);
             //intent.putExtra("idval",idvalue);
-            intent.putExtra("access_token",access_token);
+            intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
         }
@@ -234,9 +245,9 @@ public class AddEventActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            Intent intent = new Intent(AddEventActivity.this,EmployeeListActivity.class);
+            Intent intent = new Intent(AddEventActivity.this,DashboardActivity.class);
             intent.putExtra("userrole",roleval);
-            intent.putExtra("access_token",access_token);
+            intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
         }
@@ -298,8 +309,14 @@ public class AddEventActivity extends AppCompatActivity {
                         titleEdt.setText("");
                         timeEdt.setText("");
                         descriptionEdt.setText("");
+
+                        titleEdt.setError(null);
+                        timeEdt.setError(null);
+                        descriptionEdt.setError(null);
+
                         radioGroup.setEnabled(false);
                         progressDialog.dismiss();
+                        Toast.makeText(AddEventActivity.this, "Successfully added event.", Toast.LENGTH_SHORT).show();
                     }
                 },
                 new Response.ErrorListener() {

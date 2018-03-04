@@ -6,12 +6,16 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -39,10 +43,11 @@ public class AddSupportActivity extends AppCompatActivity {
 
     private EditText organizationEdt,issueEdt,personEdt,descriptionEdt,remarksEdt,dateEdt,timeEdt;
     private Button submitBtn,cancelBtn;
-    private String organization,support_issue,person,description,remarks,access_token,Authorization;
+    private String organization,support_issue,person,description,remarks,access_token,Authorization,roleval;
     String start_time,end_time;
     private ProgressDialog progressDialog;
     private ScrollView scrollView;
+    private Toolbar toolbar;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -50,9 +55,21 @@ public class AddSupportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_support);
 
+        roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("accesstoken");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setTitle("Add Support");
+        toolbar.setTitleTextColor(getResources().getColor(R.color.white));
+
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
 
         organizationEdt = (EditText) findViewById(R.id.organizationeEdt);
         issueEdt = (EditText) findViewById(R.id.issueEdt);
@@ -104,6 +121,44 @@ public class AddSupportActivity extends AppCompatActivity {
         });
 
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menusettings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            Intent intent = new Intent(AddSupportActivity.this,DashboardActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("access_token",access_token);
+            startActivity(intent);
+            finish();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AddSupportActivity.this,DashboardActivity.class);
+        intent.putExtra("userrole",roleval);
+        intent.putExtra("access_token",access_token);
+        startActivity(intent);
+        finish();
+    }
+
 
     private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
