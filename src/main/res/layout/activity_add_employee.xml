@@ -69,8 +69,8 @@ android:layout_height="match_parent">
 
             <ImageView
                 android:id="@+id/imageViewLogo"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:adjustViewBounds="true"
@@ -81,7 +81,8 @@ android:layout_height="match_parent">
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
-                android:layout_marginLeft="53dp"                                                style="@style/MyButtonStyleSmall"
+                android:layout_marginLeft="53dp"
+                style="@style/MyButtonStyleSmall"
                 android:layout_marginStart="53dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/editbutton"
@@ -104,7 +105,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="88dp"
@@ -115,7 +116,7 @@ android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/nameEdt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
@@ -126,7 +127,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -137,7 +138,7 @@ android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/emailEdt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
@@ -149,7 +150,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -160,7 +161,7 @@ android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/phoneEdt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:inputType="number"
@@ -173,7 +174,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -184,7 +185,7 @@ android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/designationEdt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
@@ -195,7 +196,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -206,7 +207,7 @@ android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/addressEdt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Enter Address"
@@ -221,7 +222,7 @@ android:layout_height="match_parent">
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -232,7 +233,7 @@ android:layout_height="match_parent">
 
             <Spinner
                 android:id="@+id/genderSpinner"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Male"
@@ -246,7 +247,7 @@ android:layout_height="match_parent">
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -257,7 +258,7 @@ android:layout_height="match_parent">
 
             <Spinner
                 android:id="@+id/roleSpinner"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Admin"
@@ -267,7 +268,7 @@ android:layout_height="match_parent">
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -278,7 +279,7 @@ android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/passwordEdt"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"

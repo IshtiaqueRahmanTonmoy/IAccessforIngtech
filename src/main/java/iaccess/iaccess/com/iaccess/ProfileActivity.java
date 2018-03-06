@@ -48,6 +48,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         roleval = getIntent().getStringExtra("userrole");
         userId = getIntent().getStringExtra("idval");
+
+        //Toast.makeText(this, ""+userId, Toast.LENGTH_SHORT).show();
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
@@ -64,6 +66,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
 
         ProfileActivity.this.setTitle("Profile");
+        upnameTxt = (TextView) findViewById(R.id.textViewName);
         idTxt = (TextView) findViewById(R.id.idText);
         nameTxt = (TextView) findViewById(R.id.nameText);
         emailTxt = (TextView) findViewById(R.id.emailText);
@@ -93,14 +96,14 @@ public class ProfileActivity extends AppCompatActivity {
                                 Intent intent = new Intent(ProfileActivity.this,EditProfile.class);
                                 intent.putExtra("idval",userId);
                                 intent.putExtra("userrole",roleval);
-                                intent.putExtra("accesstoken",access_token);
+                                intent.putExtra("access_token",access_token);
                                 startActivity(intent);
                                 return true;
                             case R.id.resetpass:
                                 Intent intent1 = new Intent(ProfileActivity.this,ResetPassword.class);
                                 intent1.putExtra("idval",userId);
                                 intent1.putExtra("userrole",roleval);
-                                intent1.putExtra("accesstoken",access_token);
+                                intent1.putExtra("access_token",access_token);
                                 startActivity(intent1);
                                 return true;
                             default:
@@ -119,6 +122,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(ProfileActivity.this,DashboardActivity.class);
         intent.putExtra("userrole",roleval);
+        intent.putExtra("idvalue",id);
         intent.putExtra("acces_token",access_token);
         finish();
     }
@@ -178,6 +182,7 @@ public class ProfileActivity extends AppCompatActivity {
                             gender = json.getString("gender");
                             address = json.getString("address");
 
+                            upnameTxt.setText(name);
                             idTxt.setText(id);
                             nameTxt.setText(name);
                             emailTxt.setText(email);

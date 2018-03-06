@@ -43,7 +43,7 @@ import iaccess.iaccess.iaccess.com.adapter.RecyclerItemClickListener;
 
 public class EmployeeListActivity extends AppCompatActivity {
 
-    private String Authorization,id,name,designation,role,idvalue,roleval,access_token;
+    private String Authorization,id,name,designation,role,idvalue,roleval,access_token,idval;
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
     private EmployeeAttendanceAdapter mAdapter;
@@ -58,12 +58,14 @@ public class EmployeeListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_list);
 
+        idvalue = getIntent().getStringExtra("idvalue");
+
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
 
         Log.d("autho",Authorization);
-        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
         showvaluebyid();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -115,8 +117,9 @@ public class EmployeeListActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(EmployeeListActivity.this,DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
-        intent.putExtra("idval",idvalue);
+        intent.putExtra("idvalue",idvalue);
         intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();
@@ -139,8 +142,9 @@ public class EmployeeListActivity extends AppCompatActivity {
 
         if(id == android.R.id.home){
             Intent intent = new Intent(EmployeeListActivity.this,DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
-            intent.putExtra("idval",idvalue);
+            intent.putExtra("idvalue",idvalue);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

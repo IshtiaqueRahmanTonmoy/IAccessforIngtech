@@ -66,7 +66,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
     private ProgressDialog progressDialog;
     private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/supports/";
     private StringRequest stringRequest,stringRequest1;
-    private String user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,access_token,Authorization,roleval;
+    private String user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,access_token,Authorization,roleval,idval;
     String vals;
     private List<Support> supportList = new ArrayList<Support>();
 
@@ -75,6 +75,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_history);
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
@@ -82,7 +83,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
 
         getValue();
 
-        //Toast.makeText(SupportHistory.this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(SupportHistory.this, ""+idval, Toast.LENGTH_SHORT).show();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Support History");
@@ -226,11 +227,11 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                             public void onClick(View view) {
 
                                 Intent intent = new Intent(SupportHistory.this,SupportDetailsActivity.class);
-                                intent.putExtra("id", vals);
+                                intent.putExtra("idvalue",idval);
                                 intent.putExtra("userrole",roleval);
                                 intent.putExtra("access_token",access_token);
                                 startActivity(intent);
-                                finish();
+
                             }
                         });
 
@@ -243,6 +244,8 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(SupportHistory.this,DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("idvalue",idval);
         intent.putExtra("userrole",roleval);
         intent.putExtra("acces_token",access_token);
         finish();
@@ -264,7 +267,9 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
 
         if(id == android.R.id.home){
             Intent intent = new Intent(SupportHistory.this,DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

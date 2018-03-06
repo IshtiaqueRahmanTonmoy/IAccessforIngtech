@@ -61,7 +61,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
     private TextView txtview;
     private Spinner spinner;
     private StringRequest stringRequest;
-    private String id,title,time,name,month,day,hour,ids,access_token,Authorization,roleval,intime;
+    private String id,title,time,name,month,day,hour,ids,access_token,Authorization,roleval,intime,idval;
     private List<Event> eventList = new ArrayList<Event>();
     private ProgressDialog progressDialog;
     private EventAdapter mAdapter;
@@ -71,6 +71,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
@@ -189,7 +190,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
                                 Intent intent = new Intent(EventListActivity.this,EventDetailsActivity.class);
                                 intent.putExtra("userrole",roleval);
                                 intent.putExtra("access_token",access_token);
-                                intent.putExtra("id",ids);
+                                intent.putExtra("idvalue",ids);
                                 startActivity(intent);
                                 finish();
                             }
@@ -206,6 +207,8 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(EventListActivity.this,DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("idvalue",idval);
         intent.putExtra("userrole",roleval);
         intent.putExtra("acces_token",access_token);
         finish();
@@ -228,6 +231,8 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
 
         if(id == android.R.id.home){
             Intent intent = new Intent(EventListActivity.this,DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("userrole",roleval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);

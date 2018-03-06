@@ -39,14 +39,14 @@ public class AttendanceDetails extends AppCompatActivity {
     String years,months,days,mnth;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
-    String roleval,access_token,Authorization,id,ids,name,date,intime,outtime,in_location,out_location,working_hour,overtime,remarks,timestamp,month,day,hour,timestampsout,hourout,fromto;
+    String idval,roleval,access_token,Authorization,id,ids,name,date,intime,outtime,in_location,out_location,working_hour,overtime,remarks,timestamp,month,day,hour,timestampsout,hourout,fromto;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendance_details);
 
         Intent intent = getIntent();
-        id = intent.getStringExtra("id");
+        idval = intent.getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
@@ -64,7 +64,7 @@ public class AttendanceDetails extends AppCompatActivity {
         //Toast.makeText(this, "role value"+roleval, Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, "access token"+access_token, Toast.LENGTH_SHORT).show();
 
-        showDetails(id);
+        showDetails(idval);
 
 
         nameTxt = (TextView) findViewById(R.id.name);
@@ -130,6 +130,8 @@ public class AttendanceDetails extends AppCompatActivity {
         if(id == android.R.id.home){
             Intent intent = new Intent(AttendanceDetails.this,AttendanceHistoryActivity.class);
             intent.putExtra("userrole",roleval);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();

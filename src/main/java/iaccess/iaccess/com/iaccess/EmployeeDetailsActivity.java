@@ -60,6 +60,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        upnameTxt = (TextView) findViewById(R.id.textName);
         idTxt = (TextView) findViewById(R.id.idTxt);
         nameTxt = (TextView) findViewById(R.id.nameTxt);
         emailTxt = (TextView) findViewById(R.id.emailTxt);
@@ -116,7 +117,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(EmployeeDetailsActivity.this,EmployeeListActivity.class);
         intent.putExtra("userrole",roleval);
-        //intent.putExtra("idval",idvalue);
+        intent.putExtra("idvalue",idval);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
         finish();
@@ -141,6 +142,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         if(id == android.R.id.home){
             Intent intent = new Intent(EmployeeDetailsActivity.this,EmployeeListActivity.class);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();
@@ -185,6 +187,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
                             designationTxt.setText(designaton);
                             genderTxt.setText(gender);
                             addressTxt.setText(address);
+                            upnameTxt.setText(name);
                             Log.d("id", id + "name" + name + "email" + email);
 
 

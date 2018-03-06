@@ -79,7 +79,7 @@ public class ResetPassword extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 Log.d("responsevalue",response);
-                //progressDialog.dismiss();
+                progressDialog.dismiss();
                 Toast.makeText(ResetPassword.this, "Password successfully changed", Toast.LENGTH_SHORT).show();
                 //mPostCommentResponse.requestCompleted();
             }
@@ -122,7 +122,7 @@ public class ResetPassword extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
         intent.putExtra("userrole",roleval);
-        //intent.putExtra("idval",idvalue);
+        intent.putExtra("idval",idval);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
         finish();
@@ -147,6 +147,7 @@ public class ResetPassword extends AppCompatActivity {
         if(id == android.R.id.home){
             Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("idval",idval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();

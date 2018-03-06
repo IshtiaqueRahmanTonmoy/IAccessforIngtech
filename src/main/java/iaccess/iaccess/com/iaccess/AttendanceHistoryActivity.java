@@ -70,7 +70,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
     private Button button;
     private TextView txtview;
     private RecyclerView recyclerView;
-    private String id,image,name,timestamp,timestampsout,hour,in_location,out_location,hourout,month,day,fromto,ids,roleval,access_token,Authorization;
+    private String id,idval,image,name,timestamp,timestampsout,hour,in_location,out_location,hourout,month,day,fromto,ids,roleval,access_token,Authorization;
     Timestamp timestamps = new Timestamp(System.currentTimeMillis());
     private String inlat,inlong,outlat,outlong;
     String intime,outtime;
@@ -94,7 +94,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
 
@@ -242,7 +242,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                             public void onClick(View view) {
 
                                 Intent intent = new Intent(AttendanceHistoryActivity.this,AttendanceDetails.class);
-                                intent.putExtra("id",ids);
+                                intent.putExtra("idvalue",ids);
                                 intent.putExtra("userrole",roleval);
                                 intent.putExtra("access_token",access_token);
                                 startActivity(intent);
@@ -285,6 +285,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         super.onBackPressed();
         Intent intent = new Intent(AttendanceHistoryActivity.this,DashboardActivity.class);
         intent.putExtra("userrole",roleval);
+        intent.putExtra("idvalue",idval);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("acces_token",access_token);
         finish();
     }
@@ -306,6 +308,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         if(id == android.R.id.home){
             Intent intent = new Intent(AttendanceHistoryActivity.this,DashboardActivity.class);
             intent.putExtra("userrole",roleval);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

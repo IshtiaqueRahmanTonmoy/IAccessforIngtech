@@ -34,7 +34,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
     Intent intent;
     String id;
     private TextView namevalues,datevalue,idvalues,organizationame,supportissue,personname,description,remarksvalue;
-    private String roleval,user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,descrpt,remarks,access_token,Authorization;
+    private String idval,roleval,user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,descrpt,remarks,access_token,Authorization;
     private StringRequest stringRequest;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
@@ -44,6 +44,9 @@ public class SupportDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_support_details);
 
+        idval = getIntent().getStringExtra("idvalue");
+
+        //Toast.makeText(this, ""+idval, Toast.LENGTH_SHORT).show();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Support Details");
@@ -79,8 +82,9 @@ public class SupportDetailsActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(SupportDetailsActivity.this,DashboardActivity.class);
+        Intent intent = new Intent(SupportDetailsActivity.this,SupportHistory.class);
         intent.putExtra("userrole",roleval);
+        intent.putExtra("idvalue",idval);
         intent.putExtra("access_token",access_token);
         finish();
     }
@@ -102,7 +106,9 @@ public class SupportDetailsActivity extends AppCompatActivity {
 
         if(id == android.R.id.home){
             Intent intent = new Intent(SupportDetailsActivity.this,SupportHistory.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();
@@ -118,7 +124,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports/view/"+id,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports/view/"+idval,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

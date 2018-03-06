@@ -50,6 +50,7 @@ public class SignInActivity extends AppCompatActivity {
 
         SM = getSharedPreferences("userrecord", 0);
         Boolean islogin = SM.getBoolean("userlogin", false);
+        String id = SM.getString("userid",null);
         String emailvalue = SM.getString("email",null);
         String accesstoken = SM.getString("acces_token",null);
         String rolevals = SM.getString("userrole",null);
@@ -58,6 +59,7 @@ public class SignInActivity extends AppCompatActivity {
         if(islogin){
             Intent intent = new Intent(SignInActivity.this, DashboardActivity.class);
             intent.putExtra("acces_token",accesstoken);
+            intent.putExtra("idvalue",id);
             intent.putExtra("email",emailvalue);
             intent.putExtra("userrole",rolevals);
             startActivity(intent);
@@ -97,116 +99,155 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
                 username = emailEdt.getText().toString();
                 password = passwordEdt.getText().toString();
 
+                if(username.isEmpty() || username.length() == 0 || username.equals("") || username == null)
+                {
+                    emailEdt.setError("username cannot be blank");
+                    //EditText is empty
+                }
 
-                RequestQueue queue = Volley.newRequestQueue(SignInActivity.this);
-                //this is the url where you want to send the request
-                //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
-                // Request a string response from the provided URL.
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
-                        new Response.Listener<String>() {
-                            @Override
-                            public void onResponse(String response) {
-                                Log.d("Response",response);
-                                //Toast.makeText(SignInActivity.this, ""+response, Toast.LENGTH_SHORT).show();
-                                try {
-                                    JSONObject jsonObject = new JSONObject(response);
+                else if(password.isEmpty() || password.length() == 0 || password.equals("") || password == null)
+                {
+                    passwordEdt.setError("password cannot be blank");
+                    //EditText is empty
+                }
+                else
+                {
+                    getogin(username,password);
+                    //EditText is not empty
+                }
 
-                                                token_type = jsonObject.getString("token_type");
-                                                expires_in = jsonObject.getString("expires_in");
-                                                acces_token = jsonObject.getString("access_token");
-                                                refresh_token = jsonObject.getString("refresh_token");
-
-                                                Authorization = "Bearer"+" "+acces_token;
-
-
-                                                //getId(Authorization);
-                                                // Log.d("accesstoken",Authorization);
-
-
-                                            //progressDialog.dismiss();
-                                            //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-
-                                }
-                                Log.d("response",response);
-
-                                if(response.equals("")){
-
-                                    //progressDialog.dismiss();
-                                    //progressDialog.dismiss();
-                                    Toast.makeText(SignInActivity.this, "Please enter correct information..", Toast.LENGTH_SHORT).show();
-                                }
-                                else {
-                                    //name.setText(sharedpreferences.getString(Name, ""));
-                                    //}
-
-                                    getId(new VolleyCallback(){
-                                        @Override
-                                        public void onSuccess(String result){
-                                            Intent intent = new Intent(SignInActivity.this,DashboardActivity.class);
-                                            intent.putExtra("userrole",result);
-                                            intent.putExtra("acces_token",acces_token);
-                                            intent.putExtra("username",username);
-
-
-                                            SharedPreferences.Editor edit = SM.edit();
-                                            edit.putString("userrole", result);
-                                            edit.putString("username", username);
-                                            edit.putString("acces_token",acces_token);
-                                            edit.putBoolean("userlogin", true);
-                                            edit.commit();
-
-                                            startActivity(intent);
-
-
-
-                                            finish();
-
-                                            //rolevalue = result;
-                                            Log.d("rolevalue",result);
-                                            // Toast.makeText(SignInActivity.this, "the value is"+result, Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-
-
-                                    //progressDialog.dismiss();
-                                    //Toast.makeText(SignInActivity.this, "the value is"+rolevalue, Toast.LENGTH_SHORT).show();
-                                                                    }
-                            }
-                        }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //_response.setText("That didn't work!");
-                    }
-                }) {
-                    //adding parameters to the request
-                    @Override
-                    protected Map<String, String> getParams() throws AuthFailureError {
-                        Map<String, String> params = new HashMap<>();
-
-                        params.put("grant_type", "password");
-                        params.put("client_id","2");
-                        params.put("client_secret","tX83nzCm61VasMQSguln17lSvvItsRhSmM5w7HpK");
-                        params.put("username",username);
-                        params.put("password",password);
-
-                        return params;
-                    }
-                };
-                // Add the request to the RequestQueue.
-                queue.add(stringRequest);
-                //progressDialog = new ProgressDialog(SignInActivity.this);
-               // progressDialog.setMessage("Please wait....");
-                //progressDialog.show();
+                /*
+                else
+                {
+                    getogin(username, password);
+                    //EditText is not empty
+                }
+                */
             }
+
+    private void getogin(final String username,final String password) {
+        RequestQueue queue = Volley.newRequestQueue(SignInActivity.this);
+        //this is the url where you want to send the request
+        //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("Response",response);
+                        //Toast.makeText(SignInActivity.this, ""+response, Toast.LENGTH_SHORT).show();
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+
+                            if(jsonObject.length() > 0) {
+                                token_type = jsonObject.getString("token_type");
+                                expires_in = jsonObject.getString("expires_in");
+                                acces_token = jsonObject.getString("access_token");
+                                refresh_token = jsonObject.getString("refresh_token");
+
+                                Authorization = "Bearer" + " " + acces_token;
+                                progressDialog.dismiss();
+
+
+                                //getId(Authorization);
+                                 Log.d("accesstoken",Authorization);
+                            }
+                            else{
+                                progressDialog.dismiss();
+                                Toast.makeText(SignInActivity.this, "Please enter correct information..", Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            //progressDialog.dismiss();
+                            //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+
+                        }
+                        Log.d("response",response);
+
+
+
+                        if(response.equals("")){
+
+                            //progressDialog.dismiss();
+                            //progressDialog.dismiss();
+                            Toast.makeText(SignInActivity.this, "Please enter correct information..", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            //name.setText(sharedpreferences.getString(Name, ""));
+                            //}
+
+                            getId(new VolleyCallback(){
+                                @Override
+                                public void onSuccess(String result, String id) {
+                                    Intent intent = new Intent(SignInActivity.this,DashboardActivity.class);
+                                    intent.putExtra("userrole",result);
+                                    intent.putExtra("idvalue",id);
+                                    intent.putExtra("acces_token",acces_token);
+                                    intent.putExtra("username",username);
+
+
+                                    SharedPreferences.Editor edit = SM.edit();
+                                    edit.putString("userrole", result);
+                                    edit.putString("userid", id);
+                                    edit.putString("username", username);
+                                    edit.putString("acces_token",acces_token);
+                                    edit.putBoolean("userlogin", true);
+                                    edit.commit();
+
+                                    startActivity(intent);
+
+
+
+                                    finish();
+
+                                    //rolevalue = result;
+                                    Log.d("rolevalue",result);
+                                }
+
+
+                            });
+
+
+                            //progressDialog.dismiss();
+                            //Toast.makeText(SignInActivity.this, "the value is"+rolevalue, Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //_response.setText("That didn't work!");
+            }
+        }) {
+            //adding parameters to the request
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+
+                params.put("grant_type", "password");
+                params.put("client_id","2");
+                params.put("client_secret","tX83nzCm61VasMQSguln17lSvvItsRhSmM5w7HpK");
+                params.put("username",username);
+                params.put("password",password);
+
+                return params;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+        progressDialog = new ProgressDialog(SignInActivity.this);
+        progressDialog.setMessage("Please wait....");
+        progressDialog.show();
+    }
         });
     }
+
 
     private void hideKeyboard(View v) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -235,7 +276,9 @@ public class SignInActivity extends AppCompatActivity {
                                         //JSONObject json = j.getJSONObject(i);
 
                                         role = j.getString("role");
-                                        callback.onSuccess(role);
+                                        id = j.getString("id");
+
+                                        callback.onSuccess(role,id);
 
 
                                 //Log.d("idrole",role);

@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -114,7 +114,7 @@
 
                 <EditText
                     android:id="@+id/nameEdt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -137,7 +137,7 @@
 
                 <EditText
                     android:id="@+id/emailEdt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
@@ -150,7 +150,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -161,7 +161,7 @@
 
                 <EditText
                     android:id="@+id/phoneEdt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
@@ -174,7 +174,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -185,7 +185,7 @@
 
                 <EditText
                     android:id="@+id/designationEdt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1.8"
                     android:textSize="20sp"
@@ -197,7 +197,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -208,7 +208,7 @@
 
                 <EditText
                     android:id="@+id/addressEdt"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
@@ -221,7 +221,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"
                 android:layout_weight="2"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -232,7 +232,7 @@
 
                 <Spinner
                     android:id="@+id/gender"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"

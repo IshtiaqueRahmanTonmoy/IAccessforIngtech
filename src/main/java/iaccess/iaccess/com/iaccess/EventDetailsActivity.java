@@ -43,6 +43,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         //EventDetailsActivity.this.setTitle("Event Details");
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
 
         access_token = getIntent().getStringExtra("access_token");
@@ -59,7 +60,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        idval = getIntent().getStringExtra("id");
+        //idval = getIntent().getStringExtra("id");
         //Toast.makeText(EventDetailsActivity.this, ""+idval, Toast.LENGTH_SHORT).show();
 
         nameTxt= (TextView) findViewById(R.id.name);
@@ -92,6 +93,8 @@ public class EventDetailsActivity extends AppCompatActivity {
 
         if(id == android.R.id.home){
             Intent intent = new Intent(EventDetailsActivity.this,EventListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("userrole",roleval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
