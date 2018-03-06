@@ -15,6 +15,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -34,6 +36,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.auth.api.Auth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,11 +77,20 @@ public class AddEmployeeActivity extends AppCompatActivity {
         toolbar.setTitle("Add Employee");
         toolbar.setTitleTextColor(getResources().getColor(R.color.white));
 
+        if(getSupportActionBar()!=null){
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+
+
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("accesstoken");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
-        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+
+
+        Log.d("Auth", Authorization);
+        // Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         getrole();
         //idEdt = (EditText) findViewById(R.id.idEdt);
@@ -274,7 +286,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     password = passwordEdt.getText().toString();
                     avatar = getStringImage(bitmap);
 
-                    addemployee();
+                    addemployee(name,email,phone,designation,address,password,avatar);
                 }
             }
         });
@@ -309,6 +321,43 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menusettings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            Intent intent = new Intent(AddEmployeeActivity.this,DashboardActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("acces_token",access_token);
+            startActivity(intent);
+            finish();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AddEmployeeActivity.this,DashboardActivity.class);
+        intent.putExtra("userrole",roleval);
+        intent.putExtra("acces_token",access_token);
+        startActivity(intent);
+        finish();
+    }
+
     private void hideKeyboard(View view) {
         InputMethodManager inputMethodManager =(InputMethodManager)getSystemService(Activity.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
@@ -338,51 +387,62 @@ public class AddEmployeeActivity extends AppCompatActivity {
         }
     }
 
-    private void addemployee() {
+    private void addemployee(final String name,final String email,final String phone, final String designation,final String address,final String password, final String avatar) {
+        RequestQueue queue = Volley.newRequestQueue(AddEmployeeActivity.this);
+        //this is the url where you want to send the request
+        //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
-        Log.d("emp",name+"email"+email+"phone"+phone+"designation"+designation+"gender"+gender+"avatar"+avatar+"address"+address+"role"+role+"password"+password);
-        RequestQueue requestQueue = Volley.newRequestQueue(AddEmployeeActivity.this);
-          /*Post data*/
-        Map<String, String> params = new HashMap<>();
-        params.put("name", name);
-        params.put("email", email);
-        params.put("phone", phone);
-        params.put("designaton",designation);
-        params.put("gender",gender);
-        params.put("avatar",avatar);
-        params.put("address",address);
-        params.put("role",role);
-        params.put("password",password);
+        String url = "http://i-access.ingtechbd.com/api/users/add";
 
-        Log.d("paramsforattendance",params.toString());
-
-
-        JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, "http://i-access.ingtechbd.com/api/users/add",
-
-                new JSONObject(params),
-                new Response.Listener<JSONObject>() {
+        // Request a string response from the provided URL.
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
+                new Response.Listener<String>() {
                     @Override
-                    public void onResponse(JSONObject response) {
+                    public void onResponse(String response) {
+                        Log.d("respforaddemp", response);
+                        //Log.d("respo", String.valueOf(response));
 
-                        //Toast.makeText(AddEmployeeActivity.this, ""+response, Toast.LENGTH_SHORT).show();
-                        //progressDialog.dismiss();
 
-                        Log.d("respo", String.valueOf(response));
+                        /*
                         nameEdt.setText("");
                         emailEdt.setText("");
                         phoneEdt.setText("");
                         designationEdt.setText("");
                         addressEdt.setText("");
                         passwordEdt.setText("");
+                        progressDialog.dismiss();
+                        Toast.makeText(AddEmployeeActivity.this, ""+response, Toast.LENGTH_SHORT).show();
+                       */
+                        //Toast.makeText(AddEmployeeActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
+                        // Display the response string.
+                        //_response.setText(response);
                     }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //   Handle Error
-                        Toast.makeText(AddEmployeeActivity.this, "added", Toast.LENGTH_SHORT).show();
-                    }
-                }) {
+
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //_response.setText("That didn't work!");
+            }
+        }) {
+            //adding parameters to the request
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("name", name);
+                params.put("email", email);
+                params.put("phone", phone);
+                params.put("designaton",designation);
+                params.put("gender",gender);
+                //params.put("avatar","images/users/default.jpeg");
+                params.put("address",address);
+                params.put("role",role);
+                params.put("password",password);
+
+
+                Log.d("attendanceaddemployee",params.toString());
+                return params;
+            }
+
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
@@ -392,10 +452,11 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 return headers;
             }
         };
-        requestQueue.add(postRequest);
-        //progressDialog = new ProgressDialog(this);
-       // progressDialog.setMessage("Please wait....");
-       // progressDialog.show();
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+        progressDialog = new ProgressDialog(AddEmployeeActivity.this);
+        progressDialog.setMessage("Please wait....");
+        progressDialog.show();
     }
 
     private void getrole() {

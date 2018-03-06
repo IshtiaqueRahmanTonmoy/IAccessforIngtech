@@ -61,7 +61,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
     private TextView txtview;
     private Spinner spinner;
     private StringRequest stringRequest;
-    private String id,title,time,name,month,day,hour,ids,access_token,Authorization,roleval;
+    private String id,title,time,name,month,day,hour,ids,access_token,Authorization,roleval,intime;
     private List<Event> eventList = new ArrayList<Event>();
     private ProgressDialog progressDialog;
     private EventAdapter mAdapter;
@@ -75,7 +75,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
-        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,10 +88,12 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         }
 
 
-        //getValue();
+        getValue();
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         spinner = (Spinner) findViewById(R.id.Spinner);
         String[] list = new String[]{
+                "Select...",
                 "Search by date"
         };
 
@@ -102,13 +104,26 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
                 this,R.layout.spinner_item,List){
 
             @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
             public View getDropDownView(int position, View convertView,
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
                 if(position == 0){
                     // Set the hint text color gray
-                    tv.setTextColor(Color.BLACK);
+                    tv.setTextColor(Color.GRAY);
                 }
                 else {
                     tv.setTextColor(Color.BLACK);
@@ -121,6 +136,8 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         mAdapter = new EventAdapter(eventList);
         spinnerArrayAdapter.setDropDownViewResource(R.layout.spinner_item);
         spinner.setAdapter(spinnerArrayAdapter);
+
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -129,18 +146,13 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
                 // First item is disable and it is used for hint
 
                 Log.d("string",selectedItemText);
+
                 if(selectedItemText.equals("Search by date")){
                     DateRangePickerFragment dateRangePickerFragment= DateRangePickerFragment.newInstance(EventListActivity.this,false);
                     dateRangePickerFragment.show(getSupportFragmentManager(),"datePicker");
-
                 }
                 else{
                 }
-                // Notify the selected item text
-               // Toast.makeText(getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                //        .show();
-
-
             }
 
             @Override
@@ -263,31 +275,30 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
                                             //int m = Integer.parseInt(mth);
 
                                             if (mth.equals("01")) {
-                                                month = "January";
+                                                month = "Jan";
                                             } else if (mth.equals("02")) {
-                                                month = "February";
+                                                month = "Feb";
                                             } else if (mth.equals("03")) {
-                                                month = "March";
+                                                month = "Mar";
                                             } else if (mth.equals("04")) {
-                                                month = "April";
+                                                month = "Apr";
                                             } else if (mth.equals("05")) {
                                                 month = "May";
                                             } else if (mth.equals("06")) {
-                                                month = "June";
+                                                month = "Jun";
                                             } else if (mth.equals("07")) {
-                                                month = "July";
+                                                month = "Jul";
                                             } else if (mth.equals("08")) {
-                                                month = "August";
+                                                month = "Aug";
                                             } else if (mth.equals("09")) {
-                                                month = "September";
+                                                month = "Sept";
                                             } else if (mth.equals("10")) {
-                                                month = "October";
+                                                month = "Oct";
 
                                             } else if (mth.equals("11")) {
-                                                month = "November";
-
+                                                month = "Nov";
                                             } else {
-                                                month = "December";
+                                                month = "Dec";
                                             }
 
                                             day = parts[2];
@@ -346,21 +357,24 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
                                                 hour = "10";
                                             } else if (hr == 23) {
                                                 hour = "11";
-                                            } else {
+                                            } else if(hr == 24){
                                                 hour = "12";
+                                            }
+                                            else{
+
                                             }
 
 
                                             String minute = timeparts[1];
 
                                             if (hr <= 12) {
-                                                //intime = hour+":"+minute+"AM";
+                                               intime = hour+":"+minute+"AM";
                                             } else {
-                                                //intime = hour+":"+minute+"PM";
+                                                intime = hour+":"+minute+"PM";
                                             }
 
 
-                                            String t = v + "." + month + "." + year + " " + time;
+                                            String t = v + "," + month + "," + year + " " + " " + intime;
                                             //Log.d("day",pd);
 
 

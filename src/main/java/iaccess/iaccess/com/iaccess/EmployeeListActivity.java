@@ -63,7 +63,7 @@ public class EmployeeListActivity extends AppCompatActivity {
         Authorization = "Bearer"+" "+access_token;
 
         Log.d("autho",Authorization);
-        //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
         showvaluebyid();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -162,13 +162,9 @@ public class EmployeeListActivity extends AppCompatActivity {
                         Log.d("responsevalueall", response);
                         try {
                             JSONObject jsonObject = new JSONObject(response);
-                            //JSONArray j = jsonObject.getJSONArray("data");
-                            //if (j.length() > 0) {
-                            //for (int i = 0; i < j.length(); i++) {
-                            try {
-                                //Getting json object
-                                JSONObject json = jsonObject.getJSONObject("data");
-
+                            JSONArray j = jsonObject.getJSONArray("data");
+                            for(int i=0; i<j.length(); i++){
+                                JSONObject json = j.getJSONObject(i);
                                 id = json.getString("id");
                                 name = json.getString("name");
                                 designation = json.getString("designaton");
@@ -181,19 +177,7 @@ public class EmployeeListActivity extends AppCompatActivity {
                                 //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
                                 progressDialog.dismiss();
                                 //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-
-                        }
-
-                          /*
-                            else {
-                                //progressDialog.dismiss();
-                                Toast.makeText(EmployeeListActivity.this, "Data not found", Toast.LENGTH_SHORT).show();
                             }
-                            */
-
                         }
 
                         catch (JSONException e) {

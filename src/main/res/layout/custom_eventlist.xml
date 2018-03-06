@@ -29,7 +29,7 @@
                 android:id="@+id/list_image"
                 android:layout_width="50dip"
                 android:layout_height="60dip"
-                android:src="@mipmap/ic_launcher_round" />
+                android:src="@drawable/user" />
         </LinearLayout>
 
         <!-- Title Of Song -->

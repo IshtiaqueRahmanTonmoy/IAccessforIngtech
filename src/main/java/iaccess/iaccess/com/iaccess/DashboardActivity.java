@@ -55,7 +55,7 @@ public class DashboardActivity extends AppCompatActivity
                intent.putExtra("userrole",roleval);
                intent.putExtra("access_token",acces_token);
                startActivity(intent);
-               finish();
+               //finish();
            }
        });
 
@@ -77,6 +77,7 @@ public class DashboardActivity extends AppCompatActivity
                 intent.putExtra("userrole",roleval);
                 intent.putExtra("access_token",acces_token);
                 startActivity(intent);
+                //finish();
             }
         });
 
@@ -308,6 +309,16 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("userrole",roleval);
             intent.putExtra("access_token",acces_token);
             startActivity(intent);
+        }
+        else if (id == R.id.nav_logout) {
+            SharedPreferences SM = getSharedPreferences("userrecord", 0);
+            SharedPreferences.Editor edit = SM.edit();
+            edit.putBoolean("userlogin", false);
+            edit.commit();
+
+            Intent intent = new Intent(DashboardActivity.this,SignInActivity.class);
+            startActivity(intent);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

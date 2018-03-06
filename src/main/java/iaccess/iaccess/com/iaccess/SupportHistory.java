@@ -79,7 +79,8 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
         //Toast.makeText(this, ""+ Authorization, Toast.LENGTH_SHORT).show();
-        //getValue();
+
+        getValue();
 
         //Toast.makeText(SupportHistory.this, ""+Authorization, Toast.LENGTH_SHORT).show();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -97,6 +98,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         String[] list = new String[]{
+                "Select...",
                 "Search by id",
                 "Search by date"
         };
@@ -108,13 +110,26 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                 this,R.layout.spinner_item,plantsList){
 
             @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
             public View getDropDownView(int position, View convertView,
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
                 if(position == 0){
                     // Set the hint text color gray
-                    tv.setTextColor(Color.BLACK);
+                    tv.setTextColor(Color.GRAY);
                 }
                 else {
                     tv.setTextColor(Color.BLACK);
@@ -134,7 +149,11 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                 // First item is disable and it is used for hint
 
                 Log.d("string",selectedItemText);
-                if(selectedItemText.equals("Search by id")){
+
+                if(selectedItemText.equals("Select...")){
+
+                }
+                else if(selectedItemText.equals("Search by id")){
                     supportList.clear();
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(SupportHistory.this);
                     LayoutInflater inflater = SupportHistory.this.getLayoutInflater();
@@ -143,7 +162,6 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
 
                     final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
-                    dialogBuilder.setTitle("Custom dialog");
                     dialogBuilder.setMessage("Enter id below");
                     dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -167,8 +185,8 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                     dateRangePickerFragment.show(getSupportFragmentManager(),"datePicker");
                 }
                 // Notify the selected item text
-                Toast.makeText(getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                        .show();
+                //Toast.makeText(getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                //        .show();
 
 
             }
@@ -257,126 +275,126 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
     }
 
 
-        private void getValue() {
-            RequestQueue queue = Volley.newRequestQueue(SupportHistory.this);
-            //this is the url where you want to send the request
-            //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
+    private void getValue() {
+        RequestQueue queue = Volley.newRequestQueue(SupportHistory.this);
+        //this is the url where you want to send the request
+        //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
-            // Request a string response from the provided URL.
-            stringRequest = new StringRequest(Request.Method.GET, GETALL_URL,
-                    new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            Log.d("responsevalue", response);
-                            try {
-                                JSONObject jsonObject = new JSONObject(response);
-                                JSONArray j = jsonObject.getJSONArray("data");
-                                if(j.length() > 0) {
-                                    for (int i = 0; i < j.length(); i++) {
-                                        try {
-                                            //Getting json object
-                                            JSONObject json = j.getJSONObject(i);
-                                            user_id = json.getString("user_id");
-                                            organization = json.getString("organization");
-                                            start_time = json.getString("start_time");
-                                            end_time = json.getString("end_time");
-                                            JSONObject jsonob = json.getJSONObject("user");
-                                            name = jsonob.getString("name");
+        // Request a string response from the provided URL.
+        stringRequest = new StringRequest(Request.Method.GET, GETALL_URL,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responsevalue", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray j = jsonObject.getJSONArray("data");
+                            if(j.length() > 0) {
+                                for (int i = 0; i < j.length(); i++) {
+                                    try {
+                                        //Getting json object
+                                        JSONObject json = j.getJSONObject(i);
+                                        user_id = json.getString("user_id");
+                                        organization = json.getString("organization");
+                                        start_time = json.getString("start_time");
+                                        end_time = json.getString("end_time");
+                                        JSONObject jsonob = json.getJSONObject("user");
+                                        name = jsonob.getString("name");
 
-                                            //this is start of intime
-                                            JSONObject jsonin = json.getJSONObject("created_at");
-                                            timestamp = jsonin.getString("date");
-                                            String[] parts = timestamp.split("-");
+                                        //this is start of intime
+                                        JSONObject jsonin = json.getJSONObject("created_at");
+                                        timestamp = jsonin.getString("date");
+                                        String[] parts = timestamp.split("-");
 
-                                            String year = parts[0];
-                                            String mth = parts[1];
-                                            String d = parts[2];
+                                        String year = parts[0];
+                                        String mth = parts[1];
+                                        String d = parts[2];
 
-                                            String[] da = d.split(" ");
-                                            String v = da[0];
-                                            Log.d("vagfd", v);
-                                            //int m = Integer.parseInt(mth);
+                                        String[] da = d.split(" ");
+                                        String v = da[0];
+                                        Log.d("vagfd", v);
+                                        //int m = Integer.parseInt(mth);
 
-                                            if (mth.equals("01")) {
-                                                month = "January";
-                                            } else if (mth.equals("02")) {
-                                                month = "February";
-                                            } else if (mth.equals("03")) {
-                                                month = "March";
-                                            } else if (mth.equals("04")) {
-                                                month = "April";
-                                            } else if (mth.equals("05")) {
-                                                month = "May";
-                                            } else if (mth.equals("06")) {
-                                                month = "June";
-                                            } else if (mth.equals("07")) {
-                                                month = "July";
-                                            } else if (mth.equals("08")) {
-                                                month = "August";
-                                            } else if (mth.equals("09")) {
-                                                month = "September";
-                                            } else if (mth.equals("10")) {
-                                                month = "October";
+                                        if (mth.equals("01")) {
+                                            month = "January";
+                                        } else if (mth.equals("02")) {
+                                            month = "February";
+                                        } else if (mth.equals("03")) {
+                                            month = "March";
+                                        } else if (mth.equals("04")) {
+                                            month = "April";
+                                        } else if (mth.equals("05")) {
+                                            month = "May";
+                                        } else if (mth.equals("06")) {
+                                            month = "June";
+                                        } else if (mth.equals("07")) {
+                                            month = "July";
+                                        } else if (mth.equals("08")) {
+                                            month = "August";
+                                        } else if (mth.equals("09")) {
+                                            month = "September";
+                                        } else if (mth.equals("10")) {
+                                            month = "October";
 
-                                            } else if (mth.equals("11")) {
-                                                month = "November";
+                                        } else if (mth.equals("11")) {
+                                            month = "November";
 
-                                            } else {
-                                                month = "December";
-                                            }
-
-                                            day = parts[2];
-                                            //Log.d("day",pd);
-
-                                            Log.d("ffsd", day);
-                                            //this is end of intime
-                                            //this is end of out time
-                                            fromto = start_time + "-" + end_time;
-
-                                            supportList.add(new Support(user_id, name, month, v, fromto, organization));
-                                            mAdapter.notifyDataSetChanged();
-
-
-                                            //Toast.makeText(SupportHistory.this, ""+v, Toast.LENGTH_SHORT).show();
-                                            progressDialog.dismiss();
-                                            //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
-
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
+                                        } else if(mth.equals("12")){
+                                            month = "December";
                                         }
+                                        else {}
+                                        day = parts[2];
+                                        //Log.d("day",pd);
+
+                                        Log.d("ffsd", day);
+                                        //this is end of intime
+                                        //this is end of out time
+                                        fromto = start_time + "-" + end_time;
+
+                                        supportList.add(new Support(user_id, name, month, v, fromto, organization));
+                                        mAdapter.notifyDataSetChanged();
+
+
+                                        //Toast.makeText(SupportHistory.this, ""+v, Toast.LENGTH_SHORT).show();
+                                        progressDialog.dismiss();
+                                        //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
+
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
                                 }
-                                else{
-                                    progressDialog.dismiss();
-                                    Toast.makeText(SupportHistory.this, "Data not found", Toast.LENGTH_SHORT).show();
-                                }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
                             }
-                        }
-                    }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    //_response.setText("That didn't work!");
-                }
-            }) {
+                            else{
+                                progressDialog.dismiss();
+                                Toast.makeText(SupportHistory.this, "Data not found", Toast.LENGTH_SHORT).show();
+                            }
 
-                @Override
-                public Map<String, String> getHeaders() throws AuthFailureError {
-                    Map<String,String> headers = new HashMap<String,String>();
-                    headers.put("Accept","application/json");
-                    headers.put("Authorization",Authorization);
-                    //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
-                    return headers;
-                }
-            };
-            // Add the request to the RequestQueue.
-            queue.add(stringRequest);
-            progressDialog = new ProgressDialog(SupportHistory.this);
-            progressDialog.setMessage("Please wait....");
-            progressDialog.show();
-        }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //_response.setText("That didn't work!");
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<String,String>();
+                headers.put("Accept","application/json");
+                headers.put("Authorization",Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                return headers;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+        progressDialog = new ProgressDialog(SupportHistory.this);
+        progressDialog.setMessage("Please wait....");
+        progressDialog.show();
+    }
 
 
     private void showvaluebyid(final String userid) {
@@ -445,9 +463,10 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                                         } else if (mth.equals("11")) {
                                             month = "November";
 
-                                        } else {
+                                        } else if(mth.equals("12")){
                                             month = "December";
                                         }
+                                        else {}
 
                                         day = parts[2];
                                         //Log.d("day",pd);

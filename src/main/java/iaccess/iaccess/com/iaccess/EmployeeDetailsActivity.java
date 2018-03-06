@@ -48,7 +48,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         idval = getIntent().getStringExtra("idval");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
-        Toast.makeText(EmployeeDetailsActivity.this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(EmployeeDetailsActivity.this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

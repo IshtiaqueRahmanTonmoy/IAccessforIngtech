@@ -183,7 +183,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                             }
 
                             //day1 = parts[2];
-                            String date =v1+""+month1+""+year1;
+                            String date =v1+" , " + month1 + " , " + year1;
                             Log.d("time",v1+""+month1+""+year1);
 
                             String[] partss = times.split(" ");
@@ -335,8 +335,8 @@ public class EventDetailsActivity extends AppCompatActivity {
 
                             day = parts[2];
 
-                            String crton = v+""+month+""+year;
-                            Log.d("vlaues",v+""+month+""+year);
+                            String crton = v+"," + month + "," + year;
+                            Log.d("vlaues",v+" , " + month+" , " + year);
 
                             progressDialog.dismiss();
 

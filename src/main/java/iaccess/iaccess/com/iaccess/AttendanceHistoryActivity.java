@@ -102,12 +102,14 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
 
         Authorization = "Bearer"+" "+access_token;
 
+        getValue();
         Log.d("Authorization",Authorization);
         //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
         spinner = (Spinner) findViewById(R.id.Spinner);
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         String[] list = new String[]{
+                "Select...",
                 "Search by id",
                 "Search by date"
         };
@@ -119,13 +121,26 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                 this,R.layout.spinner_item,plantsList){
 
             @Override
+            public boolean isEnabled(int position){
+                if(position == 0)
+                {
+                    // Disable the first item from Spinner
+                    // First item will be use for hint
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            @Override
             public View getDropDownView(int position, View convertView,
                                         ViewGroup parent) {
                 View view = super.getDropDownView(position, convertView, parent);
                 TextView tv = (TextView) view;
                 if(position == 0){
                     // Set the hint text color gray
-                    tv.setTextColor(Color.BLACK);
+                    tv.setTextColor(Color.GRAY);
                 }
                 else {
                     tv.setTextColor(Color.BLACK);
@@ -145,7 +160,11 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                 // First item is disable and it is used for hint
 
                       Log.d("string",selectedItemText);
-                      if(selectedItemText.equals("Search by id")){
+
+                      if(selectedItemText.equals("Select...")){
+
+                      }
+                      else if(selectedItemText.equals("Search by id")){
                           empList.clear();
                           AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(AttendanceHistoryActivity.this);
                           LayoutInflater inflater = AttendanceHistoryActivity.this.getLayoutInflater();
@@ -154,7 +173,6 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
 
                           final EditText edt = (EditText) dialogView.findViewById(R.id.edit1);
 
-                          dialogBuilder.setTitle("Custom dialog");
                           dialogBuilder.setMessage("Enter id below");
                           dialogBuilder.setPositiveButton("Done", new DialogInterface.OnClickListener() {
                               public void onClick(DialogInterface dialog, int whichButton) {
@@ -178,8 +196,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                           dateRangePickerFragment.show(getSupportFragmentManager(),"datePicker");
                       }
                     // Notify the selected item text
-                    Toast.makeText(getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
-                            .show();
+                    //Toast.makeText(getApplicationContext(), "Selected : " + selectedItemText, Toast.LENGTH_SHORT)
+                    //        .show();
 
 
             }
@@ -610,8 +628,10 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                     in_location = json.getString("in_location");
                                     JSONObject jsonob = json.getJSONObject("user");
                                     name = jsonob.getString("name");
+                                    image = jsonob.getString("avatar");
 
-                                 //this is start of intime
+
+                                    //this is start of intime
                                     JSONObject jsonin = json.getJSONObject("in_time");
                                     timestamp = jsonin.getString("date");
                                     String[] parts = timestamp.split("-");

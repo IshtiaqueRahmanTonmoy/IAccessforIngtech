@@ -112,24 +112,21 @@ public class SignInActivity extends AppCompatActivity {
                             public void onResponse(String response) {
                                 Log.d("Response",response);
                                 //Toast.makeText(SignInActivity.this, ""+response, Toast.LENGTH_SHORT).show();
-
                                 try {
                                     JSONObject jsonObject = new JSONObject(response);
-                                    //JSONArray j = jsonObject.getJSONArray("result");
-                                    //for(int i=0;i<j.length();i++){
-                                       // try {
-                                            //Getting json object
-                                            //JSONObject json = j.getJSONObject(i);
-                                            token_type = jsonObject.getString("token_type");
-                                            expires_in = jsonObject.getString("expires_in");
-                                            acces_token = jsonObject.getString("access_token");
-                                            refresh_token = jsonObject.getString("refresh_token");
 
-                                            Authorization = "Bearer"+" "+acces_token;
+                                                token_type = jsonObject.getString("token_type");
+                                                expires_in = jsonObject.getString("expires_in");
+                                                acces_token = jsonObject.getString("access_token");
+                                                refresh_token = jsonObject.getString("refresh_token");
+
+                                                Authorization = "Bearer"+" "+acces_token;
 
 
-                                    //getId(Authorization);
-                                            Log.d("accesstoken",Authorization);
+                                                //getId(Authorization);
+                                                // Log.d("accesstoken",Authorization);
+
+
                                             //progressDialog.dismiss();
                                             //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
 
@@ -178,7 +175,7 @@ public class SignInActivity extends AppCompatActivity {
                                     });
 
 
-                                    progressDialog.dismiss();
+                                    //progressDialog.dismiss();
                                     //Toast.makeText(SignInActivity.this, "the value is"+rolevalue, Toast.LENGTH_SHORT).show();
                                                                     }
                             }
@@ -204,9 +201,9 @@ public class SignInActivity extends AppCompatActivity {
                 };
                 // Add the request to the RequestQueue.
                 queue.add(stringRequest);
-                progressDialog = new ProgressDialog(SignInActivity.this);
-                progressDialog.setMessage("Please wait....");
-                progressDialog.show();
+                //progressDialog = new ProgressDialog(SignInActivity.this);
+               // progressDialog.setMessage("Please wait....");
+                //progressDialog.show();
             }
         });
     }

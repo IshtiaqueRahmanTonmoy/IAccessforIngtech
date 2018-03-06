@@ -37,7 +37,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
-                    android:src="@mipmap/ic_launcher_round" />
+                    android:src="@drawable/cl"/>
 
                 <TextView
                     android:id="@+id/month"
@@ -47,9 +47,14 @@
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
+                    android:textStyle="bold"
                     android:text="Hello"
-                    android:textColor="#8c1010"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="2dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:textColor="#f4efef"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/date"
@@ -58,7 +63,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:text="Hello"
-                    android:textColor="#642525" />
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:textColor="#121111" />
 
 
             </RelativeLayout>

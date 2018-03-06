@@ -62,7 +62,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
-        Toast.makeText(this, ""+ Authorization, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+ Authorization, Toast.LENGTH_SHORT).show();
 
         namevalues = (TextView) findViewById(R.id.name);
         datevalue = (TextView) findViewById(R.id.date);
@@ -207,7 +207,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
 
                                     idvalues.setText(user_id);
                                     namevalues.setText(name);
-                                    datevalue.setText(v+""+month+""+year);
+                                    datevalue.setText(v+","+month+","+year);
                                     organizationame.setText(organization);
                                     supportissue.setText(descrpt);
                                     namevalues.setText(name);
