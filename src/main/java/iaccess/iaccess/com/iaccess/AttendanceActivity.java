@@ -76,7 +76,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
     private Button checkIn,checkOut,submitBtn;
     private double in_lat,in_long,out_lat,out_long;
     private EditText remarksEdt;
-    private String remarks,in_location,timezone,time,out_location,hour,intime,format,format1,time1,roleval,intimevalue,hourin;
+    private String remarks,in_location,timezone,time,out_location,hour,intime,format,format1,time1,roleval,intimevalue,hourin,idval;
     boolean checkinclicked=false,checkoutclicked=false;
     Timestamp ts=null;
     TextView nameText,designationText;
@@ -94,8 +94,9 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
-        access_token = getIntent().getStringExtra("accesstoken");
+        access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
 
@@ -220,6 +221,46 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             }
         });
     }
+
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(AttendanceActivity.this,DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra("userrole",roleval);
+        intent.putExtra("idvalue",idval);
+        intent.putExtra("acces_token",access_token);
+        startActivity(intent);
+        finish();
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menusettings, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+
+        if(id == android.R.id.home){
+            Intent intent = new Intent(AttendanceActivity.this,DashboardActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra("idvalue",idval);
+            intent.putExtra("acces_token",access_token);
+            startActivity(intent);
+            finish();
+        }
+
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void getValue() {
         final String intime,hoursh,minute;

@@ -53,7 +53,7 @@ public class AddEventActivity extends AppCompatActivity {
     private RadioButton radioDisplayButton;
 
     private Button submitBtn;
-    private String name,title,time,description,timevalue,status,access_token,Authorization,roleval,valuenot;
+    private String name,title,time,description,timevalue,status,access_token,Authorization,roleval,valuenot,idval;
     private ProgressDialog progressDialog;
     private ScrollView scrollView;
     private Toolbar toolbar;
@@ -64,6 +64,7 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         valuenot = getIntent().getStringExtra("valuenotlist");
 
@@ -78,7 +79,7 @@ public class AddEventActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        access_token = getIntent().getStringExtra("accesstoken");
+        access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
 
@@ -211,16 +212,18 @@ public class AddEventActivity extends AppCompatActivity {
         super.onBackPressed();
         if(valuenot.equals("1")){
             Intent intent = new Intent(AddEventActivity.this,DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
-            //intent.putExtra("idval",idvalue);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
         }
         else{
             Intent intent = new Intent(AddEventActivity.this,EmployeeListActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
-            //intent.putExtra("idval",idvalue);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();

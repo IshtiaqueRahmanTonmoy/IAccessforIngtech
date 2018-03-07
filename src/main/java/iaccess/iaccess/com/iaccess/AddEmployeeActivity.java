@@ -49,18 +49,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import iaccess.iaccess.com.entity.EmployeeInfo;
+
 public class AddEmployeeActivity extends AppCompatActivity {
 
     private EditText idEdt,nameEdt,emailEdt,phoneEdt,designationEdt,addressEdt,passwordEdt;
     private ScrollView scrollView;
     private Spinner genderSpinner,roleSpinner;
     private StringRequest stringRequest;
-    private List<String> listOfString;
+    private List<String> listOfString,emaillist,phonelist;
     private Button submitBtn;
     private ProgressDialog progressDialog;
     private ImageView image;
     Bitmap bitmap;
-    String val,gender,role,name,email,phone,designation,avatar,address,password,access_token,Authorization,roleval;
+    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+    String val,gender,role,name,email,phone,designation,avatar,address,password,access_token,Authorization,roleval,idval,emailval,phoneval;
     String[] gnd = new String[]{
             "Male",
             "Female"
@@ -72,6 +76,9 @@ public class AddEmployeeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_employee);
 
+        emaillist = new ArrayList<String>();
+        phonelist = new ArrayList<String>();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Add Employee");
@@ -82,9 +89,11 @@ public class AddEmployeeActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        getvalue();
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
-        access_token = getIntent().getStringExtra("accesstoken");
+        access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
 
@@ -148,7 +157,21 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s)  {
                 if (emailEdt.getText().toString().length() <= 0) {
                     emailEdt.setError("Enter Email");
-                } else {
+                }
+
+                else if(!emailEdt.getText().toString().matches(emailPattern)){
+
+                    emailEdt.setError("Email not valid");
+                }
+
+                else if(emailEdt.getText().toString().length()>0){
+                    for(String str : emaillist){
+                        if(str.trim().contains(emailEdt.getText().toString())){
+                            emailEdt.setError("Email already in use");
+                        }
+                    }
+                }
+                else {
                     emailEdt.setError(null);
                 }
             }
@@ -167,7 +190,15 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s)  {
                 if (phoneEdt.getText().toString().length() <= 0) {
                     phoneEdt.setError("Enter Phone");
-                } else {
+                }
+                else if(phoneEdt.getText().toString().length()>0){
+                    for(String str1 : phonelist){
+                        if(str1.trim().contains(phoneEdt.getText().toString())){
+                            phoneEdt.setError("Phone already in use");
+                        }
+                    }
+                }
+                else {
                     phoneEdt.setError(null);
                 }
             }
@@ -225,7 +256,11 @@ public class AddEmployeeActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s)  {
                 if (passwordEdt.getText().toString().length() <= 0) {
                     passwordEdt.setError("Enter Password");
-                } else {
+                }
+                else if(passwordEdt.getText().toString().length() < 6){
+                    passwordEdt.setError("Password should be atleast 6 character");
+                }
+                else {
                     passwordEdt.setError(null);
                 }
             }
@@ -277,6 +312,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 else if (passwordEdt.getText().toString().length() <= 0) {
                     passwordEdt.setError("Enter Password");
                 }
+
+                else if(emailEdt.getText().toString().equals(emailPattern)){
+                    emailEdt.setError("Email address not valid");
+                }
                 else {
                     name = nameEdt.getText().toString();
                     email = emailEdt.getText().toString();
@@ -284,7 +323,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
                     designation = designationEdt.getText().toString();
                     address = addressEdt.getText().toString();
                     password = passwordEdt.getText().toString();
-                    avatar = getStringImage(bitmap);
+                    avatar = null;
+                    //avatar = getStringImage(bitmap);
 
                     addemployee(name,email,phone,designation,address,password,avatar);
                 }
@@ -321,6 +361,59 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
     }
 
+    private void getvalue() {
+        RequestQueue queue = Volley.newRequestQueue(AddEmployeeActivity.this);
+        //this is the url where you want to send the request
+        //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
+
+        // Request a string response from the provided URL.
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users/",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("responsevalueall", response);
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONArray j = jsonObject.getJSONArray("data");
+                            for(int i=0; i<j.length(); i++){
+                                JSONObject json = j.getJSONObject(i);
+                                emailval = json.getString("email");
+                                phoneval = json.getString("phone");
+
+                                emaillist.add(emailval);
+                                phonelist.add(phoneval);
+
+                                //Toast.makeText(AddEmployeeActivity.this, ""+emailval+""+phoneval, Toast.LENGTH_SHORT).show();
+                                //progressDialog.dismiss();
+                                //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                //_response.setText("That didn't work!");
+            }
+        }) {
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String,String> headers = new HashMap<String,String>();
+                headers.put("Accept","application/json");
+                headers.put("Authorization",Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjQ5MzIwZjgyNzc1NzI5NThiMTFjMmU0ODA1YWE1YTc3MWRhMzM2N2QwNTllZjFkMGNkNTRjMThlYWQzYmI2NDc3OGU0Y2FlM2E3NTBkMzgwIn0.eyJhdWQiOiIyIiwianRpIjoiNDkzMjBmODI3NzU3Mjk1OGIxMWMyZTQ4MDVhYTVhNzcxZGEzMzY3ZDA1OWVmMWQwY2Q1NGMxOGVhZDNiYjY0Nzc4ZTRjYWUzYTc1MGQzODAiLCJpYXQiOjE1MTk3MjQ1MzAsIm5iZiI6MTUxOTcyNDUzMCwiZXhwIjoxNTUxMjYwNTMwLCJzdWIiOiIzIiwic2NvcGVzIjpbXX0.JmwLGPco1hAcKDD3z9pwguyIq2tjuxQg-korcwfDLgOCykv4hC20cE5MSe8ekVUiel2e9LWYkgq1jKz93-UawxKmd0vQ6VBLerIfVX8hbusgiOjQTcAVRCO5N40fc2GuhJ3IAXNA3sFeDfDU-sCMvdB1vKm7pMXH2AgIJLaUflDfA6KY67vy_-HhsDq6ZBp-PZsVNXGMNKiDxzuufUWZD6EOQ6Dyn8VHa3RkUHu7QL_e05NI3-tptLSNkzrtWt2Vycyy42zA8ZRdAGFsU_LNYd9oqaDguFmEihWGLjUwXGEsql1BulrtHdEAduzuM1_UIDAsU1cOrUktXMzJMnZ2rrOCnQfL1KaHHduGamQV1f7FvdLEkAQU0lUMN-NyqU-MnypJ9Z2QlZbIXYkdfZmOMWnISgW_8RD2v_Wwf0tPvmzEaeS0L6LPt4CPcIp-RNLHZPvbTz79yiZrl8J_D5L-KK4Es638InDZeSjPm5jIgoerWlt_8Z74K9XOkf0-YsndPL0E9CGbdfb2vOCqZoH-QSmDu61Q-ED5QFSsJa2eU__XMG-sbva3n5zgH1NVW09ccOkQ3BeCI_LE2C4WItljxCsNutla7ilaHlIS5SLKSWZu4swLAciiChWYi2eWcoaVMKTv9G6_DMSF0D5JAcIvCkklvctteLgyTqdG_Pl2edk");
+                return headers;
+            }
+        };
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest);
+
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -338,7 +431,9 @@ public class AddEmployeeActivity extends AppCompatActivity {
 
         if(id == android.R.id.home){
             Intent intent = new Intent(AddEmployeeActivity.this,DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("idvalue",idval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
@@ -352,7 +447,9 @@ public class AddEmployeeActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(AddEmployeeActivity.this,DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
+        intent.putExtra("idvalue",idval);
         intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();
@@ -402,17 +499,16 @@ public class AddEmployeeActivity extends AppCompatActivity {
                         Log.d("respforaddemp", response);
                         //Log.d("respo", String.valueOf(response));
 
-
-                        /*
                         nameEdt.setText("");
                         emailEdt.setText("");
                         phoneEdt.setText("");
                         designationEdt.setText("");
                         addressEdt.setText("");
                         passwordEdt.setText("");
+
                         progressDialog.dismiss();
                         Toast.makeText(AddEmployeeActivity.this, ""+response, Toast.LENGTH_SHORT).show();
-                       */
+
                         //Toast.makeText(AddEmployeeActivity.this, "Successfully added", Toast.LENGTH_SHORT).show();
                         // Display the response string.
                         //_response.setText(response);
@@ -421,6 +517,24 @@ public class AddEmployeeActivity extends AppCompatActivity {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                nameEdt.setText("");
+                emailEdt.setText("");
+                phoneEdt.setText("");
+                designationEdt.setText("");
+                addressEdt.setText("");
+                passwordEdt.setText("");
+
+                progressDialog.dismiss();
+                Toast.makeText(AddEmployeeActivity.this, "Employee added successfully", Toast.LENGTH_SHORT).show();
+
+                nameEdt.setError(null);
+                emailEdt.setError(null);
+                phoneEdt.setError(null);
+                designationEdt.setError(null);
+                addressEdt.setError(null);
+                passwordEdt.setError(null);
+
                 //_response.setText("That didn't work!");
             }
         }) {

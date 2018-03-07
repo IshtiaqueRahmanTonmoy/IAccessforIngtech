@@ -41,7 +41,7 @@ public class DashboardActivity extends AppCompatActivity
         //Toast.makeText(this, ""+idval, Toast.LENGTH_SHORT).show();
         roleval = getIntent().getStringExtra("userrole");
         acces_token = getIntent().getStringExtra("acces_token");
-        //Toast.makeText(DashboardActivity.this, ""+idval, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(DashboardActivity.this, ""+acces_token, Toast.LENGTH_SHORT).show();
 
        cardview = (CardView) findViewById(R.id.supports);
        eventcardview = (CardView) findViewById(R.id.events);
@@ -132,18 +132,22 @@ public class DashboardActivity extends AppCompatActivity
 
                             if (item.getTitle().toString().equals("Attendance")) {
                                 Intent intent = new Intent(DashboardActivity.this, AttendanceActivity.class);
-                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("idvalue",idval);
+                                intent.putExtra("access_token",acces_token);
                                 intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             }
                             else if (item.getTitle().toString().equals("Event")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEventActivity.class);
-                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("idvalue",idval);
+                                intent.putExtra("access_token",acces_token);
+                                intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             }
                             else if (item.getTitle().toString().equals("Support")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddSupportActivity.class);
-                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("access_token",acces_token);
+                                intent.putExtra("idvalue",idval);
                                 intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             }
@@ -162,20 +166,23 @@ public class DashboardActivity extends AppCompatActivity
 
                             if (item.getTitle().toString().equals("Attendance")) {
                                 Intent intent = new Intent(DashboardActivity.this, AttendanceActivity.class);
-                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("idvalue",idval);
+                                intent.putExtra("access_token",acces_token);
                                 intent.putExtra("userrole",roleval);
                                 startActivity(intent);
                             }  else if (item.getTitle().toString().equals("Event")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEventActivity.class);
-                                intent.putExtra("accesstoken",acces_token);
-                                intent.putExtra("valuenotlist","1");
+                                intent.putExtra("idvalue",idval);
+                                intent.putExtra("access_token",acces_token);
                                 intent.putExtra("userrole",roleval);
+                                intent.putExtra("valuenotlist","1");
                                 startActivity(intent);
                                 finish();
                             } else if (item.getTitle().toString().equals("Employee")) {
                                 Intent intent = new Intent(DashboardActivity.this, AddEmployeeActivity.class);
                                 intent.putExtra("userrole",roleval);
-                                intent.putExtra("accesstoken",acces_token);
+                                intent.putExtra("idvalue",idval);
+                                intent.putExtra("access_token",acces_token);
                                 startActivity(intent);
                             }
                             return true;

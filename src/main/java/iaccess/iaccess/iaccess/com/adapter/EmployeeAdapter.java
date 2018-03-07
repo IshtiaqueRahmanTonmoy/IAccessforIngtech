@@ -49,6 +49,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
         holder.abovetext.setText(employee.getMonth());
         holder.belowtext.setText(employee.getDay());
 
+        /*
         Glide.with(context)
                 .load("http://i-access.ingtechbd.com/"+employee.getImage())
                 .asBitmap()
@@ -56,7 +57,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.MyView
                 .skipMemoryCache(true)
                 .diskCacheStrategy(DiskCacheStrategy.NONE)
                 .into(holder.imageview);
-
+        */
     }
 
     @Override

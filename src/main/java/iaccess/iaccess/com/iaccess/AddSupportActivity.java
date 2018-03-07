@@ -43,7 +43,7 @@ public class AddSupportActivity extends AppCompatActivity {
 
     private EditText organizationEdt,issueEdt,personEdt,descriptionEdt,remarksEdt,dateEdt,timeEdt;
     private Button submitBtn,cancelBtn;
-    private String organization,support_issue,person,description,remarks,access_token,Authorization,roleval;
+    private String organization,support_issue,person,description,remarks,access_token,Authorization,roleval,idval;
     String start_time,end_time;
     private ProgressDialog progressDialog;
     private ScrollView scrollView;
@@ -55,8 +55,9 @@ public class AddSupportActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_support);
 
+        idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
-        access_token = getIntent().getStringExtra("accesstoken");
+        access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
 
@@ -139,8 +140,10 @@ public class AddSupportActivity extends AppCompatActivity {
 
         if(id == android.R.id.home){
             Intent intent = new Intent(AddSupportActivity.this,DashboardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
-            intent.putExtra("access_token",access_token);
+            intent.putExtra("idvalue",idval);
+            intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
         }
@@ -153,8 +156,10 @@ public class AddSupportActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Intent intent = new Intent(AddSupportActivity.this,DashboardActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
-        intent.putExtra("access_token",access_token);
+        intent.putExtra("idvalue",idval);
+        intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();
     }

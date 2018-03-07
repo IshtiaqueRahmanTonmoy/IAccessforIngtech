@@ -238,7 +238,7 @@
                             android:textSize="16sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="More.."
+                            android:text="See on map.."
                             android:padding="5dp"
                             android:textColor="#3c8dde"
                             />
@@ -305,6 +305,7 @@
                             android:textSize="16sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginRight="15dp"
                             android:text="Dhanmondi,Satmojhid Road"
                             android:padding="5dp"
                             android:textColor="#123150"
@@ -316,7 +317,7 @@
                             android:textSize="16sp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="More.."
+                            android:text="See on map.."
                             android:padding="5dp"
                             android:textColor="#3c8dde"
                             />

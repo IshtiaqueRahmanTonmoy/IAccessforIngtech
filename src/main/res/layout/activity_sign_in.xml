@@ -94,5 +94,5 @@
         android:paddingLeft="1dp"
         android:background="@drawable/user_profile_image_background"
         android:elevation="8dp"
-        android:src="@drawable/eve" />
+        android:src="@drawable/user" />
 </RelativeLayout>

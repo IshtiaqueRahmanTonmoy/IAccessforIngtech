@@ -139,6 +139,8 @@ public class SignInActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         Log.d("Response",response);
                         //Toast.makeText(SignInActivity.this, ""+response, Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
+                        //progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
 
@@ -149,19 +151,19 @@ public class SignInActivity extends AppCompatActivity {
                                 refresh_token = jsonObject.getString("refresh_token");
 
                                 Authorization = "Bearer" + " " + acces_token;
-                                progressDialog.dismiss();
+
 
 
                                 //getId(Authorization);
                                  Log.d("accesstoken",Authorization);
                             }
                             else{
-                                progressDialog.dismiss();
+                                //progressDialog.dismiss();
                                 Toast.makeText(SignInActivity.this, "Please enter correct information..", Toast.LENGTH_SHORT).show();
 
                             }
 
-                            //progressDialog.dismiss();
+                            progressDialog.dismiss();
                             //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
 
                         } catch (JSONException e) {
@@ -174,7 +176,7 @@ public class SignInActivity extends AppCompatActivity {
 
                         if(response.equals("")){
 
-                            //progressDialog.dismiss();
+                            progressDialog.dismiss();
                             //progressDialog.dismiss();
                             Toast.makeText(SignInActivity.this, "Please enter correct information..", Toast.LENGTH_SHORT).show();
                         }
@@ -182,6 +184,7 @@ public class SignInActivity extends AppCompatActivity {
                             //name.setText(sharedpreferences.getString(Name, ""));
                             //}
 
+                            progressDialog.dismiss();
                             getId(new VolleyCallback(){
                                 @Override
                                 public void onSuccess(String result, String id) {
@@ -214,15 +217,18 @@ public class SignInActivity extends AppCompatActivity {
                             });
 
 
-                            //progressDialog.dismiss();
+                            progressDialog.dismiss();
                             //Toast.makeText(SignInActivity.this, "the value is"+rolevalue, Toast.LENGTH_SHORT).show();
                         }
+
 
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 //_response.setText("That didn't work!");
+                progressDialog.dismiss();
+                Toast.makeText(SignInActivity.this, "Please enter correct information", Toast.LENGTH_SHORT).show();
             }
         }) {
             //adding parameters to the request
