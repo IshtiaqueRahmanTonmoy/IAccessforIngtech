@@ -35,7 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView idTxt,nameTxt,emailTxt,phoneTxt,designationTxt,genderTxt,addressTxt,upnameTxt;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,access_token,Authorization,userId,roleval;
+    private String id,name,email,phone,designaton,gender,address,access_token,Authorization,userId,roleval,names,designations;
     private Button buttonmenu;
     PopupMenu popup;
     private ProgressDialog progressDialog;
@@ -48,6 +48,10 @@ public class ProfileActivity extends AppCompatActivity {
 
         roleval = getIntent().getStringExtra("userrole");
         userId = getIntent().getStringExtra("idval");
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
+
 
         //Toast.makeText(this, ""+userId, Toast.LENGTH_SHORT).show();
         access_token = getIntent().getStringExtra("access_token");
@@ -96,6 +100,8 @@ public class ProfileActivity extends AppCompatActivity {
                                 Intent intent = new Intent(ProfileActivity.this,EditProfile.class);
                                 intent.putExtra("idval",userId);
                                 intent.putExtra("userrole",roleval);
+                                intent.putExtra("namevalue",names);
+                                intent.putExtra("designationvalue",designations);
                                 intent.putExtra("access_token",access_token);
                                 startActivity(intent);
                                 return true;
@@ -103,6 +109,8 @@ public class ProfileActivity extends AppCompatActivity {
                                 Intent intent1 = new Intent(ProfileActivity.this,ResetPassword.class);
                                 intent1.putExtra("idval",userId);
                                 intent1.putExtra("userrole",roleval);
+                                intent1.putExtra("namevalue",names);
+                                intent1.putExtra("designationvalue",designations);
                                 intent1.putExtra("access_token",access_token);
                                 startActivity(intent1);
                                 return true;
@@ -123,6 +131,8 @@ public class ProfileActivity extends AppCompatActivity {
         Intent intent = new Intent(ProfileActivity.this,DashboardActivity.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",id);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("acces_token",access_token);
         finish();
     }
@@ -144,6 +154,8 @@ public class ProfileActivity extends AppCompatActivity {
         if(id == android.R.id.home){
             Intent intent = new Intent(ProfileActivity.this,DashboardActivity.class);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

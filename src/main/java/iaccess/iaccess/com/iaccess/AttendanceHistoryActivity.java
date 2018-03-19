@@ -70,7 +70,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
     private Button button;
     private TextView txtview;
     private RecyclerView recyclerView;
-    private String id,idval,image,name,timestamp,timestampsout,hour,in_location,out_location,hourout,month,day,fromto,ids,roleval,access_token,Authorization;
+    private String names,designations,v,id,idval,image,name,timestamp,timestampsout,hour,in_location,out_location,hourout,month,day,fromto,ids,roleval,access_token,Authorization;
     Timestamp timestamps = new Timestamp(System.currentTimeMillis());
     private String inlat,inlong,outlat,outlong;
     String intime,outtime;
@@ -97,10 +97,11 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
-
-        //Toast.makeText(this, ""+roleval, Toast.LENGTH_SHORT).show();
-
+        //Toast.makeText(this, ""+access_token+""+roleval, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         getValue();
         Log.d("Authorization",Authorization);
@@ -243,6 +244,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
 
                                 Intent intent = new Intent(AttendanceHistoryActivity.this,AttendanceDetails.class);
                                 intent.putExtra("idvalue",ids);
+                                intent.putExtra("namevalue",names);
+                                intent.putExtra("designationvalue",designations);
                                 intent.putExtra("userrole",roleval);
                                 intent.putExtra("access_token",access_token);
                                 startActivity(intent);
@@ -268,8 +271,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         nameText = (TextView) headerView.findViewById(R.id.nameNav);
         designationText = (TextView) headerView.findViewById(R.id.designationNav);
 
-        nameText.setText("Nur A Alam");
-        designationText.setText("Developer");
+        nameText.setText(names);
+        designationText.setText(designations);
 
         Menu menu =navigationView.getMenu();
         if(roleval.equals("user")) {
@@ -286,6 +289,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         Intent intent = new Intent(AttendanceHistoryActivity.this,DashboardActivity.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("acces_token",access_token);
         finish();
@@ -310,6 +315,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
             intent.putExtra("userrole",roleval);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
@@ -333,29 +340,27 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                     @Override
                     public void onResponse(String response) {
                         Log.d("responsevaluebyid", response);
+                        progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray j = jsonObject.getJSONArray("data");
+                            for(int i=0;i<j.length();i++){
+                                try {
+                                    //Getting json object
+                                    JSONObject json = j.getJSONObject(i);
+                                    id = json.getString("id");
+                                    in_location = json.getString("in_location");
 
-                            if(j.length() > 0) {
-                                for (int i = 0; i < j.length(); i++) {
-                                    try {
-                                        //Getting json object
-                                        JSONObject json = j.getJSONObject(i);
-                                        id = json.getString("id");
+                                    JSONObject jsonob = json.getJSONObject("user");
+                                    name = jsonob.getString("name");
+                                    image = jsonob.getString("avatar");
 
-                                        inlat = json.getString("in_lat");
-                                        inlong = json.getString("in_long");
-                                        outlat = json.getString("out_lat");
-                                        outlong = json.getString("out_long");
-
-                                        //Toast.makeText(AttendanceHistoryActivity.this, ""+id, Toast.LENGTH_SHORT).show();
-                                        in_location = json.getString("in_location");
-                                        JSONObject jsonob = json.getJSONObject("user");
-                                        name = jsonob.getString("name");
-                                        image = jsonob.getString("avatar");
-
-                                        //this is start of intime
+                                    if(json.isNull("in_time"))
+                                    {
+                                        intime = null;
+                                    }
+                                    else
+                                    {
                                         JSONObject jsonin = json.getJSONObject("in_time");
                                         timestamp = jsonin.getString("date");
                                         String[] parts = timestamp.split("-");
@@ -365,35 +370,46 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                         String d = parts[2];
 
                                         String[] da = d.split(" ");
-                                        String v = da[0];
-                                        Log.d("va", v);
+                                        v = da[0];
+                                        Log.d("va",v);
                                         //int m = Integer.parseInt(mth);
 
-                                        if (mth.equals("01")) {
+                                        if(mth.equals("01")){
                                             month = "January";
-                                        } else if (mth.equals("02")) {
+                                        }
+                                        else if(mth.equals("02")){
                                             month = "February";
-                                        } else if (mth.equals("03")) {
+                                        }
+                                        else if(mth.equals("03")){
                                             month = "March";
-                                        } else if (mth.equals("04")) {
+                                        }
+                                        else if(mth.equals("04")){
                                             month = "April";
-                                        } else if (mth.equals("05")) {
+                                        }
+                                        else if(mth.equals("05")){
                                             month = "May";
-                                        } else if (mth.equals("06")) {
+                                        }
+                                        else if(mth.equals("06")){
                                             month = "June";
-                                        } else if (mth.equals("07")) {
+                                        }
+                                        else if(mth.equals("07")){
                                             month = "July";
-                                        } else if (mth.equals("08")) {
+                                        }
+                                        else if(mth.equals("08")){
                                             month = "August";
-                                        } else if (mth.equals("09")) {
+                                        }
+                                        else if(mth.equals("09")){
                                             month = "September";
-                                        } else if (mth.equals("10")) {
+                                        }
+                                        else if(mth.equals("10")){
                                             month = "October";
 
-                                        } else if (mth.equals("11")) {
+                                        }
+                                        else if(mth.equals("11")){
                                             month = "November";
 
-                                        } else {
+                                        }
+                                        else{
                                             month = "December";
                                         }
 
@@ -409,29 +425,41 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
 
                                         if (hr == 1) {
                                             hour = "1";
-                                        } else if (hr == 2) {
+                                        }
+                                        else if (hr == 2) {
                                             hour = "2";
-                                        } else if (hr == 3) {
+                                        }
+                                        else if (hr == 3) {
                                             hour = "3";
-                                        } else if (hr == 4) {
+                                        }
+                                        else if (hr == 4) {
                                             hour = "4";
-                                        } else if (hr == 5) {
+                                        }
+                                        else if (hr == 5) {
                                             hour = "5";
-                                        } else if (hr == 6) {
+                                        }
+                                        else if (hr == 6) {
                                             hour = "1";
-                                        } else if (hr == 7) {
+                                        }
+                                        else if (hr == 7) {
                                             hour = "7";
-                                        } else if (hr == 8) {
+                                        }
+                                        else if (hr == 8) {
                                             hour = "8";
-                                        } else if (hr == 9) {
+                                        }
+                                        else if (hr == 9) {
                                             hour = "9";
-                                        } else if (hr == 10) {
+                                        }
+                                        else if (hr == 10) {
                                             hour = "10";
-                                        } else if (hr == 11) {
+                                        }
+                                        else if (hr == 11) {
                                             hour = "11";
-                                        } else if (hr == 12) {
+                                        }
+                                        else if (hr == 12) {
                                             hour = "12";
-                                        } else if (hr == 13) {
+                                        }
+                                        else if (hr == 13) {
                                             hour = "1";
                                         } else if (hr == 14) {
                                             hour = "2";
@@ -457,129 +485,128 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                             hour = "12";
                                         }
 
-
                                         String minute = timeparts[1];
-
-                                        if (hr <= 12) {
-                                            intime = hour + ":" + minute + "AM";
-                                        } else {
-                                            intime = hour + ":" + minute + "PM";
+                                        if(hr<=12){
+                                            intime = hour+":"+minute+"AM";
                                         }
+                                        else{
+                                            intime = hour+":"+minute+"PM";
+                                        }
+                                    }
 
 
-                                        Log.d("intime", intime);
-
-                                        //this is end of intime
-                                        //this is begininig of out time
+                                    if(json.isNull("out_time"))
+                                    {
+                                        outtime = null;
+                                        //Toast.makeText(AttendanceHistoryActivity.this, "is null out time", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else
+                                    {
                                         JSONObject jsonout = json.getJSONObject("out_time");
 
-                                        Log.d("jsonout", jsonout.toString());
-                                        if (jsonout.isNull("null")) {
-                                            timestampsout = jsonout.getString("date");
-                                            String[] parts1 = timestampsout.split("-");
+                                        Log.d("jsonout",jsonout.toString());
 
-                                            String years = parts1[0];
-                                            String months = parts1[1];
-                                            String days = parts1[2];
+                                        timestampsout = jsonout.getString("date");
+                                        String[] parts1 = timestampsout.split("-");
 
-                                            String[] partsss = timestampsout.split(" ");
-                                            String times = partsss[1];
+                                        String years = parts1[0];
+                                        String months = parts1[1];
+                                        String days = parts1[2];
 
-                                            Log.d("times", times);
+                                        String[] partsss = timestampsout.split(" ");
+                                        String times = partsss[1];
 
-                                            String[] timepartss = times.split(":");
+                                        Log.d("times", times);
 
-                                            String hs = timepartss[0];
-                                            int hrs = Integer.parseInt(hs);
+                                        String[] timepartss = times.split(":");
 
-                                            Log.d("hrs", String.valueOf(hrs));
+                                        String hs = timepartss[0];
+                                        int hrs = Integer.parseInt(hs);
 
-                                            if (hrs == 1) {
-                                                hourout = "1";
-                                            } else if (hrs == 2) {
-                                                hourout = "2";
-                                            } else if (hrs == 3) {
-                                                hourout = "3";
-                                            } else if (hrs == 4) {
-                                                hourout = "4";
-                                            } else if (hrs == 5) {
-                                                hourout = "5";
-                                            } else if (hrs == 6) {
-                                                hourout = "1";
-                                            } else if (hrs == 7) {
-                                                hourout = "7";
-                                            } else if (hrs == 8) {
-                                                hourout = "8";
-                                            } else if (hrs == 9) {
-                                                hourout = "9";
-                                            } else if (hrs == 10) {
-                                                hourout = "10";
-                                            } else if (hrs == 11) {
-                                                hourout = "11";
-                                            } else if (hrs == 12) {
-                                                hourout = "12";
-                                            } else if (hrs == 13) {
-                                                hourout = "1";
-                                            } else if (hrs == 14) {
-                                                hourout = "2";
-                                            } else if (hrs == 15) {
-                                                hourout = "3";
-                                            } else if (hrs == 16) {
-                                                hourout = "4";
-                                            } else if (hrs == 17) {
-                                                hourout = "5";
-                                            } else if (hrs == 18) {
-                                                hourout = "6";
-                                            } else if (hrs == 19) {
-                                                hourout = "7";
-                                            } else if (hrs == 20) {
-                                                hourout = "8";
-                                            } else if (hrs == 21) {
-                                                hourout = "9";
-                                            } else if (hrs == 22) {
-                                                hourout = "10";
-                                            } else if (hrs == 23) {
-                                                hourout = "11";
-                                            } else {
-                                                hourout = "12";
-                                            }
+                                        Log.d("hrs", String.valueOf(hrs));
 
-                                            String minutes = timepartss[1];
-
-
-                                            if (hrs <= 12) {
-                                                outtime = hourout + ":" + minutes + "AM";
-                                            } else {
-                                                outtime = hourout + ":" + minutes + "PM";
-                                            }
-                                        } else {
-                                            outtime = null;
+                                        if (hrs == 1) {
+                                            hourout = "1";
                                         }
-                                        Log.d("stringoutime", outtime);
+                                        else if (hrs == 2) {
+                                            hourout = "2";
+                                        }
+                                        else if (hrs == 3) {
+                                            hourout = "3";
+                                        }
+                                        else if (hrs == 4) {
+                                            hourout = "4";
+                                        }
+                                        else if (hrs == 5) {
+                                            hourout = "5";
+                                        }
+                                        else if (hrs == 6) {
+                                            hourout = "1";
+                                        }
+                                        else if (hrs == 7) {
+                                            hourout = "7";
+                                        }
+                                        else if (hrs == 8) {
+                                            hourout = "8";
+                                        }
+                                        else if (hrs == 9) {
+                                            hourout = "9";
+                                        }
+                                        else if (hrs == 10) {
+                                            hourout = "10";
+                                        }
+                                        else if (hrs == 11) {
+                                            hourout = "11";
+                                        }
+                                        else if (hrs == 12) {
+                                            hourout = "12";
+                                        }
+                                        else if (hrs == 13) {
+                                            hourout = "1";
+                                        } else if (hrs == 14) {
+                                            hourout = "2";
+                                        } else if (hrs == 15) {
+                                            hourout = "3";
+                                        } else if (hrs == 16) {
+                                            hourout = "4";
+                                        } else if (hrs == 17) {
+                                            hourout = "5";
+                                        } else if (hrs == 18) {
+                                            hourout = "6";
+                                        } else if (hrs == 19) {
+                                            hourout = "7";
+                                        } else if (hrs == 20) {
+                                            hourout = "8";
+                                        } else if (hrs == 21) {
+                                            hourout = "9";
+                                        } else if (hrs == 22) {
+                                            hourout = "10";
+                                        } else if (hrs == 23) {
+                                            hourout = "11";
+                                        } else {
+                                            hourout = "12";
+                                        }
 
-                                        //this is end of out time
-                                        fromto = intime + "-" + outtime;
-
-                                        Log.d("fromto", fromto);
-
-                                        Log.d("allv", id + "name" + name + "image" + image + "month" + month + "day" + v + "fromto" + fromto + "inlocation" + in_location);
-
-                                        empList.add(new Employee(id, image, name, month, v, fromto, in_location));
-                                        mAdapter.notifyDataSetChanged();
+                                        String minutes = timepartss[1];
 
 
-                                        //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                        progressDialog.dismiss();
-                                        //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
+                                        if (hrs <= 12) {
+                                            outtime = hourout + ":" + minutes + "AM";
+                                        } else {
+                                            outtime = hourout + ":" + minutes + "PM";
+                                        }
 
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        //Toast.makeText(AttendanceHistoryActivity.this, "is not null time", Toast.LENGTH_SHORT).show();
                                     }
+
+
+                                    fromto = intime+"-"+outtime;
+                                    empList.add(new Employee(id,image,name,month,v,fromto,in_location));
+                                    mAdapter.notifyDataSetChanged();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            }
-                            else{
-                                progressDialog.dismiss();
-                                Toast.makeText(AttendanceHistoryActivity.this, "Data not found..", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
@@ -620,7 +647,8 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Log.d("responsevalue", response);
+
+                        progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray j = jsonObject.getJSONArray("data");
@@ -630,198 +658,200 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                     JSONObject json = j.getJSONObject(i);
                                     id = json.getString("id");
                                     in_location = json.getString("in_location");
+
                                     JSONObject jsonob = json.getJSONObject("user");
                                     name = jsonob.getString("name");
                                     image = jsonob.getString("avatar");
 
-
-                                    //this is start of intime
-                                    JSONObject jsonin = json.getJSONObject("in_time");
-                                    timestamp = jsonin.getString("date");
-                                    String[] parts = timestamp.split("-");
-
-                                    String year = parts[0];
-                                    String mth = parts[1];
-                                    String d = parts[2];
-
-                                    String[] da = d.split(" ");
-                                    String v = da[0];
-                                    Log.d("va",v);
-                                    //int m = Integer.parseInt(mth);
-
-                                    if(mth.equals("01")){
-                                        month = "January";
+                                    if(json.isNull("in_time"))
+                                    {
+                                        intime = null;
                                     }
-                                    else if(mth.equals("02")){
-                                        month = "February";
-                                    }
-                                    else if(mth.equals("03")){
-                                        month = "March";
-                                    }
-                                    else if(mth.equals("04")){
-                                        month = "April";
-                                    }
-                                    else if(mth.equals("05")){
-                                        month = "May";
-                                    }
-                                    else if(mth.equals("06")){
-                                        month = "June";
-                                    }
-                                    else if(mth.equals("07")){
-                                        month = "July";
-                                    }
-                                    else if(mth.equals("08")){
-                                        month = "August";
-                                    }
-                                    else if(mth.equals("09")){
-                                        month = "September";
-                                    }
-                                    else if(mth.equals("10")){
-                                        month = "October";
+                                    else
+                                    {
+                                        JSONObject jsonin = json.getJSONObject("in_time");
+                                        timestamp = jsonin.getString("date");
+                                        String[] parts = timestamp.split("-");
 
+                                        String year = parts[0];
+                                        String mth = parts[1];
+                                        String d = parts[2];
+
+                                        String[] da = d.split(" ");
+                                        v = da[0];
+                                        Log.d("va",v);
+                                        //int m = Integer.parseInt(mth);
+
+                                        if(mth.equals("01")){
+                                            month = "January";
+                                        }
+                                        else if(mth.equals("02")){
+                                            month = "February";
+                                        }
+                                        else if(mth.equals("03")){
+                                            month = "March";
+                                        }
+                                        else if(mth.equals("04")){
+                                            month = "April";
+                                        }
+                                        else if(mth.equals("05")){
+                                            month = "May";
+                                        }
+                                        else if(mth.equals("06")){
+                                            month = "June";
+                                        }
+                                        else if(mth.equals("07")){
+                                            month = "July";
+                                        }
+                                        else if(mth.equals("08")){
+                                            month = "August";
+                                        }
+                                        else if(mth.equals("09")){
+                                            month = "September";
+                                        }
+                                        else if(mth.equals("10")){
+                                            month = "October";
+
+                                        }
+                                        else if(mth.equals("11")){
+                                            month = "November";
+
+                                        }
+                                        else{
+                                            month = "December";
+                                        }
+
+                                        day = parts[2];
+
+                                        String[] partss = timestamp.split(" ");
+                                        String time = partss[1];
+
+                                        String[] timeparts = time.split(":");
+
+                                        String h = timeparts[0];
+                                        int hr = Integer.parseInt(h);
+
+                                        if (hr == 1) {
+                                            hour = "1";
+                                        }
+                                        else if (hr == 2) {
+                                            hour = "2";
+                                        }
+                                        else if (hr == 3) {
+                                            hour = "3";
+                                        }
+                                        else if (hr == 4) {
+                                            hour = "4";
+                                        }
+                                        else if (hr == 5) {
+                                            hour = "5";
+                                        }
+                                        else if (hr == 6) {
+                                            hour = "1";
+                                        }
+                                        else if (hr == 7) {
+                                            hour = "7";
+                                        }
+                                        else if (hr == 8) {
+                                            hour = "8";
+                                        }
+                                        else if (hr == 9) {
+                                            hour = "9";
+                                        }
+                                        else if (hr == 10) {
+                                            hour = "10";
+                                        }
+                                        else if (hr == 11) {
+                                            hour = "11";
+                                        }
+                                        else if (hr == 12) {
+                                            hour = "12";
+                                        }
+                                        else if (hr == 13) {
+                                            hour = "1";
+                                        } else if (hr == 14) {
+                                            hour = "2";
+                                        } else if (hr == 15) {
+                                            hour = "3";
+                                        } else if (hr == 16) {
+                                            hour = "4";
+                                        } else if (hr == 17) {
+                                            hour = "5";
+                                        } else if (hr == 18) {
+                                            hour = "6";
+                                        } else if (hr == 19) {
+                                            hour = "7";
+                                        } else if (hr == 20) {
+                                            hour = "8";
+                                        } else if (hr == 21) {
+                                            hour = "9";
+                                        } else if (hr == 22) {
+                                            hour = "10";
+                                        } else if (hr == 23) {
+                                            hour = "11";
+                                        } else {
+                                            hour = "12";
+                                        }
+
+                                        String minute = timeparts[1];
+                                        if(hr<=12){
+                                            intime = hour+":"+minute+"AM";
+                                        }
+                                        else{
+                                            intime = hour+":"+minute+"PM";
+                                        }
                                     }
-                                    else if(mth.equals("11")){
-                                        month = "November";
 
+
+                                    if(json.isNull("out_time"))
+                                    {
+                                        outtime = null;
+                                        //Toast.makeText(AttendanceHistoryActivity.this, "is null out time", Toast.LENGTH_SHORT).show();
                                     }
-                                    else{
-                                       month = "December";
-                                    }
+                                    else
+                                    {
+                                        JSONObject jsonout = json.getJSONObject("out_time");
 
-                                    day = parts[2];
+                                        Log.d("jsonout",jsonout.toString());
 
-                                    String[] partss = timestamp.split(" ");
-                                    String time = partss[1];
+                                        timestampsout = jsonout.getString("date");
+                                        String[] parts1 = timestampsout.split("-");
 
-                                    String[] timeparts = time.split(":");
+                                        String years = parts1[0];
+                                        String months = parts1[1];
+                                        String days = parts1[2];
 
-                                    String h = timeparts[0];
-                                    int hr = Integer.parseInt(h);
+                                        String[] partsss = timestampsout.split(" ");
+                                        String times = partsss[1];
 
-                                    if (hr == 1) {
-                                        hour = "1";
-                                    }
-                                    else if (hr == 2) {
-                                        hour = "2";
-                                    }
-                                    else if (hr == 3) {
-                                        hour = "3";
-                                    }
-                                    else if (hr == 4) {
-                                        hour = "4";
-                                    }
-                                    else if (hr == 5) {
-                                        hour = "5";
-                                    }
-                                    else if (hr == 6) {
-                                        hour = "1";
-                                    }
-                                    else if (hr == 7) {
-                                        hour = "7";
-                                    }
-                                    else if (hr == 8) {
-                                        hour = "8";
-                                    }
-                                    else if (hr == 9) {
-                                        hour = "9";
-                                    }
-                                    else if (hr == 10) {
-                                        hour = "10";
-                                    }
-                                    else if (hr == 11) {
-                                        hour = "11";
-                                    }
-                                    else if (hr == 12) {
-                                        hour = "12";
-                                    }
-                                    else if (hr == 13) {
-                                        hour = "1";
-                                    } else if (hr == 14) {
-                                        hour = "2";
-                                    } else if (hr == 15) {
-                                        hour = "3";
-                                    } else if (hr == 16) {
-                                        hour = "4";
-                                    } else if (hr == 17) {
-                                        hour = "5";
-                                    } else if (hr == 18) {
-                                        hour = "6";
-                                    } else if (hr == 19) {
-                                        hour = "7";
-                                    } else if (hr == 20) {
-                                        hour = "8";
-                                    } else if (hr == 21) {
-                                        hour = "9";
-                                    } else if (hr == 22) {
-                                        hour = "10";
-                                    } else if (hr == 23) {
-                                        hour = "11";
-                                    } else {
-                                        hour = "12";
-                                    }
+                                        Log.d("times", times);
 
+                                        String[] timepartss = times.split(":");
 
-                                    String minute = timeparts[1];
+                                        String hs = timepartss[0];
+                                        int hrs = Integer.parseInt(hs);
 
-                                    if(hr<=12){
-                                        intime = hour+":"+minute+"AM";
-                                    }
-                                    else{
-                                        intime = hour+":"+minute+"PM";
-                                    }
+                                        Log.d("hrs", String.valueOf(hrs));
 
-
-                                    //Log.d("day",pd);
-
-                                   //this is end of intime
-
-
-
-
-
-                                    //this is begininig of out time
-                                    JSONObject jsonout = json.getJSONObject("out_time");
-
-                                    Log.d("jsonout",jsonout.toString());
-                                    if(jsonout.isNull("null")) {
-                                      timestampsout = jsonout.getString("date");
-                                      String[] parts1 = timestampsout.split("-");
-
-                                      String years = parts1[0];
-                                      String months = parts1[1];
-                                      String days = parts1[2];
-
-                                      String[] partsss = timestampsout.split(" ");
-                                      String times = partsss[1];
-
-                                      Log.d("times", times);
-
-                                      String[] timepartss = times.split(":");
-
-                                      String hs = timepartss[0];
-                                      int hrs = Integer.parseInt(hs);
-
-                                      Log.d("hrs", String.valueOf(hrs));
-
-                                         if (hrs == 1) {
+                                        if (hrs == 1) {
                                             hourout = "1";
                                         }
-                                         else if (hrs == 2) {
+                                        else if (hrs == 2) {
                                             hourout = "2";
                                         }
                                         else if (hrs == 3) {
                                             hourout = "3";
                                         }
-                                         else if (hrs == 4) {
+                                        else if (hrs == 4) {
                                             hourout = "4";
                                         }
                                         else if (hrs == 5) {
                                             hourout = "5";
                                         }
-                                          else if (hrs == 6) {
+                                        else if (hrs == 6) {
                                             hourout = "1";
                                         }
-                                         else if (hrs == 7) {
+                                        else if (hrs == 7) {
                                             hourout = "7";
                                         }
                                         else if (hrs == 8) {
@@ -839,58 +869,48 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                         else if (hrs == 12) {
                                             hourout = "12";
                                         }
-                                      else if (hrs == 13) {
-                                          hourout = "1";
-                                      } else if (hrs == 14) {
-                                          hourout = "2";
-                                      } else if (hrs == 15) {
-                                          hourout = "3";
-                                      } else if (hrs == 16) {
-                                          hourout = "4";
-                                      } else if (hrs == 17) {
-                                          hourout = "5";
-                                      } else if (hrs == 18) {
-                                          hourout = "6";
-                                      } else if (hrs == 19) {
-                                          hourout = "7";
-                                      } else if (hrs == 20) {
-                                          hourout = "8";
-                                      } else if (hrs == 21) {
-                                          hourout = "9";
-                                      } else if (hrs == 22) {
-                                          hourout = "10";
-                                      } else if (hrs == 23) {
-                                          hourout = "11";
-                                      } else {
-                                          hourout = "12";
-                                      }
+                                        else if (hrs == 13) {
+                                            hourout = "1";
+                                        } else if (hrs == 14) {
+                                            hourout = "2";
+                                        } else if (hrs == 15) {
+                                            hourout = "3";
+                                        } else if (hrs == 16) {
+                                            hourout = "4";
+                                        } else if (hrs == 17) {
+                                            hourout = "5";
+                                        } else if (hrs == 18) {
+                                            hourout = "6";
+                                        } else if (hrs == 19) {
+                                            hourout = "7";
+                                        } else if (hrs == 20) {
+                                            hourout = "8";
+                                        } else if (hrs == 21) {
+                                            hourout = "9";
+                                        } else if (hrs == 22) {
+                                            hourout = "10";
+                                        } else if (hrs == 23) {
+                                            hourout = "11";
+                                        } else {
+                                            hourout = "12";
+                                        }
 
-                                      String minutes = timepartss[1];
+                                        String minutes = timepartss[1];
 
 
-                                      if (hrs <= 12) {
-                                          outtime = hourout + ":" + minutes + "AM";
-                                      } else {
-                                          outtime = hourout + ":" + minutes + "PM";
-                                      }
-                                  }
+                                        if (hrs <= 12) {
+                                            outtime = hourout + ":" + minutes + "AM";
+                                        } else {
+                                            outtime = hourout + ":" + minutes + "PM";
+                                        }
 
-                                  else{
-                                      outtime = null;
-                                  }
-                                    Log.d("stringoutime",outtime);
+                                        //Toast.makeText(AttendanceHistoryActivity.this, "is not null time", Toast.LENGTH_SHORT).show();
+                                    }
 
-                                  //this is end of out time
+
                                     fromto = intime+"-"+outtime;
-
                                     empList.add(new Employee(id,image,name,month,v,fromto,in_location));
                                     mAdapter.notifyDataSetChanged();
-
-
-
-                                    //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
-                                    //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -900,6 +920,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -998,22 +1019,27 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                     @Override
                     public void onResponse(String response) {
                         Log.d("responsevalue", response);
-                        //Toast.makeText(AttendanceHistoryActivity.this, ""+response, Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray j = jsonObject.getJSONArray("data");
-                            if(j.length() > 0) {
-                                for (int i = 0; i < j.length(); i++) {
-                                    try {
-                                        //Getting json object
-                                        JSONObject json = j.getJSONObject(i);
-                                        id = json.getString("id");
-                                        in_location = json.getString("in_location");
-                                        JSONObject jsonob = json.getJSONObject("user");
-                                        name = jsonob.getString("name");
-                                        image = jsonob.getString("avatar");
+                            for(int i=0;i<j.length();i++){
+                                try {
+                                    //Getting json object
+                                    JSONObject json = j.getJSONObject(i);
+                                    id = json.getString("id");
+                                    in_location = json.getString("in_location");
 
-                                        //this is start of intime
+                                    JSONObject jsonob = json.getJSONObject("user");
+                                    name = jsonob.getString("name");
+                                    image = jsonob.getString("avatar");
+
+                                    if(json.isNull("in_time"))
+                                    {
+                                        intime = null;
+                                    }
+                                    else
+                                    {
                                         JSONObject jsonin = json.getJSONObject("in_time");
                                         timestamp = jsonin.getString("date");
                                         String[] parts = timestamp.split("-");
@@ -1023,35 +1049,46 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                         String d = parts[2];
 
                                         String[] da = d.split(" ");
-                                        String v = da[0];
-                                        Log.d("va", v);
+                                        v = da[0];
+                                        Log.d("va",v);
                                         //int m = Integer.parseInt(mth);
 
-                                        if (mth.equals("01")) {
+                                        if(mth.equals("01")){
                                             month = "January";
-                                        } else if (mth.equals("02")) {
+                                        }
+                                        else if(mth.equals("02")){
                                             month = "February";
-                                        } else if (mth.equals("03")) {
+                                        }
+                                        else if(mth.equals("03")){
                                             month = "March";
-                                        } else if (mth.equals("04")) {
+                                        }
+                                        else if(mth.equals("04")){
                                             month = "April";
-                                        } else if (mth.equals("05")) {
+                                        }
+                                        else if(mth.equals("05")){
                                             month = "May";
-                                        } else if (mth.equals("06")) {
+                                        }
+                                        else if(mth.equals("06")){
                                             month = "June";
-                                        } else if (mth.equals("07")) {
+                                        }
+                                        else if(mth.equals("07")){
                                             month = "July";
-                                        } else if (mth.equals("08")) {
+                                        }
+                                        else if(mth.equals("08")){
                                             month = "August";
-                                        } else if (mth.equals("09")) {
+                                        }
+                                        else if(mth.equals("09")){
                                             month = "September";
-                                        } else if (mth.equals("10")) {
+                                        }
+                                        else if(mth.equals("10")){
                                             month = "October";
 
-                                        } else if (mth.equals("11")) {
+                                        }
+                                        else if(mth.equals("11")){
                                             month = "November";
 
-                                        } else {
+                                        }
+                                        else{
                                             month = "December";
                                         }
 
@@ -1067,29 +1104,41 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
 
                                         if (hr == 1) {
                                             hour = "1";
-                                        } else if (hr == 2) {
+                                        }
+                                        else if (hr == 2) {
                                             hour = "2";
-                                        } else if (hr == 3) {
+                                        }
+                                        else if (hr == 3) {
                                             hour = "3";
-                                        } else if (hr == 4) {
+                                        }
+                                        else if (hr == 4) {
                                             hour = "4";
-                                        } else if (hr == 5) {
+                                        }
+                                        else if (hr == 5) {
                                             hour = "5";
-                                        } else if (hr == 6) {
+                                        }
+                                        else if (hr == 6) {
                                             hour = "1";
-                                        } else if (hr == 7) {
+                                        }
+                                        else if (hr == 7) {
                                             hour = "7";
-                                        } else if (hr == 8) {
+                                        }
+                                        else if (hr == 8) {
                                             hour = "8";
-                                        } else if (hr == 9) {
+                                        }
+                                        else if (hr == 9) {
                                             hour = "9";
-                                        } else if (hr == 10) {
+                                        }
+                                        else if (hr == 10) {
                                             hour = "10";
-                                        } else if (hr == 11) {
+                                        }
+                                        else if (hr == 11) {
                                             hour = "11";
-                                        } else if (hr == 12) {
+                                        }
+                                        else if (hr == 12) {
                                             hour = "12";
-                                        } else if (hr == 13) {
+                                        }
+                                        else if (hr == 13) {
                                             hour = "1";
                                         } else if (hr == 14) {
                                             hour = "2";
@@ -1115,127 +1164,128 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                                             hour = "12";
                                         }
 
-
                                         String minute = timeparts[1];
-
-                                        if (hr <= 12) {
-                                            intime = hour + ":" + minute + "AM";
-                                        } else {
-                                            intime = hour + ":" + minute + "PM";
+                                        if(hr<=12){
+                                            intime = hour+":"+minute+"AM";
                                         }
+                                        else{
+                                            intime = hour+":"+minute+"PM";
+                                        }
+                                    }
 
 
-                                        Log.d("intime", intime);
-
-                                        //this is end of intime
-                                        //this is begininig of out time
+                                    if(json.isNull("out_time"))
+                                    {
+                                        outtime = null;
+                                        //Toast.makeText(AttendanceHistoryActivity.this, "is null out time", Toast.LENGTH_SHORT).show();
+                                    }
+                                    else
+                                    {
                                         JSONObject jsonout = json.getJSONObject("out_time");
 
-                                        Log.d("jsonout", jsonout.toString());
-                                        if (jsonout.isNull("null")) {
-                                            timestampsout = jsonout.getString("date");
-                                            String[] parts1 = timestampsout.split("-");
+                                        Log.d("jsonout",jsonout.toString());
 
-                                            String years = parts1[0];
-                                            String months = parts1[1];
-                                            String days = parts1[2];
+                                        timestampsout = jsonout.getString("date");
+                                        String[] parts1 = timestampsout.split("-");
 
-                                            String[] partsss = timestampsout.split(" ");
-                                            String times = partsss[1];
+                                        String years = parts1[0];
+                                        String months = parts1[1];
+                                        String days = parts1[2];
 
-                                            Log.d("times", times);
+                                        String[] partsss = timestampsout.split(" ");
+                                        String times = partsss[1];
 
-                                            String[] timepartss = times.split(":");
+                                        Log.d("times", times);
 
-                                            String hs = timepartss[0];
-                                            int hrs = Integer.parseInt(hs);
+                                        String[] timepartss = times.split(":");
 
-                                            Log.d("hrs", String.valueOf(hrs));
+                                        String hs = timepartss[0];
+                                        int hrs = Integer.parseInt(hs);
 
-                                            if (hrs == 1) {
-                                                hourout = "1";
-                                            } else if (hrs == 2) {
-                                                hourout = "2";
-                                            } else if (hrs == 3) {
-                                                hourout = "3";
-                                            } else if (hrs == 4) {
-                                                hourout = "4";
-                                            } else if (hrs == 5) {
-                                                hourout = "5";
-                                            } else if (hrs == 6) {
-                                                hourout = "1";
-                                            } else if (hrs == 7) {
-                                                hourout = "7";
-                                            } else if (hrs == 8) {
-                                                hourout = "8";
-                                            } else if (hrs == 9) {
-                                                hourout = "9";
-                                            } else if (hrs == 10) {
-                                                hourout = "10";
-                                            } else if (hrs == 11) {
-                                                hourout = "11";
-                                            } else if (hrs == 12) {
-                                                hourout = "12";
-                                            } else if (hrs == 13) {
-                                                hourout = "1";
-                                            } else if (hrs == 14) {
-                                                hourout = "2";
-                                            } else if (hrs == 15) {
-                                                hourout = "3";
-                                            } else if (hrs == 16) {
-                                                hourout = "4";
-                                            } else if (hrs == 17) {
-                                                hourout = "5";
-                                            } else if (hrs == 18) {
-                                                hourout = "6";
-                                            } else if (hrs == 19) {
-                                                hourout = "7";
-                                            } else if (hrs == 20) {
-                                                hourout = "8";
-                                            } else if (hrs == 21) {
-                                                hourout = "9";
-                                            } else if (hrs == 22) {
-                                                hourout = "10";
-                                            } else if (hrs == 23) {
-                                                hourout = "11";
-                                            } else {
-                                                hourout = "12";
-                                            }
+                                        Log.d("hrs", String.valueOf(hrs));
 
-                                            String minutes = timepartss[1];
-
-
-                                            if (hrs <= 12) {
-                                                outtime = hourout + ":" + minutes + "AM";
-                                            } else {
-                                                outtime = hourout + ":" + minutes + "PM";
-                                            }
-                                        } else {
-                                            outtime = null;
+                                        if (hrs == 1) {
+                                            hourout = "1";
                                         }
-                                        Log.d("stringoutime", outtime);
+                                        else if (hrs == 2) {
+                                            hourout = "2";
+                                        }
+                                        else if (hrs == 3) {
+                                            hourout = "3";
+                                        }
+                                        else if (hrs == 4) {
+                                            hourout = "4";
+                                        }
+                                        else if (hrs == 5) {
+                                            hourout = "5";
+                                        }
+                                        else if (hrs == 6) {
+                                            hourout = "1";
+                                        }
+                                        else if (hrs == 7) {
+                                            hourout = "7";
+                                        }
+                                        else if (hrs == 8) {
+                                            hourout = "8";
+                                        }
+                                        else if (hrs == 9) {
+                                            hourout = "9";
+                                        }
+                                        else if (hrs == 10) {
+                                            hourout = "10";
+                                        }
+                                        else if (hrs == 11) {
+                                            hourout = "11";
+                                        }
+                                        else if (hrs == 12) {
+                                            hourout = "12";
+                                        }
+                                        else if (hrs == 13) {
+                                            hourout = "1";
+                                        } else if (hrs == 14) {
+                                            hourout = "2";
+                                        } else if (hrs == 15) {
+                                            hourout = "3";
+                                        } else if (hrs == 16) {
+                                            hourout = "4";
+                                        } else if (hrs == 17) {
+                                            hourout = "5";
+                                        } else if (hrs == 18) {
+                                            hourout = "6";
+                                        } else if (hrs == 19) {
+                                            hourout = "7";
+                                        } else if (hrs == 20) {
+                                            hourout = "8";
+                                        } else if (hrs == 21) {
+                                            hourout = "9";
+                                        } else if (hrs == 22) {
+                                            hourout = "10";
+                                        } else if (hrs == 23) {
+                                            hourout = "11";
+                                        } else {
+                                            hourout = "12";
+                                        }
 
-                                        //this is end of out time
-                                        fromto = intime + "-" + outtime;
-
-                                        Log.d("fromto", fromto);
-
-                                        empList.add(new Employee(id, image, name, month, v, fromto, in_location));
-                                        mAdapter.notifyDataSetChanged();
+                                        String minutes = timepartss[1];
 
 
-                                        //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                        progressDialog.dismiss();
-                                        //Toast.makeText(AllTransactionsActivity.this, "category"+category, Toast.LENGTH_SHORT).show();
+                                        if (hrs <= 12) {
+                                            outtime = hourout + ":" + minutes + "AM";
+                                        } else {
+                                            outtime = hourout + ":" + minutes + "PM";
+                                        }
 
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
+                                        //Toast.makeText(AttendanceHistoryActivity.this, "is not null time", Toast.LENGTH_SHORT).show();
                                     }
+
+
+                                    fromto = intime+"-"+outtime;
+                                    empList.add(new Employee(id,image,name,month,v,fromto,in_location));
+                                    mAdapter.notifyDataSetChanged();
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-                            }
-                            else{
-                                progressDialog.dismiss();
-                                Toast.makeText(AttendanceHistoryActivity.this, "Data not found", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {

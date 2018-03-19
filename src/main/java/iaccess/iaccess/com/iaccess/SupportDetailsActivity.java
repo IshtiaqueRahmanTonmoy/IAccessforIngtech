@@ -34,7 +34,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
     Intent intent;
     String id;
     private TextView namevalues,datevalue,idvalues,organizationame,supportissue,personname,description,remarksvalue;
-    private String idval,roleval,user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,descrpt,remarks,access_token,Authorization;
+    private String names,designations,idval,roleval,user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,descrpt,remarks,access_token,Authorization;
     private StringRequest stringRequest;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
@@ -46,7 +46,9 @@ public class SupportDetailsActivity extends AppCompatActivity {
 
         idval = getIntent().getStringExtra("idvalue");
 
-        //Toast.makeText(this, ""+idval, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "ivaluedetails"+idval, Toast.LENGTH_SHORT).show();
+       // Log.d("idvaldetails",idval);
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Support Details");
@@ -57,15 +59,20 @@ public class SupportDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        intent = getIntent();
-        id = intent.getStringExtra("id");
-        showDetails(id);
+        //intent = getIntent();
+        //id = intent.getStringExtra("id");
+        showDetails(idval);
 
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
-        //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(SupportDetailsActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
+
+        Log.d("author",access_token);
         Authorization = "Bearer"+" "+access_token;
         //Toast.makeText(this, ""+ Authorization, Toast.LENGTH_SHORT).show();
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         namevalues = (TextView) findViewById(R.id.name);
         datevalue = (TextView) findViewById(R.id.date);
@@ -85,6 +92,8 @@ public class SupportDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(SupportDetailsActivity.this,SupportHistory.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("access_token",access_token);
         finish();
     }
@@ -109,6 +118,8 @@ public class SupportDetailsActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();
@@ -118,7 +129,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void showDetails(String id) {
+    private void showDetails(String idval) {
         RequestQueue queue1 = Volley.newRequestQueue(SupportDetailsActivity.this);
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
@@ -129,6 +140,8 @@ public class SupportDetailsActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responsedetailsvalues", response);
+
+                        progressDialog.dismiss();
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             //JSONArray j = jsonObject.getJSONArray("data");
@@ -216,12 +229,13 @@ public class SupportDetailsActivity extends AppCompatActivity {
                                     datevalue.setText(v+","+month+","+year);
                                     organizationame.setText(organization);
                                     supportissue.setText(descrpt);
+                                    personname.setText(name);
                                     namevalues.setText(name);
                                     description.setText(descrpt);
                                     remarksvalue.setText(remarks);
 
                                     //Toast.makeText(AttendanceHistoryActivity.this, ""+time, Toast.LENGTH_SHORT).show();
-                                    progressDialog.dismiss();
+                                  //  progressDialog.dismiss();
                                     //Toast.makeText(SupportHistory.this, "category"+supportList.get(i).getName(), Toast.LENGTH_SHORT).show();
 
                                 } catch (JSONException e) {
@@ -244,7 +258,8 @@ public class SupportDetailsActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String,String> headers = new HashMap<String,String>();
                 headers.put("Accept","application/json");
-                headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
+                headers.put("Authorization",Authorization);
+                //headers.put("Authorization","Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYjJlYjI2ZDhhNmEwZjA5ZTE5ZmQyZTk1ZmExNWIxZDhjZmQwYWRhZjYxYTJjZDRlMTA4NmY3OGZjZWJjNzlhYzNlOTRhYmQ1YmQzODUzIn0.eyJhdWQiOiIyIiwianRpIjoiNWJiMmViMjZkOGE2YTBmMDllMTlmZDJlOTVmYTE1YjFkOGNmZDBhZGFmNjFhMmNkNGUxMDg2Zjc4ZmNlYmM3OWFjM2U5NGFiZDViZDM4NTMiLCJpYXQiOjE1MTc4MTg5NjksIm5iZiI6MTUxNzgxODk2OSwiZXhwIjoxNTQ5MzU0OTY5LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.IrunbaEHmpxGwJTnJ9tUuibBjYNfgWimN2hxHSoFS33r-bcVb8MMIVlYY72vbsfhxMKnEf8k1ds0IJ65uCg8IFO-sEsqA_bpomY1IhLradgoX7TwBKv_iqYLLQ3zMMyjaiUYEHcrFTIJxn4A80YTjtXfekGquDVUczFoVVhUMumhVWaJ23bZuqD2ujZDwg2CyZy3ABlg9VT30qmwVxOY_ThfVCIll69onrZyLVVzNC_rvJPTzzD0Hb827VnMBLRN6vv7cBme9wasBJzq6ab4Ys9IFn4j7JtVRoWHf_wVxgjeDPo2clggWt_KqAP2rU2ORBrQCYXk0TKwhzRtck2aczcOZcJLBnmOSaj3-1zw8gGXwNyLi-8a4h4A6aQzXZQpQTs9BNt-cnaP6LVr1Et-yMtjMpEMpzPcgt11vTxjFKVbWdbmV41445T9EtaaOLUMTM3m0STfsNJTOvl-bOtIoYNuTmXD5uNn69b6HcpiIdsqFwljffc_uPGvzXg9ddko286YVAVP5dSX7BC8WrX21sktrMreln7sbHQI4dzfs2y2k07nknlCO1AaXJjaqpFn4w3kfKSOcPhZ7ngf4WfZ8qGYXRRNbvs_Xs1HvPkIe2XxZ2u1L8b9mAWbEt5cC3YcKGPd4cVTK3qXFZLgc5yD-AZiFXSIiqjDZ3nfdSW0Hyw");
                 return headers;
             }
         };

@@ -35,7 +35,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
     private EditText idEdt,nameEdt,emailEdt,phoneEdt,designationEdt,addressEdt;
     private Spinner genderSpinner;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designation,gender,address,idval,roleval,access_token,Authorization;
+    private String id,name,email,phone,designation,gender,address,idval,roleval,access_token,Authorization,names,designations;
     private Button update;
     String[] gnd = new String[]{
 
@@ -64,6 +64,9 @@ public class EditEmployeeActivity extends AppCompatActivity {
         idval = getIntent().getStringExtra("idval");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
         //Toast.makeText(EditEmployeeActivity.this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         // Toast.makeText(EditEmployeeActivity.this, ""+idval, Toast.LENGTH_SHORT).show();
@@ -181,6 +184,8 @@ public class EditEmployeeActivity extends AppCompatActivity {
         Intent intent = new Intent(EditEmployeeActivity.this,EmployeeDetailsActivity.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idval",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         //intent.putExtra("idval",idvalue);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
@@ -206,6 +211,8 @@ public class EditEmployeeActivity extends AppCompatActivity {
             Intent intent = new Intent(EditEmployeeActivity.this,EmployeeDetailsActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idval",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();

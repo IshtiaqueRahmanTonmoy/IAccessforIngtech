@@ -61,7 +61,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
     private TextView txtview;
     private Spinner spinner;
     private StringRequest stringRequest;
-    private String id,title,time,name,month,day,hour,ids,access_token,Authorization,roleval,intime,idval;
+    private String id,title,time,name,month,day,hour,ids,access_token,Authorization,roleval,intime,idval,names,designations;
     private List<Event> eventList = new ArrayList<Event>();
     private ProgressDialog progressDialog;
     private EventAdapter mAdapter;
@@ -77,6 +77,9 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
         //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -189,6 +192,8 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
 
                                 Intent intent = new Intent(EventListActivity.this,EventDetailsActivity.class);
                                 intent.putExtra("userrole",roleval);
+                                intent.putExtra("namevalue",names);
+                                intent.putExtra("designationvalue",designations);
                                 intent.putExtra("access_token",access_token);
                                 intent.putExtra("idvalue",ids);
                                 startActivity(intent);
@@ -210,6 +215,8 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("idvalue",idval);
         intent.putExtra("userrole",roleval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("acces_token",access_token);
         finish();
     }
@@ -234,6 +241,8 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("idvalue",idval);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

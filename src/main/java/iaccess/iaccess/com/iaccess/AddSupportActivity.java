@@ -43,7 +43,7 @@ public class AddSupportActivity extends AppCompatActivity {
 
     private EditText organizationEdt,issueEdt,personEdt,descriptionEdt,remarksEdt,dateEdt,timeEdt;
     private Button submitBtn,cancelBtn;
-    private String organization,support_issue,person,description,remarks,access_token,Authorization,roleval,idval;
+    private String organization,support_issue,person,description,remarks,access_token,Authorization,roleval,idval,names,designations;
     String start_time,end_time;
     private ProgressDialog progressDialog;
     private ScrollView scrollView;
@@ -60,6 +60,9 @@ public class AddSupportActivity extends AppCompatActivity {
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -107,6 +110,8 @@ public class AddSupportActivity extends AppCompatActivity {
         });
         */
 
+        cancelBtn = (Button) findViewById(R.id.cancelBtn);
+
         submitBtn = (Button) findViewById(R.id.saveBtn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,6 +126,18 @@ public class AddSupportActivity extends AppCompatActivity {
             }
         });
 
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(AddSupportActivity.this,DashboardActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.putExtra("userrole",roleval);
+                intent.putExtra("idvalue",idval);
+                intent.putExtra("acces_token",access_token);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 
     @Override
@@ -143,6 +160,8 @@ public class AddSupportActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
@@ -159,6 +178,8 @@ public class AddSupportActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();

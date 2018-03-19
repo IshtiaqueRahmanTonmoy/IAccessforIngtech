@@ -28,7 +28,7 @@ public class ResetPassword extends AppCompatActivity {
 
     private EditText oldpass,newpass,retypepass;
     private Button submitBtn;
-    private String old_password,new_password,idval,access_token,Authorization,roleval;
+    private String old_password,new_password,idval,access_token,Authorization,roleval,names,designations;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
 
@@ -54,6 +54,10 @@ public class ResetPassword extends AppCompatActivity {
 
         roleval = getIntent().getStringExtra("userrole");
         idval = getIntent().getStringExtra("idval");
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
+
         //Toast.makeText(ResetPassword.this, ""+idval, Toast.LENGTH_SHORT).show();
 
         oldpass = (EditText) findViewById(R.id.oldpassword);
@@ -123,6 +127,8 @@ public class ResetPassword extends AppCompatActivity {
         Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idval",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
         finish();
@@ -148,6 +154,8 @@ public class ResetPassword extends AppCompatActivity {
             Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idval",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();

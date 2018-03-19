@@ -53,7 +53,7 @@ public class AddEventActivity extends AppCompatActivity {
     private RadioButton radioDisplayButton;
 
     private Button submitBtn;
-    private String name,title,time,description,timevalue,status,access_token,Authorization,roleval,valuenot,idval;
+    private String names,designations,name,title,time,description,timevalue,status,access_token,Authorization,roleval,valuenot,idval;
     private ProgressDialog progressDialog;
     private ScrollView scrollView;
     private Toolbar toolbar;
@@ -68,7 +68,10 @@ public class AddEventActivity extends AppCompatActivity {
         roleval = getIntent().getStringExtra("userrole");
         valuenot = getIntent().getStringExtra("valuenotlist");
 
-        //Toast.makeText(this, ""+valuenot, Toast.LENGTH_SHORT).show();
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
+
+        //Toast.makeText(this, ""+names+""+designations, Toast.LENGTH_SHORT).show();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Add Event");
@@ -89,6 +92,7 @@ public class AddEventActivity extends AppCompatActivity {
 
         submitBtn = (Button) findViewById(R.id.saveBtn);
 
+       /*
         scrollView = (ScrollView) findViewById(R.id.scrollview);
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
@@ -96,6 +100,7 @@ public class AddEventActivity extends AppCompatActivity {
                 hideKeyboard(view);
             }
         });
+        */
 
 
         radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
@@ -210,11 +215,24 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+
+
+        Intent intent = new Intent(AddEventActivity.this,DashboardActivity.class);
+        intent.putExtra("userrole",roleval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
+        intent.putExtra("acces_token",access_token);
+        startActivity(intent);
+        finish();
+
+        /*
         if(valuenot.equals("1")){
             Intent intent = new Intent(AddEventActivity.this,DashboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
@@ -224,10 +242,13 @@ public class AddEventActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();
         }
+        */
 
     }
 
@@ -250,6 +271,8 @@ public class AddEventActivity extends AppCompatActivity {
         if(id == android.R.id.home){
             Intent intent = new Intent(AddEventActivity.this,DashboardActivity.class);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
@@ -270,6 +293,7 @@ public class AddEventActivity extends AppCompatActivity {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             final Calendar c = Calendar.getInstance();
+
             int hour = c.get(Calendar.HOUR_OF_DAY);
             int minute = c.get(Calendar.MINUTE);
             return new TimePickerDialog(getActivity(), this, hour, minute, DateFormat.is24HourFormat(getActivity()));
@@ -279,10 +303,15 @@ public class AddEventActivity extends AppCompatActivity {
             //dateEdt.setText("Selected Time: " + String.valueOf(hourOfDay) + " : " + String.valueOf(minute));
             try {
 
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 timevalue = dateFormat.format(new Date()); // Find todays date
-                timeEdt.setText(timevalue);
-                //Log.d("currentdate",currentDateTime);
+                if(hourOfDay<12) {
+                    timeEdt.setText(timevalue + " " + hourOfDay + ":" + minute+"AM");
+                }
+                else{
+                    hourOfDay = hourOfDay - 12;
+                    timeEdt.setText(timevalue + " " + hourOfDay + ":" + minute+"PM");
+                }
             } catch (Exception e) {
                 e.printStackTrace();}
         }
@@ -326,6 +355,8 @@ public class AddEventActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         //   Handle Error
+                        progressDialog.dismiss();
+                        Toast.makeText(AddEventActivity.this, "Successfully added event.", Toast.LENGTH_SHORT).show();
                     }
                 }) {
             @Override

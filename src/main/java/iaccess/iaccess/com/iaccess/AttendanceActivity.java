@@ -80,7 +80,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
     boolean checkinclicked=false,checkoutclicked=false;
     Timestamp ts=null;
     TextView nameText,designationText;
-    String yearout,mthout,dout,timeout,hsout,hourout,outtimevalue,access_token,Authorization;
+    String yearout,mthout,dout,timeout,hsout,hourout,outtimevalue,access_token,Authorization,name,designation;
     int hrsout;
 
 
@@ -99,6 +99,9 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
+
+        name = getIntent().getStringExtra("namevalue");
+        designation = getIntent().getStringExtra("designationvalue");
 
         toolbar1 = (Toolbar) findViewById(R.id.page_toolbar);
         checkIn = (Button) findViewById(R.id.checkIn);
@@ -129,8 +132,8 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         nameText = (TextView) headerView.findViewById(R.id.nameNav);
         designationText = (TextView) headerView.findViewById(R.id.designationNav);
 
-        nameText.setText("Nur A Alam");
-        designationText.setText("Developer");
+        nameText.setText(name);
+        designationText.setText(designation);
 
         Menu menu =navigationView.getMenu();
 
@@ -228,6 +231,8 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",name);
+        intent.putExtra("designationvalue",designation);
         intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();
@@ -252,6 +257,8 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             intent.putExtra("userrole",roleval);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",name);
+            intent.putExtra("designationvalue",designation);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

@@ -35,7 +35,7 @@ public class EditProfile extends AppCompatActivity {
     private EditText idEdt,nameEdt,emailEdt,phoneEdt,designationEdt,addressEdt;
     private Spinner genderSpinner;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,designation,Authorization,access_token,userId,roleval,idval;
+    private String id,name,email,phone,designaton,gender,address,designation,Authorization,access_token,userId,roleval,idval,names,designations;
     private Button update;
     private Toolbar toolbar;
     String[] gnd = new String[]{
@@ -66,6 +66,9 @@ public class EditProfile extends AppCompatActivity {
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         //idEdt = (EditText) findViewById(R.id.idEdt);
         nameEdt = (EditText) findViewById(R.id.nameEdt);
@@ -120,6 +123,8 @@ public class EditProfile extends AppCompatActivity {
         intent.putExtra("userrole",roleval);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("idval",userId);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("acces_token",access_token);
         finish();
     }
@@ -143,6 +148,8 @@ public class EditProfile extends AppCompatActivity {
             intent.putExtra("userrole",roleval);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("idval",userId);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();

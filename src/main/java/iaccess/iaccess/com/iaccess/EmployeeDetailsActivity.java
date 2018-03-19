@@ -35,7 +35,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
     private Button buttonmenu;
     PopupMenu popup;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,idval,roleval,access_token,Authorization;
+    private String id,name,email,phone,designaton,gender,address,idval,roleval,access_token,Authorization,names,designations;
     private ProgressDialog progressDialog;
     Toolbar toolbar;
 
@@ -48,6 +48,9 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         idval = getIntent().getStringExtra("idval");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
         //Toast.makeText(EmployeeDetailsActivity.this, ""+Authorization, Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -87,6 +90,8 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
                             case R.id.editprof:
                                 Intent intent = new Intent(EmployeeDetailsActivity.this,EditEmployeeActivity.class);
                                 intent.putExtra("userrole",roleval);
+                                intent.putExtra("namevalue",names);
+                                intent.putExtra("designationvalue",designations);
                                 intent.putExtra("access_token",access_token);
                                 intent.putExtra("idval",idval);
                                 startActivity(intent);
@@ -95,6 +100,8 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
                             case R.id.resetpass:
                                 Intent intent1 = new Intent(EmployeeDetailsActivity.this,ResetPassword.class);
                                 intent1.putExtra("userrole",roleval);
+                                intent1.putExtra("namevalue",names);
+                                intent1.putExtra("designationvalue",designations);
                                 intent1.putExtra("access_token",access_token);
                                 intent1.putExtra("idval",idval);
                                 startActivity(intent1);
@@ -118,6 +125,8 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         Intent intent = new Intent(EmployeeDetailsActivity.this,EmployeeListActivity.class);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
         finish();
@@ -143,6 +152,8 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
             Intent intent = new Intent(EmployeeDetailsActivity.this,EmployeeListActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();

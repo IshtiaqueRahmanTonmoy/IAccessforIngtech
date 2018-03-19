@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="100dp"
         android:background="#fff"
         android:orientation="horizontal"
         android:padding="10dp">
@@ -114,9 +114,8 @@
                 android:id="@+id/buttonfd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="15dp"
                 android:background="@drawable/map" />
-
 
             <Button
                 android:id="@+id/view"
@@ -130,10 +129,8 @@
             android:id="@+id/location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="55dp"
             android:layout_below="@+id/cart_plus_minus_layout"
-            android:layout_toEndOf="@+id/thumbnail"
-            android:layout_toRightOf="@+id/thumbnail"
-            android:layout_marginTop="5dp"
             android:text="Peer Shaheber goli,Shantinagar"
             android:textColor="#343434"
             android:textSize="12dip" />

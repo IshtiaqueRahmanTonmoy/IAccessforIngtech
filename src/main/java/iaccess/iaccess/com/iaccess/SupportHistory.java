@@ -64,9 +64,9 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
     private TextView txtview;
     private Button button;
     private ProgressDialog progressDialog;
-    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/supports/";
+    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/supports?user_id=";
     private StringRequest stringRequest,stringRequest1;
-    private String user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,access_token,Authorization,roleval,idval;
+    private String names,designations,strttime,entime,user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,access_token,Authorization,roleval,idval;
     String vals;
     private List<Support> supportList = new ArrayList<Support>();
 
@@ -79,9 +79,14 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
+
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
+
         //Toast.makeText(this, ""+ Authorization, Toast.LENGTH_SHORT).show();
 
-        getValue();
+        getValue(idval);
 
         //Toast.makeText(SupportHistory.this, ""+idval, Toast.LENGTH_SHORT).show();
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -221,14 +226,16 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
 
 
                         vals = txtview.getText().toString();
-                        //Toast.makeText(SupportHistory.this, ""+txtview.getText().toString(), Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(SupportHistory.this, "supporthistory"+vals, Toast.LENGTH_SHORT).show();
                         button.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
 
                                 Intent intent = new Intent(SupportHistory.this,SupportDetailsActivity.class);
-                                intent.putExtra("idvalue",idval);
+                                intent.putExtra("idvalue",vals);
                                 intent.putExtra("userrole",roleval);
+                                intent.putExtra("namevalue",names);
+                                intent.putExtra("designationvalue",designations);
                                 intent.putExtra("access_token",access_token);
                                 startActivity(intent);
 
@@ -246,6 +253,8 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         Intent intent = new Intent(SupportHistory.this,DashboardActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("userrole",roleval);
         intent.putExtra("acces_token",access_token);
         finish();
@@ -269,6 +278,8 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
             Intent intent = new Intent(SupportHistory.this,DashboardActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("idvalue",idval);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
@@ -280,13 +291,13 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
     }
 
 
-    private void getValue() {
+    private void getValue(String idval) {
         RequestQueue queue = Volley.newRequestQueue(SupportHistory.this);
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, GETALL_URL,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports?user_id="+idval,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -299,12 +310,41 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                                     try {
                                         //Getting json object
                                         JSONObject json = j.getJSONObject(i);
-                                        user_id = json.getString("user_id");
+                                        user_id = json.getString("id");
                                         organization = json.getString("organization");
                                         start_time = json.getString("start_time");
                                         end_time = json.getString("end_time");
                                         JSONObject jsonob = json.getJSONObject("user");
                                         name = jsonob.getString("name");
+
+
+                                        String[] parts1 = start_time.split(":");
+                                        String hour = parts1[0];
+                                        String minute = parts1[1];
+
+                                        int hrs = Integer.parseInt(hour);
+                                        if(hrs<12){
+                                            strttime = hrs+":"+minute+"AM";
+                                        }
+                                        else{
+                                            hrs = hrs - 12;
+                                            strttime = hrs+":"+minute+"PM";
+                                        }
+
+
+
+                                        String[] parts2 = end_time.split(":");
+                                        String hours = parts2[0];
+                                        String minutes = parts2[1];
+                                        int hrss = Integer.parseInt(hours);
+                                        if(hrss<12){
+                                            entime = hrss+":"+minutes+"AM";
+                                        }
+                                        else{
+                                            hrss = hrss - 12;
+                                            entime = hrss+":"+minutes+"PM";
+                                        }
+
 
                                         //this is start of intime
                                         JSONObject jsonin = json.getJSONObject("created_at");
@@ -354,7 +394,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
                                         Log.d("ffsd", day);
                                         //this is end of intime
                                         //this is end of out time
-                                        fromto = start_time + "-" + end_time;
+                                        fromto = strttime+ "-" + entime;
 
                                         supportList.add(new Support(user_id, name, month, v, fromto, organization));
                                         mAdapter.notifyDataSetChanged();
@@ -548,7 +588,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         String from = startYear+"-"+smonth+"-"+startDay+" "+"00:00:00";
         String to = endYear+"-"+mmonth+"-"+endDay+" "+"23:59:5";
 
-        getValue();
+        getValue(idval);
     }
 
     private void getvalues() {

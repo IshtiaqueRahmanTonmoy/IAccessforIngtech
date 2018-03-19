@@ -64,7 +64,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
     Bitmap bitmap;
     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-    String val,gender,role,name,email,phone,designation,avatar,address,password,access_token,Authorization,roleval,idval,emailval,phoneval;
+    String names,designations,val,gender,role,name,email,phone,designation,avatar,address,password,access_token,Authorization,roleval,idval,emailval,phoneval;
     String[] gnd = new String[]{
             "Male",
             "Female"
@@ -94,6 +94,10 @@ public class AddEmployeeActivity extends AppCompatActivity {
         idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
+
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
 
@@ -434,6 +438,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
@@ -450,6 +456,8 @@ public class AddEmployeeActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();

@@ -32,7 +32,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private TextView nameTxt,createdonTxt,idTxt,dateTxt,descriptionTxt;
     private Button timeBtn;
     private StringRequest stringRequest;
-    private String idvalues,name,createdon,date,description,times,month,day,month1,hour,intime,roleval,access_token,Authorization;
+    private String idvalues,name,createdon,date,description,times,month,day,month1,hour,intime,roleval,access_token,Authorization,names,designations;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
 
@@ -49,6 +49,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -96,6 +99,8 @@ public class EventDetailsActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("idvalue",idval);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();
@@ -110,6 +115,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
         Intent intent = new Intent(EventDetailsActivity.this,EventListActivity.class);
         intent.putExtra("userrole",roleval);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
         finish();

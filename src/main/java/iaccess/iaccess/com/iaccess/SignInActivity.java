@@ -40,7 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     private SharedPreferences SM;
     private ProgressDialog progressDialog;
     public static final String url = "http://i-access.ingtechbd.com/oauth/token";
-    private String token_type,expires_in,acces_token,refresh_token,rolevalue,role;
+    private String token_type,expires_in,acces_token,refresh_token,rolevalue,role,name,designation;
     private StringRequest stringRequest;
 
     @Override
@@ -55,11 +55,16 @@ public class SignInActivity extends AppCompatActivity {
         String accesstoken = SM.getString("acces_token",null);
         String rolevals = SM.getString("userrole",null);
 
+        String shusername = SM.getString("usersname",null);
+        String shdesignation = SM.getString("userdesignation",null);
+
         //Log.d("sharepref",accesstoken);
         if(islogin){
             Intent intent = new Intent(SignInActivity.this, DashboardActivity.class);
             intent.putExtra("acces_token",accesstoken);
             intent.putExtra("idvalue",id);
+            intent.putExtra("namevalue",shusername);
+            intent.putExtra("designationvalue",shdesignation);
             intent.putExtra("email",emailvalue);
             intent.putExtra("userrole",rolevals);
             startActivity(intent);
@@ -187,10 +192,12 @@ public class SignInActivity extends AppCompatActivity {
                             progressDialog.dismiss();
                             getId(new VolleyCallback(){
                                 @Override
-                                public void onSuccess(String result, String id) {
+                                public void onSuccess(String result, String id,String name,String designation) {
                                     Intent intent = new Intent(SignInActivity.this,DashboardActivity.class);
                                     intent.putExtra("userrole",result);
                                     intent.putExtra("idvalue",id);
+                                    intent.putExtra("namevalue",name);
+                                    intent.putExtra("designationvalue",designation);
                                     intent.putExtra("acces_token",acces_token);
                                     intent.putExtra("username",username);
 
@@ -198,6 +205,8 @@ public class SignInActivity extends AppCompatActivity {
                                     SharedPreferences.Editor edit = SM.edit();
                                     edit.putString("userrole", result);
                                     edit.putString("userid", id);
+                                    edit.putString("usersname", name);
+                                    edit.putString("userdesignation", designation);
                                     edit.putString("username", username);
                                     edit.putString("acces_token",acces_token);
                                     edit.putBoolean("userlogin", true);
@@ -283,8 +292,10 @@ public class SignInActivity extends AppCompatActivity {
 
                                         role = j.getString("role");
                                         id = j.getString("id");
+                                        name = j.getString("name");
+                                        designation = j.getString("designaton");
 
-                                        callback.onSuccess(role,id);
+                                        callback.onSuccess(role,id,name,designation);
 
 
                                 //Log.d("idrole",role);

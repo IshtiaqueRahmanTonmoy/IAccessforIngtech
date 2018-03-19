@@ -5,5 +5,5 @@ package iaccess.iaccess.com.iaccess;
  */
 
 interface VolleyCallback {
-    void onSuccess(String result,String id);
+    void onSuccess(String result,String id,String name,String designation);
 }

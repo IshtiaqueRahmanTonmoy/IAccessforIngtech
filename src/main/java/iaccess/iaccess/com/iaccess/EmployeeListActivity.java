@@ -43,7 +43,7 @@ import iaccess.iaccess.iaccess.com.adapter.RecyclerItemClickListener;
 
 public class EmployeeListActivity extends AppCompatActivity {
 
-    private String Authorization,id,name,designation,role,idvalue,roleval,access_token,idval;
+    private String Authorization,id,name,designation,role,idvalue,roleval,access_token,idval,names,designations;
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
     private EmployeeAttendanceAdapter mAdapter;
@@ -63,6 +63,9 @@ public class EmployeeListActivity extends AppCompatActivity {
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
+
+        names = getIntent().getStringExtra("namevalue");
+        designations = getIntent().getStringExtra("designationvalue");
 
         Log.d("autho",Authorization);
         //Toast.makeText(this, ""+Authorization, Toast.LENGTH_SHORT).show();
@@ -104,6 +107,8 @@ public class EmployeeListActivity extends AppCompatActivity {
                          Intent intent = new Intent(EmployeeListActivity.this,EmployeeDetailsActivity.class);
                          intent.putExtra("userrole",roleval);
                          intent.putExtra("idval",idvalue);
+                        intent.putExtra("namevalue",names);
+                        intent.putExtra("designationvalue",designations);
                          intent.putExtra("access_token",access_token);
                          startActivity(intent);
                          finish();
@@ -120,6 +125,8 @@ public class EmployeeListActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idvalue);
+        intent.putExtra("namevalue",names);
+        intent.putExtra("designationvalue",designations);
         intent.putExtra("acces_token",access_token);
         startActivity(intent);
         finish();
@@ -145,6 +152,8 @@ public class EmployeeListActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idvalue);
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
             intent.putExtra("acces_token",access_token);
             startActivity(intent);
             finish();
