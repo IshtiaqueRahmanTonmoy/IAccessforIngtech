@@ -101,8 +101,9 @@
                     android:textSize="16dp"
                     android:padding="12dp"/>
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:weightSum="2"
                     android:orientation="horizontal">
 
                     <EditText
@@ -111,8 +112,13 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:hint="Start time"
+                        android:focusable="false"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusableInTouchMode="false"
                         android:drawableLeft="@drawable/clock"
                         android:layout_margin="5dp"
+                        android:layout_weight="1"
                         android:layout_marginBottom="3dp"
                         android:layout_marginTop="3dp"
                         android:letterSpacing="0.025"
@@ -126,6 +132,10 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:hint="End time"
+                        android:clickable="false"
+                        android:cursorVisible="false"
+                        android:focusable="false"
+                        android:layout_weight="1"
                         android:drawableLeft="@drawable/clock"
                         android:focusableInTouchMode="false"
                         android:layout_margin="5dp"

@@ -35,7 +35,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
     private Button buttonmenu;
     PopupMenu popup;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,idval,roleval,access_token,Authorization,names,designations;
+    private String id,name,email,phone,designaton,gender,address,idval,roleval,access_token,Authorization,names,designations,token;
     private ProgressDialog progressDialog;
     Toolbar toolbar;
 
@@ -44,6 +44,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_employee_details);
 
+        token = getIntent().getStringExtra("tokenval");
         roleval = getIntent().getStringExtra("userrole");
         idval = getIntent().getStringExtra("idval");
         access_token = getIntent().getStringExtra("access_token");
@@ -51,7 +52,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
 
         names = getIntent().getStringExtra("namevalue");
         designations = getIntent().getStringExtra("designationvalue");
-        //Toast.makeText(EmployeeDetailsActivity.this, ""+Authorization, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(EmployeeDetailsActivity.this, ""+token, Toast.LENGTH_SHORT).show();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -91,6 +92,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
                                 Intent intent = new Intent(EmployeeDetailsActivity.this,EditEmployeeActivity.class);
                                 intent.putExtra("userrole",roleval);
                                 intent.putExtra("namevalue",names);
+                                intent.putExtra("tokenval","2");
                                 intent.putExtra("designationvalue",designations);
                                 intent.putExtra("access_token",access_token);
                                 intent.putExtra("idval",idval);
@@ -101,6 +103,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
                                 Intent intent1 = new Intent(EmployeeDetailsActivity.this,ResetPassword.class);
                                 intent1.putExtra("userrole",roleval);
                                 intent1.putExtra("namevalue",names);
+                                intent1.putExtra("tokenval","2");
                                 intent1.putExtra("designationvalue",designations);
                                 intent1.putExtra("access_token",access_token);
                                 intent1.putExtra("idval",idval);
@@ -126,6 +129,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
         intent.putExtra("userrole",roleval);
         intent.putExtra("idvalue",idval);
         intent.putExtra("namevalue",names);
+        intent.putExtra("tokenval","2");
         intent.putExtra("designationvalue",designations);
         intent.putExtra("access_token",access_token);
         startActivity(intent);
@@ -152,6 +156,7 @@ public class EmployeeDetailsActivity extends AppCompatActivity {
             Intent intent = new Intent(EmployeeDetailsActivity.this,EmployeeListActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idvalue",idval);
+            intent.putExtra("tokenval","2");
             intent.putExtra("namevalue",names);
             intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);

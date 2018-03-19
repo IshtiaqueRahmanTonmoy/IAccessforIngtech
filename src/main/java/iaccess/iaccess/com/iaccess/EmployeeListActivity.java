@@ -40,10 +40,11 @@ import iaccess.iaccess.com.entity.SimpleDividerItemDecoration;
 import iaccess.iaccess.iaccess.com.adapter.EmployeeAdapter;
 import iaccess.iaccess.iaccess.com.adapter.EmployeeAttendanceAdapter;
 import iaccess.iaccess.iaccess.com.adapter.RecyclerItemClickListener;
+import iaccess.iaccess.iaccess.com.adapter.RecyclerViewItemClickInterface;
 
 public class EmployeeListActivity extends AppCompatActivity {
 
-    private String Authorization,id,name,designation,role,idvalue,roleval,access_token,idval,names,designations;
+    private String Authorization,id,name,designation,role,idvalue,roleval,access_token,idval,names,designations,token;
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
     private EmployeeAttendanceAdapter mAdapter;
@@ -60,6 +61,9 @@ public class EmployeeListActivity extends AppCompatActivity {
 
         idvalue = getIntent().getStringExtra("idvalue");
 
+        token = getIntent().getStringExtra("tokenval");
+
+        //Toast.makeText(EmployeeListActivity.this, ""+token, Toast.LENGTH_SHORT).show();
         roleval = getIntent().getStringExtra("userrole");
         access_token = getIntent().getStringExtra("access_token");
         Authorization = "Bearer"+" "+access_token;
@@ -94,6 +98,7 @@ public class EmployeeListActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(mAdapter);
 
+
         recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(EmployeeListActivity.this, new   RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -110,12 +115,14 @@ public class EmployeeListActivity extends AppCompatActivity {
                         intent.putExtra("namevalue",names);
                         intent.putExtra("designationvalue",designations);
                          intent.putExtra("access_token",access_token);
+                        intent.putExtra("tokenval","2");
                          startActivity(intent);
                          finish();
                         //Toast.makeText(AttendanceHistoryActivity.this, ""+t, Toast.LENGTH_SHORT).show();
                     }
                 })
         );
+
     }
 
     @Override

@@ -59,7 +59,7 @@
                     android:gravity="center"
                     android:lines="2"
                     android:scrollHorizontally="false"
-                    android:text="Nur A Alam"
+                    android:text=""
                     android:textAppearance="?android:attr/textAppearance"
                     android:textColor="@android:color/black"
                     android:textColorLink="@android:color/white"
@@ -116,7 +116,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="20sp"
-                android:text="1007" />
+                android:text="" />
         </LinearLayout>
 
             <LinearLayout
@@ -138,7 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Nur A Alam" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -160,7 +160,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="nuraalam@ingtechbd.com" />
+                    android:text="" />
             </LinearLayout>
 
 
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="017914123456" />
+                    android:text="" />
             </LinearLayout>
 
 
@@ -206,7 +206,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Web Developer" />
+                    android:text="" />
             </LinearLayout>
 
 
@@ -229,7 +229,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Male" />
+                    android:text="" />
             </LinearLayout>
 
 
@@ -253,7 +253,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:text="Protin premium leo ac pelletesque mollis fellis" />
+                    android:text="" />
             </LinearLayout>
 
         </LinearLayout>

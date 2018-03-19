@@ -309,8 +309,11 @@ public class DashboardActivity extends AppCompatActivity
         }
         else if (id == R.id.action_event) {
             Intent intent = new Intent(DashboardActivity.this, EventListActivity.class);
-            intent.putExtra("accesstoken",acces_token);
             intent.putExtra("userrole",roleval);
+            intent.putExtra("idvalue",idval);
+            intent.putExtra("namevalue",name);
+            intent.putExtra("designationvalue",designation);
+            intent.putExtra("access_token",acces_token);
             startActivity(intent);
             finish();
             return true;
@@ -361,6 +364,7 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("namevalue",name);
             intent.putExtra("designationvalue",designation);
             intent.putExtra("access_token",acces_token);
+            intent.putExtra("tokenval","1");
             intent.putExtra("userrole",roleval);
             startActivity(intent);
         } else if (id == R.id.nav_employees) {
@@ -369,6 +373,7 @@ public class DashboardActivity extends AppCompatActivity
             intent.putExtra("namevalue",name);
             intent.putExtra("designationvalue",designation);
             intent.putExtra("access_token",acces_token);
+            intent.putExtra("tokenval","2");
             startActivity(intent);
         }
         else if (id == R.id.nav_logout) {

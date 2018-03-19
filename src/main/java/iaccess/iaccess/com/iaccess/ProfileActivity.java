@@ -35,7 +35,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private TextView idTxt,nameTxt,emailTxt,phoneTxt,designationTxt,genderTxt,addressTxt,upnameTxt;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,access_token,Authorization,userId,roleval,names,designations;
+    private String id,name,email,phone,designaton,gender,address,access_token,Authorization,userId,roleval,names,designations,token;
     private Button buttonmenu;
     PopupMenu popup;
     private ProgressDialog progressDialog;
@@ -49,11 +49,12 @@ public class ProfileActivity extends AppCompatActivity {
         roleval = getIntent().getStringExtra("userrole");
         userId = getIntent().getStringExtra("idval");
 
+        token = getIntent().getStringExtra("tokenval");
         names = getIntent().getStringExtra("namevalue");
         designations = getIntent().getStringExtra("designationvalue");
 
 
-        //Toast.makeText(this, ""+userId, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
@@ -103,7 +104,9 @@ public class ProfileActivity extends AppCompatActivity {
                                 intent.putExtra("namevalue",names);
                                 intent.putExtra("designationvalue",designations);
                                 intent.putExtra("access_token",access_token);
+                                intent.putExtra("tokenval","1");
                                 startActivity(intent);
+                                finish();
                                 return true;
                             case R.id.resetpass:
                                 Intent intent1 = new Intent(ProfileActivity.this,ResetPassword.class);
@@ -112,7 +115,9 @@ public class ProfileActivity extends AppCompatActivity {
                                 intent1.putExtra("namevalue",names);
                                 intent1.putExtra("designationvalue",designations);
                                 intent1.putExtra("access_token",access_token);
+                                intent1.putExtra("tokenval","1");
                                 startActivity(intent1);
+                                finish();
                                 return true;
                             default:
                                 return false;

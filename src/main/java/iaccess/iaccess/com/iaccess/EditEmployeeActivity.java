@@ -35,7 +35,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
     private EditText idEdt,nameEdt,emailEdt,phoneEdt,designationEdt,addressEdt;
     private Spinner genderSpinner;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designation,gender,address,idval,roleval,access_token,Authorization,names,designations;
+    private String id,name,email,phone,designation,gender,address,idval,roleval,access_token,Authorization,names,designations,token;
     private Button update;
     String[] gnd = new String[]{
 
@@ -60,6 +60,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
+        token = getIntent().getStringExtra("tokenval");
         roleval = getIntent().getStringExtra("userrole");
         idval = getIntent().getStringExtra("idval");
         access_token = getIntent().getStringExtra("access_token");
@@ -185,6 +186,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
         intent.putExtra("userrole",roleval);
         intent.putExtra("idval",idval);
         intent.putExtra("namevalue",names);
+        intent.putExtra("tokenval","2");
         intent.putExtra("designationvalue",designations);
         //intent.putExtra("idval",idvalue);
         intent.putExtra("access_token",access_token);
@@ -211,6 +213,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
             Intent intent = new Intent(EditEmployeeActivity.this,EmployeeDetailsActivity.class);
             intent.putExtra("userrole",roleval);
             intent.putExtra("idval",idval);
+            intent.putExtra("tokenval","2");
             intent.putExtra("namevalue",names);
             intent.putExtra("designationvalue",designations);
             intent.putExtra("access_token",access_token);

@@ -1,10 +1,14 @@
 package iaccess.iaccess.com.iaccess;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +32,7 @@ public class ResetPassword extends AppCompatActivity {
 
     private EditText oldpass,newpass,retypepass;
     private Button submitBtn;
-    private String old_password,new_password,idval,access_token,Authorization,roleval,names,designations;
+    private String old_password,new_password,idval,access_token,Authorization,roleval,names,designations,token;
     private ProgressDialog progressDialog;
     private Toolbar toolbar;
 
@@ -37,6 +41,8 @@ public class ResetPassword extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset_password);
 
+        token = getIntent().getStringExtra("tokenval");
+       // Toast.makeText(this, ""+token, Toast.LENGTH_SHORT).show();
         access_token = getIntent().getStringExtra("access_token");
         //Toast.makeText(AttendanceActivity.this, ""+access_token, Toast.LENGTH_SHORT).show();
         Authorization = "Bearer"+" "+access_token;
@@ -64,6 +70,64 @@ public class ResetPassword extends AppCompatActivity {
         newpass = (EditText) findViewById(R.id.newpassword);
         retypepass = (EditText) findViewById(R.id.retypepassword);
 
+        oldpass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                 if(oldpass.getText().length() < 6){
+                     oldpass.setError("Password must be greater than 6");
+                 }
+            }
+        });
+
+        newpass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(newpass.getText().length() < 6){
+                    newpass.setError("Password must be greater than 6");
+                }
+            }
+        });
+
+
+        retypepass.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(retypepass.getText().length() < 6){
+                    retypepass.setError("Password must be greater than 6");
+                }
+            }
+        });
+
         submitBtn = (Button) findViewById(R.id.submitBtn);
         submitBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -72,7 +136,36 @@ public class ResetPassword extends AppCompatActivity {
 
                 old_password = oldpass.getText().toString();
                 new_password = newpass.getText().toString();
-                changepassword(old_password,new_password);
+
+                if(old_password.equals(new_password)){
+                    AlertDialog.Builder builder1 = new AlertDialog.Builder(ResetPassword.this);
+                    builder1.setMessage("Old password and New password cannot be same..");
+                    builder1.setCancelable(true);
+
+                    builder1.setPositiveButton(
+                            "Yes",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    builder1.setNegativeButton(
+                            "No",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            });
+
+                    AlertDialog alert11 = builder1.create();
+                    alert11.show();
+                    //oldpass.setError("old pa");
+                    //Toast.makeText(ResetPassword.this, "old password and new password cannot be same", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    changepassword(old_password, new_password);
+                }
 
     }
 
@@ -124,14 +217,31 @@ public class ResetPassword extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
-        intent.putExtra("userrole",roleval);
-        intent.putExtra("idval",idval);
-        intent.putExtra("namevalue",names);
-        intent.putExtra("designationvalue",designations);
-        intent.putExtra("access_token",access_token);
-        startActivity(intent);
-        finish();
+
+        if(token.equals("1")){
+            Intent intent = new Intent(ResetPassword.this,ProfileActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("idval",idval);
+            intent.putExtra("tokenval","1");
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
+            intent.putExtra("access_token",access_token);
+            startActivity(intent);
+            finish();
+
+        }
+        else{
+            Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
+            intent.putExtra("userrole",roleval);
+            intent.putExtra("idval",idval);
+            intent.putExtra("tokenval","2");
+            intent.putExtra("namevalue",names);
+            intent.putExtra("designationvalue",designations);
+            intent.putExtra("access_token",access_token);
+            startActivity(intent);
+            finish();
+
+        }
     }
 
 
@@ -151,14 +261,30 @@ public class ResetPassword extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
-            intent.putExtra("userrole",roleval);
-            intent.putExtra("idval",idval);
-            intent.putExtra("namevalue",names);
-            intent.putExtra("designationvalue",designations);
-            intent.putExtra("access_token",access_token);
-            startActivity(intent);
-            finish();
+            if(token.equals("1")){
+                Intent intent = new Intent(ResetPassword.this,ProfileActivity.class);
+                intent.putExtra("userrole",roleval);
+                intent.putExtra("idval",idval);
+                intent.putExtra("tokenval","1");
+                intent.putExtra("namevalue",names);
+                intent.putExtra("designationvalue",designations);
+                intent.putExtra("access_token",access_token);
+                startActivity(intent);
+                finish();
+
+            }
+            else{
+                Intent intent = new Intent(ResetPassword.this,EmployeeDetailsActivity.class);
+                intent.putExtra("userrole",roleval);
+                intent.putExtra("idval",idval);
+                intent.putExtra("tokenval","1");
+                intent.putExtra("namevalue",names);
+                intent.putExtra("designationvalue",designations);
+                intent.putExtra("access_token",access_token);
+                startActivity(intent);
+                finish();
+
+            }
         }
 
 

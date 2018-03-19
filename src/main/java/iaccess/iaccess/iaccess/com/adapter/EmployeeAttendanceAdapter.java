@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,10 +19,11 @@ import iaccess.iaccess.com.iaccess.R;
  * Created by TONMOYPC on 2/13/2018.
  */
 
-public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAttendanceAdapter.MyViewHolder> {
+public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAttendanceAdapter.MyViewHolder> implements View.OnClickListener  {
 
     private List<EmployeeInfo> empList;
     private Context context;
+    RecyclerViewItemClickInterface listener;
 
     public EmployeeAttendanceAdapter(List<EmployeeInfo> empList){
         this.empList = empList;
@@ -36,13 +38,31 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
     }
 
     @Override
-    public void onBindViewHolder(EmployeeAttendanceAdapter.MyViewHolder holder, int position) {
+    public void onBindViewHolder(EmployeeAttendanceAdapter.MyViewHolder holder, final int position) {
         EmployeeInfo employee = empList.get(position);
 
         holder.id.setText(employee.getId());
         holder.name.setText(employee.getName());
         holder.designation.setText(employee.getDesignation());
         holder.role.setText(employee.getRole());
+
+        holder.id.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                final int currentPosition = position;
+                final EmployeeInfo infoData = empList.get(position);
+                removeItem(infoData);
+                return false;
+            }
+        });
+
+    }
+
+
+        private void removeItem(EmployeeInfo infoData) {
+            int currPosition = empList.indexOf(infoData);
+            empList.remove(currPosition);
+            notifyItemRemoved(currPosition);
 
     }
 
@@ -62,6 +82,38 @@ public class EmployeeAttendanceAdapter extends RecyclerView.Adapter<EmployeeAtte
             name = (TextView) view.findViewById(R.id.name);
             designation = (TextView) view.findViewById(R.id.designation);
             role = (TextView) view.findViewById(R.id.role);
+
+            /*
+            view.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int p=getLayoutPosition();
+                    EmployeeInfo notes = empList.get(p);
+                    Toast.makeText(context, "Recycle Click" + p +"  ", Toast.LENGTH_SHORT).show();
+                    return false;
+                }
+            });
+            */
         }
     }
+
+    @Override
+    public void onClick(View v) {
+        // TODO Auto-generated method stub
+        if (listener != null) {
+            EmployeeInfo model = (EmployeeInfo) v.getTag();
+            listener.onItemclick(v,model);}
+    }
+
+    public void setOnItemClickListener(RecyclerViewItemClickInterface listener){
+
+        this.listener=listener;
+    }
+
+    public void remove(EmployeeInfo item) {
+        int position = empList.indexOf(item);
+        empList.remove(position);
+        notifyItemRemoved(position);
+    }
+
 }

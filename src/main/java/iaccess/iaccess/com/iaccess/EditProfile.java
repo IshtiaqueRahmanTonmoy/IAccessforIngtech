@@ -35,7 +35,7 @@ public class EditProfile extends AppCompatActivity {
     private EditText idEdt,nameEdt,emailEdt,phoneEdt,designationEdt,addressEdt;
     private Spinner genderSpinner;
     private StringRequest stringRequest;
-    private String id,name,email,phone,designaton,gender,address,designation,Authorization,access_token,userId,roleval,idval,names,designations;
+    private String token,id,name,email,phone,designaton,gender,address,designation,Authorization,access_token,userId,roleval,idval,names,designations;
     private Button update;
     private Toolbar toolbar;
     String[] gnd = new String[]{
@@ -50,6 +50,7 @@ public class EditProfile extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
+        token = getIntent().getStringExtra("tokenval");
         idval = getIntent().getStringExtra("idval");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -119,13 +120,14 @@ public class EditProfile extends AppCompatActivity {
 
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(EditProfile.this,DashboardActivity.class);
+        Intent intent = new Intent(EditProfile.this,ProfileActivity.class);
         intent.putExtra("userrole",roleval);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra("idval",userId);
         intent.putExtra("namevalue",names);
+        intent.putExtra("tokenval","1");
         intent.putExtra("designationvalue",designations);
-        intent.putExtra("acces_token",access_token);
+        intent.putExtra("access_token",access_token);
         finish();
     }
     @Override
@@ -144,13 +146,14 @@ public class EditProfile extends AppCompatActivity {
         int id = item.getItemId();
 
         if(id == android.R.id.home){
-            Intent intent = new Intent(EditProfile.this,DashboardActivity.class);
+            Intent intent = new Intent(EditProfile.this,ProfileActivity.class);
             intent.putExtra("userrole",roleval);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra("idval",userId);
             intent.putExtra("namevalue",names);
+            intent.putExtra("tokenval","1");
             intent.putExtra("designationvalue",designations);
-            intent.putExtra("acces_token",access_token);
+            intent.putExtra("access_token",access_token);
             startActivity(intent);
             finish();
         }
@@ -247,6 +250,7 @@ public class EditProfile extends AppCompatActivity {
                             emailEdt.setText(email);
                             phoneEdt.setText(phone);
                             designationEdt.setText(designaton);
+                            addressEdt.setText(address);
 
                             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                                     EditProfile.this,R.layout.textview_for_spinner,gnd );
