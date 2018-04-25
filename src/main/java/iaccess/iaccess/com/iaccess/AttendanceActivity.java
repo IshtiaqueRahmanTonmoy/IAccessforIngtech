@@ -66,7 +66,7 @@ import iaccess.iaccess.com.entity.GPSTracker;
 
 public class AttendanceActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
-    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/access-logs/add";
+    private static final String GETALL_URL = "http://i-attendance.ingtechbd.com/api/access-logs/add";
 
     Toolbar toolbar,toolbar1;
     private StringRequest stringRequest;
@@ -841,7 +841,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
-        String url = "http://i-access.ingtechbd.com/api/access-logs/add";
+        String url = "http://i-attendance.ingtechbd.com/api/access-logs/add";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -1001,7 +1001,7 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
-        String url = "http://i-access.ingtechbd.com/api/access-logs/add";
+        String url = "http://i-attendance.ingtechbd.com/api/access-logs/add";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,

@@ -371,7 +371,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users/",
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/users/",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -497,7 +497,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         //this is the url where you want to send the request
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
-        String url = "http://i-access.ingtechbd.com/api/users/add";
+        String url = "http://i-attendance.ingtechbd.com/api/users/add";
 
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url,
@@ -587,7 +587,7 @@ public class AddEmployeeActivity extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users/add",
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/users/add",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

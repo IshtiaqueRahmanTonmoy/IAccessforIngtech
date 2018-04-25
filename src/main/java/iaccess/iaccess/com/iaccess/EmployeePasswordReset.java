@@ -52,7 +52,7 @@ public class EmployeePasswordReset extends AppCompatActivity {
             private void changepassword(final String old_password, final String new_password) {
                 //mPostCommentResponse.requestStarted();
                 RequestQueue queue = Volley.newRequestQueue(EmployeePasswordReset.this);
-                StringRequest sr = new StringRequest(Request.Method.POST,"http://i-access.ingtechbd.com/api/users/password-reset/1", new Response.Listener<String>() {
+                StringRequest sr = new StringRequest(Request.Method.POST,"http://i-attendance.ingtechbd.com/api/users/password-reset/1", new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
                         Log.d("responsevalue",response);

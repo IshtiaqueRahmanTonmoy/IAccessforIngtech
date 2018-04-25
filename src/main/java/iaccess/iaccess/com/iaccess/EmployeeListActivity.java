@@ -49,7 +49,7 @@ public class EmployeeListActivity extends AppCompatActivity {
     private StringRequest stringRequest;
     private EmployeeAttendanceAdapter mAdapter;
     private List<EmployeeInfo> empList = new ArrayList<EmployeeInfo>();
-    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/users/";
+    private static final String GETALL_URL = "http://i-attendance.ingtechbd.com/api/users/";
     private TextView textviewid;
     private ProgressDialog progressDialog;
     Toolbar toolbar;

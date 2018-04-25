@@ -255,7 +255,7 @@ public class AddSupportActivity extends AppCompatActivity {
         Log.d("paramsforattendance",params.toString());
 
 
-        JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, "http://i-access.ingtechbd.com/api/supports/add",
+        JsonObjectRequest postRequest = new JsonObjectRequest( Request.Method.POST, "http://i-attendance.ingtechbd.com/api/supports/add",
 
                 new JSONObject(params),
                 new Response.Listener<JSONObject>() {

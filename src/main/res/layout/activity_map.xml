@@ -23,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Nur A Alam Checked in on 21/01/2017"
+                android:text="Location on Map"
                 android:textSize="18sp"
                 />
 

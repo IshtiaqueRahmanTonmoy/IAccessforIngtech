@@ -128,7 +128,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/events/view/"+id,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/events/view/"+id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

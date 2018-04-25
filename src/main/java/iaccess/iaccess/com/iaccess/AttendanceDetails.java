@@ -157,7 +157,7 @@ public class AttendanceDetails extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/access-logs/view/"+id,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/access-logs/view/"+id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

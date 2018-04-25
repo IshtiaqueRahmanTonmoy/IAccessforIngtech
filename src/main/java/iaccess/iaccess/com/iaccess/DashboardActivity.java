@@ -54,7 +54,7 @@ public class DashboardActivity extends AppCompatActivity
         designation = getIntent().getStringExtra("designationvalue");
 
 
-        Log.d("tokenandrole",roleval+acces_token);
+        Log.d("tokenandrole",acces_token);
 
         //Toast.makeText(DashboardActivity.this, ""+acces_token+"", Toast.LENGTH_SHORT).show();
 

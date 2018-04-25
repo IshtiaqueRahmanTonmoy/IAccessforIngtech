@@ -63,7 +63,7 @@ import iaccess.iaccess.iaccess.com.adapter.RecyclerItemClickListener;
 
 public class AttendanceHistoryActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,DateRangePickerFragment.OnDateRangeSelectedListener {
 
-    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/access-logs/";
+    private static final String GETALL_URL = "http://i-attendance.ingtechbd.com/api/access-logs/";
     private StringRequest stringRequest;
     Toolbar toolbar;
     private Spinner spinner;
@@ -335,7 +335,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/access-logs?user_id="+user_id,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/access-logs?user_id="+user_id,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -648,273 +648,238 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
                     @Override
                     public void onResponse(String response) {
 
-                        progressDialog.dismiss();
+
                         try {
                             JSONObject jsonObject = new JSONObject(response);
                             JSONArray j = jsonObject.getJSONArray("data");
-                            for(int i=0;i<j.length();i++){
-                                try {
-                                    //Getting json object
-                                    JSONObject json = j.getJSONObject(i);
-                                    id = json.getString("id");
-                                    in_location = json.getString("in_location");
+                            if(j.length() > 0) {
+                                for (int i = 0; i < j.length(); i++) {
+                                    try {
+                                        //Getting json object
+                                        JSONObject json = j.getJSONObject(i);
+                                        id = json.getString("id");
+                                        in_location = json.getString("in_location");
 
-                                    JSONObject jsonob = json.getJSONObject("user");
-                                    name = jsonob.getString("name");
-                                    image = jsonob.getString("avatar");
+                                        JSONObject jsonob = json.getJSONObject("user");
+                                        name = jsonob.getString("name");
+                                        image = jsonob.getString("avatar");
 
-                                    if(json.isNull("in_time"))
-                                    {
-                                        intime = null;
-                                    }
-                                    else
-                                    {
-                                        JSONObject jsonin = json.getJSONObject("in_time");
-                                        timestamp = jsonin.getString("date");
-                                        String[] parts = timestamp.split("-");
-
-                                        String year = parts[0];
-                                        String mth = parts[1];
-                                        String d = parts[2];
-
-                                        String[] da = d.split(" ");
-                                        v = da[0];
-                                        Log.d("va",v);
-                                        //int m = Integer.parseInt(mth);
-
-                                        if(mth.equals("01")){
-                                            month = "January";
-                                        }
-                                        else if(mth.equals("02")){
-                                            month = "February";
-                                        }
-                                        else if(mth.equals("03")){
-                                            month = "March";
-                                        }
-                                        else if(mth.equals("04")){
-                                            month = "April";
-                                        }
-                                        else if(mth.equals("05")){
-                                            month = "May";
-                                        }
-                                        else if(mth.equals("06")){
-                                            month = "June";
-                                        }
-                                        else if(mth.equals("07")){
-                                            month = "July";
-                                        }
-                                        else if(mth.equals("08")){
-                                            month = "August";
-                                        }
-                                        else if(mth.equals("09")){
-                                            month = "September";
-                                        }
-                                        else if(mth.equals("10")){
-                                            month = "October";
-
-                                        }
-                                        else if(mth.equals("11")){
-                                            month = "November";
-
-                                        }
-                                        else{
-                                            month = "December";
-                                        }
-
-                                        day = parts[2];
-
-                                        String[] partss = timestamp.split(" ");
-                                        String time = partss[1];
-
-                                        String[] timeparts = time.split(":");
-
-                                        String h = timeparts[0];
-                                        int hr = Integer.parseInt(h);
-
-                                        if (hr == 1) {
-                                            hour = "1";
-                                        }
-                                        else if (hr == 2) {
-                                            hour = "2";
-                                        }
-                                        else if (hr == 3) {
-                                            hour = "3";
-                                        }
-                                        else if (hr == 4) {
-                                            hour = "4";
-                                        }
-                                        else if (hr == 5) {
-                                            hour = "5";
-                                        }
-                                        else if (hr == 6) {
-                                            hour = "1";
-                                        }
-                                        else if (hr == 7) {
-                                            hour = "7";
-                                        }
-                                        else if (hr == 8) {
-                                            hour = "8";
-                                        }
-                                        else if (hr == 9) {
-                                            hour = "9";
-                                        }
-                                        else if (hr == 10) {
-                                            hour = "10";
-                                        }
-                                        else if (hr == 11) {
-                                            hour = "11";
-                                        }
-                                        else if (hr == 12) {
-                                            hour = "12";
-                                        }
-                                        else if (hr == 13) {
-                                            hour = "1";
-                                        } else if (hr == 14) {
-                                            hour = "2";
-                                        } else if (hr == 15) {
-                                            hour = "3";
-                                        } else if (hr == 16) {
-                                            hour = "4";
-                                        } else if (hr == 17) {
-                                            hour = "5";
-                                        } else if (hr == 18) {
-                                            hour = "6";
-                                        } else if (hr == 19) {
-                                            hour = "7";
-                                        } else if (hr == 20) {
-                                            hour = "8";
-                                        } else if (hr == 21) {
-                                            hour = "9";
-                                        } else if (hr == 22) {
-                                            hour = "10";
-                                        } else if (hr == 23) {
-                                            hour = "11";
+                                        if (json.isNull("in_time")) {
+                                            intime = null;
                                         } else {
-                                            hour = "12";
+                                            JSONObject jsonin = json.getJSONObject("in_time");
+                                            timestamp = jsonin.getString("date");
+                                            String[] parts = timestamp.split("-");
+
+                                            String year = parts[0];
+                                            String mth = parts[1];
+                                            String d = parts[2];
+
+                                            String[] da = d.split(" ");
+                                            v = da[0];
+                                            Log.d("va", v);
+                                            //int m = Integer.parseInt(mth);
+
+                                            if (mth.equals("01")) {
+                                                month = "January";
+                                            } else if (mth.equals("02")) {
+                                                month = "February";
+                                            } else if (mth.equals("03")) {
+                                                month = "March";
+                                            } else if (mth.equals("04")) {
+                                                month = "April";
+                                            } else if (mth.equals("05")) {
+                                                month = "May";
+                                            } else if (mth.equals("06")) {
+                                                month = "June";
+                                            } else if (mth.equals("07")) {
+                                                month = "July";
+                                            } else if (mth.equals("08")) {
+                                                month = "August";
+                                            } else if (mth.equals("09")) {
+                                                month = "September";
+                                            } else if (mth.equals("10")) {
+                                                month = "October";
+
+                                            } else if (mth.equals("11")) {
+                                                month = "November";
+
+                                            } else {
+                                                month = "December";
+                                            }
+
+                                            day = parts[2];
+
+                                            String[] partss = timestamp.split(" ");
+                                            String time = partss[1];
+
+                                            String[] timeparts = time.split(":");
+
+                                            String h = timeparts[0];
+                                            int hr = Integer.parseInt(h);
+
+                                            if (hr == 1) {
+                                                hour = "1";
+                                            } else if (hr == 2) {
+                                                hour = "2";
+                                            } else if (hr == 3) {
+                                                hour = "3";
+                                            } else if (hr == 4) {
+                                                hour = "4";
+                                            } else if (hr == 5) {
+                                                hour = "5";
+                                            } else if (hr == 6) {
+                                                hour = "1";
+                                            } else if (hr == 7) {
+                                                hour = "7";
+                                            } else if (hr == 8) {
+                                                hour = "8";
+                                            } else if (hr == 9) {
+                                                hour = "9";
+                                            } else if (hr == 10) {
+                                                hour = "10";
+                                            } else if (hr == 11) {
+                                                hour = "11";
+                                            } else if (hr == 12) {
+                                                hour = "12";
+                                            } else if (hr == 13) {
+                                                hour = "1";
+                                            } else if (hr == 14) {
+                                                hour = "2";
+                                            } else if (hr == 15) {
+                                                hour = "3";
+                                            } else if (hr == 16) {
+                                                hour = "4";
+                                            } else if (hr == 17) {
+                                                hour = "5";
+                                            } else if (hr == 18) {
+                                                hour = "6";
+                                            } else if (hr == 19) {
+                                                hour = "7";
+                                            } else if (hr == 20) {
+                                                hour = "8";
+                                            } else if (hr == 21) {
+                                                hour = "9";
+                                            } else if (hr == 22) {
+                                                hour = "10";
+                                            } else if (hr == 23) {
+                                                hour = "11";
+                                            } else {
+                                                hour = "12";
+                                            }
+
+                                            String minute = timeparts[1];
+                                            if (hr <= 12) {
+                                                intime = hour + ":" + minute + "AM";
+                                            } else {
+                                                intime = hour + ":" + minute + "PM";
+                                            }
                                         }
 
-                                        String minute = timeparts[1];
-                                        if(hr<=12){
-                                            intime = hour+":"+minute+"AM";
-                                        }
-                                        else{
-                                            intime = hour+":"+minute+"PM";
-                                        }
-                                    }
 
-
-                                    if(json.isNull("out_time"))
-                                    {
-                                        outtime = null;
-                                        //Toast.makeText(AttendanceHistoryActivity.this, "is null out time", Toast.LENGTH_SHORT).show();
-                                    }
-                                    else
-                                    {
-                                        JSONObject jsonout = json.getJSONObject("out_time");
-
-                                        Log.d("jsonout",jsonout.toString());
-
-                                        timestampsout = jsonout.getString("date");
-                                        String[] parts1 = timestampsout.split("-");
-
-                                        String years = parts1[0];
-                                        String months = parts1[1];
-                                        String days = parts1[2];
-
-                                        String[] partsss = timestampsout.split(" ");
-                                        String times = partsss[1];
-
-                                        Log.d("times", times);
-
-                                        String[] timepartss = times.split(":");
-
-                                        String hs = timepartss[0];
-                                        int hrs = Integer.parseInt(hs);
-
-                                        Log.d("hrs", String.valueOf(hrs));
-
-                                        if (hrs == 1) {
-                                            hourout = "1";
-                                        }
-                                        else if (hrs == 2) {
-                                            hourout = "2";
-                                        }
-                                        else if (hrs == 3) {
-                                            hourout = "3";
-                                        }
-                                        else if (hrs == 4) {
-                                            hourout = "4";
-                                        }
-                                        else if (hrs == 5) {
-                                            hourout = "5";
-                                        }
-                                        else if (hrs == 6) {
-                                            hourout = "1";
-                                        }
-                                        else if (hrs == 7) {
-                                            hourout = "7";
-                                        }
-                                        else if (hrs == 8) {
-                                            hourout = "8";
-                                        }
-                                        else if (hrs == 9) {
-                                            hourout = "9";
-                                        }
-                                        else if (hrs == 10) {
-                                            hourout = "10";
-                                        }
-                                        else if (hrs == 11) {
-                                            hourout = "11";
-                                        }
-                                        else if (hrs == 12) {
-                                            hourout = "12";
-                                        }
-                                        else if (hrs == 13) {
-                                            hourout = "1";
-                                        } else if (hrs == 14) {
-                                            hourout = "2";
-                                        } else if (hrs == 15) {
-                                            hourout = "3";
-                                        } else if (hrs == 16) {
-                                            hourout = "4";
-                                        } else if (hrs == 17) {
-                                            hourout = "5";
-                                        } else if (hrs == 18) {
-                                            hourout = "6";
-                                        } else if (hrs == 19) {
-                                            hourout = "7";
-                                        } else if (hrs == 20) {
-                                            hourout = "8";
-                                        } else if (hrs == 21) {
-                                            hourout = "9";
-                                        } else if (hrs == 22) {
-                                            hourout = "10";
-                                        } else if (hrs == 23) {
-                                            hourout = "11";
+                                        if (json.isNull("out_time")) {
+                                            outtime = null;
+                                            //Toast.makeText(AttendanceHistoryActivity.this, "is null out time", Toast.LENGTH_SHORT).show();
                                         } else {
-                                            hourout = "12";
+                                            JSONObject jsonout = json.getJSONObject("out_time");
+
+                                            Log.d("jsonout", jsonout.toString());
+
+                                            timestampsout = jsonout.getString("date");
+                                            String[] parts1 = timestampsout.split("-");
+
+                                            String years = parts1[0];
+                                            String months = parts1[1];
+                                            String days = parts1[2];
+
+                                            String[] partsss = timestampsout.split(" ");
+                                            String times = partsss[1];
+
+                                            Log.d("times", times);
+
+                                            String[] timepartss = times.split(":");
+
+                                            String hs = timepartss[0];
+                                            int hrs = Integer.parseInt(hs);
+
+                                            Log.d("hrs", String.valueOf(hrs));
+
+                                            if (hrs == 1) {
+                                                hourout = "1";
+                                            } else if (hrs == 2) {
+                                                hourout = "2";
+                                            } else if (hrs == 3) {
+                                                hourout = "3";
+                                            } else if (hrs == 4) {
+                                                hourout = "4";
+                                            } else if (hrs == 5) {
+                                                hourout = "5";
+                                            } else if (hrs == 6) {
+                                                hourout = "1";
+                                            } else if (hrs == 7) {
+                                                hourout = "7";
+                                            } else if (hrs == 8) {
+                                                hourout = "8";
+                                            } else if (hrs == 9) {
+                                                hourout = "9";
+                                            } else if (hrs == 10) {
+                                                hourout = "10";
+                                            } else if (hrs == 11) {
+                                                hourout = "11";
+                                            } else if (hrs == 12) {
+                                                hourout = "12";
+                                            } else if (hrs == 13) {
+                                                hourout = "1";
+                                            } else if (hrs == 14) {
+                                                hourout = "2";
+                                            } else if (hrs == 15) {
+                                                hourout = "3";
+                                            } else if (hrs == 16) {
+                                                hourout = "4";
+                                            } else if (hrs == 17) {
+                                                hourout = "5";
+                                            } else if (hrs == 18) {
+                                                hourout = "6";
+                                            } else if (hrs == 19) {
+                                                hourout = "7";
+                                            } else if (hrs == 20) {
+                                                hourout = "8";
+                                            } else if (hrs == 21) {
+                                                hourout = "9";
+                                            } else if (hrs == 22) {
+                                                hourout = "10";
+                                            } else if (hrs == 23) {
+                                                hourout = "11";
+                                            } else {
+                                                hourout = "12";
+                                            }
+
+                                            String minutes = timepartss[1];
+
+
+                                            if (hrs <= 12) {
+                                                outtime = hourout + ":" + minutes + "AM";
+                                            } else {
+                                                outtime = hourout + ":" + minutes + "PM";
+                                            }
+
+                                            //Toast.makeText(AttendanceHistoryActivity.this, "is not null time", Toast.LENGTH_SHORT).show();
                                         }
 
-                                        String minutes = timepartss[1];
 
+                                        fromto = intime + "-" + outtime;
+                                        empList.add(new Employee(id, image, name, month, v, fromto, in_location));
+                                        mAdapter.notifyDataSetChanged();
+                                        progressDialog.dismiss();
 
-                                        if (hrs <= 12) {
-                                            outtime = hourout + ":" + minutes + "AM";
-                                        } else {
-                                            outtime = hourout + ":" + minutes + "PM";
-                                        }
-
-                                        //Toast.makeText(AttendanceHistoryActivity.this, "is not null time", Toast.LENGTH_SHORT).show();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
                                     }
-
-
-                                    fromto = intime+"-"+outtime;
-                                    empList.add(new Employee(id,image,name,month,v,fromto,in_location));
-                                    mAdapter.notifyDataSetChanged();
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
                                 }
+                            }
+                            else{
+                                progressDialog.dismiss();
+                                Toast.makeText(AttendanceHistoryActivity.this, "Data not found", Toast.LENGTH_SHORT).show();
                             }
 
                         } catch (JSONException e) {
@@ -1014,7 +979,7 @@ public class AttendanceHistoryActivity extends AppCompatActivity implements Navi
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/access-logs?from="+from+"&&to="+to,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/access-logs?from="+from+"&&to="+to,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

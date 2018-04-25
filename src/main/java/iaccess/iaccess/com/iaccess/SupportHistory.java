@@ -64,7 +64,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
     private TextView txtview;
     private Button button;
     private ProgressDialog progressDialog;
-    private static final String GETALL_URL = "http://i-access.ingtechbd.com/api/supports?user_id=";
+    private static final String GETALL_URL = "http://i-attendance.ingtechbd.com/api/supports?user_id=";
     private StringRequest stringRequest,stringRequest1;
     private String names,designations,strttime,entime,user_id,organization,start_time,end_time,name,timestamp,month,day,fromto,access_token,Authorization,roleval,idval;
     String vals;
@@ -297,7 +297,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports?user_id="+idval,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/supports?user_id="+idval,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -448,7 +448,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest1 = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports/view/"+userid,
+        stringRequest1 = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/supports/view/"+userid,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -599,7 +599,7 @@ public class SupportHistory extends AppCompatActivity implements DateRangePicker
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports/",
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/supports/",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

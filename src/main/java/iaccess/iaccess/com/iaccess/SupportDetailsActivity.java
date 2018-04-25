@@ -135,7 +135,7 @@ public class SupportDetailsActivity extends AppCompatActivity {
         //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
         // Request a string response from the provided URL.
-        stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/supports/view/"+idval,
+        stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/supports/view/"+idval,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {

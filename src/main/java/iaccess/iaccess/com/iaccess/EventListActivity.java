@@ -257,7 +257,7 @@ public class EventListActivity extends AppCompatActivity implements DateRangePic
             //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
             // Request a string response from the provided URL.
-            stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/events/",
+            stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/events/",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {

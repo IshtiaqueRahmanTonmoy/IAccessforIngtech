@@ -39,7 +39,7 @@ public class SignInActivity extends AppCompatActivity {
     private String username,password,id,Authorization;
     private SharedPreferences SM;
     private ProgressDialog progressDialog;
-    public static final String url = "http://i-access.ingtechbd.com/oauth/token";
+    public static final String url = "http://i-attendance.ingtechbd.com/oauth/token";
     private String token_type,expires_in,acces_token,refresh_token,rolevalue,role,name,designation;
     private StringRequest stringRequest;
 
@@ -279,7 +279,7 @@ public class SignInActivity extends AppCompatActivity {
             //TODO: replace with your own url to send request, as I am using my own localhost for this tutorial
 
             // Request a string response from the provided URL.
-            stringRequest = new StringRequest(Request.Method.GET, "http://i-access.ingtechbd.com/api/users?current_user=true",
+            stringRequest = new StringRequest(Request.Method.GET, "http://i-attendance.ingtechbd.com/api/users?current_user=true",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
