@@ -38,7 +38,6 @@ public class EditEmployeeActivity extends AppCompatActivity {
     private String id,name,email,phone,designation,gender,address,idval,roleval,access_token,Authorization,names,designations,token;
     private Button update;
     String[] gnd = new String[]{
-
             "Male",
             "Female"
     };
@@ -260,6 +259,7 @@ public class EditEmployeeActivity extends AppCompatActivity {
                             emailEdt.setText(email);
                             phoneEdt.setText(phone);
                             designationEdt.setText(designation);
+                            addressEdt.setText(address);
 
                             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                                     EditEmployeeActivity.this,R.layout.textview_for_spinner,gnd );

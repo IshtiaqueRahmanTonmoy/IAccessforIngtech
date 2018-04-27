@@ -15,6 +15,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -83,6 +84,8 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
     String yearout,mthout,dout,timeout,hsout,hourout,outtimevalue,access_token,Authorization,name,designation;
     int hrsout;
 
+    static final int REQUEST_LOCATION = 1;
+    LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +93,17 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
         setContentView(R.layout.activity_attendance);
         initializeLocationManager();
 
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
         AttendanceActivity.this.setTitle("i-Attendance");
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            //Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show();
+        }else{
+            showSettingsAlert();
+        }
 
         idval = getIntent().getStringExtra("idvalue");
         roleval = getIntent().getStringExtra("userrole");
@@ -672,13 +683,16 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
 
 
     private void getLocation() {
+
         gps = new GPSTracker(this);
 
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         // check if GPS enabled
-        if(gps.canGetLocation()){
+        if(location != null){
 
-            in_lat = gps.getLatitude();
-            in_long = gps.getLongitude();
+
+            in_lat = location.getLatitude();
+            in_long = location.getLongitude();
 
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             try {
@@ -697,18 +711,20 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
+            //showSettingsAlert();
         }
+
     }
 
     private void getLocationOut() {
+
         gps = new GPSTracker(this);
-
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         // check if GPS enabled
-        if(gps.canGetLocation()){
+        if(location != null){
 
-            out_lat = gps.getLatitude();
-            out_long = gps.getLongitude();
+            out_lat = location.getLatitude();
+            out_long = location.getLongitude();
 
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             try {
@@ -727,9 +743,35 @@ public class AttendanceActivity extends AppCompatActivity implements NavigationV
             // can't get location
             // GPS or Network is not enabled
             // Ask user to enable GPS/network in settings
-            gps.showSettingsAlert();
+            //showSettingsAlert();
         }
+
     }
+
+
+        public void showSettingsAlert() {
+            AlertDialog.Builder alertDialog = new AlertDialog.Builder(AttendanceActivity.this);
+            // Setting Dialog Title
+            alertDialog.setTitle("GPS is settings");
+            // Setting Dialog Message
+            alertDialog.setMessage("GPS is not enabled. Do you want to go to settings menu?");
+            // On pressing Settings button
+            alertDialog.setPositiveButton("Settings", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    AttendanceActivity.this.startActivity(intent);
+                }
+            });
+            // on pressing cancel button
+            alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.cancel();
+                }
+            });
+            // Showing Alert Message
+            alertDialog.show();
+        }
+
     private void checkIn() {
 
         getLocation();
